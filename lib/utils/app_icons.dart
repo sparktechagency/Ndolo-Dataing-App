@@ -15,5 +15,7 @@ class AppIcons{
   static String personalIcon="$baseUrl/parsong_icon-card.svg";
   static String calenderIcon="$baseUrl/calender-card.svg";
   static String appLogo="$baseUrl/Logo.svg";
+  static String email="$baseUrl/email.svg";
+  static String lock="$baseUrl/lock.svg";
 
 }

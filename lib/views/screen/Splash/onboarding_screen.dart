@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:ndolo_dating/helpers/route.dart';
 import 'package:ndolo_dating/utils/app_images.dart';
 import 'package:ndolo_dating/utils/app_strings.dart';
 import 'package:ndolo_dating/views/base/custom_button.dart';
@@ -29,7 +30,11 @@ class OnboardingScreen extends StatelessWidget {
             ),
             //==================> Get Started Button <=====================
             SizedBox(height: 48.h),
-            CustomButton(onTap: () {}, text: AppStrings.getStarted.tr)
+            CustomButton(
+                onTap: () {
+                  Get.toNamed(AppRoutes.signInScreen);
+                },
+                text: AppStrings.getStarted.tr)
           ],
         ),
       ),
