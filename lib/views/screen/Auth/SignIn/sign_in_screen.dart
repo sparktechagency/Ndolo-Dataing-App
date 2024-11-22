@@ -169,7 +169,7 @@ class _SignInScreenState extends State<SignInScreen> {
         const Spacer(),
         InkWell(
           onTap: () {
-            Get.toNamed(AppRoutes.signInScreen);
+            Get.toNamed(AppRoutes.forgotPasswordScreen);
           },
           child: CustomText(
             text: AppStrings.forgot_Password.tr,
