@@ -131,7 +131,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 CustomButton(
                     onTap: () {
                       if (_formKey.currentState!.validate()) {
-                        Get.offAllNamed(AppRoutes.uploadPhotosScreen);
+                        Get.toNamed(AppRoutes.uploadPhotosScreen);
                       }
                     },
                     text: AppStrings.signUp.tr),
