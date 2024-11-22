@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ndolo_dating/helpers/route.dart';
 import 'package:ndolo_dating/utils/app_colors.dart';
 import 'package:ndolo_dating/utils/app_icons.dart';
 import 'package:ndolo_dating/views/base/custom_button.dart';
@@ -122,7 +123,11 @@ class _UploadPhotosScreenState extends State<UploadPhotosScreen> {
               ),
             ),
             //=========================> Next Button <=======================
-            CustomButton(onTap: () {}, text: AppStrings.next.tr),
+            CustomButton(
+                onTap: () {
+                  Get.toNamed(AppRoutes.completeProfileScreen);
+                },
+                text: AppStrings.next.tr),
             SizedBox(height: 28.h),
           ],
         ),
