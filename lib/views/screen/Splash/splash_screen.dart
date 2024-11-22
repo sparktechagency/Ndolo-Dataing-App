@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:ndolo_dating/utils/app_icons.dart';
-
 import '../../../helpers/route.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -14,14 +12,14 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-/*  @override
+  @override
   void initState() {
-    Future.delayed(Duration(seconds: 3),(){
-      Get.offAllNamed(AppRoutes.homeScreen);
+    Future.delayed(const Duration(seconds: 3), () {
+      Get.offAllNamed(AppRoutes.onboardingScreen);
     });
     // TODO: implement initState
     super.initState();
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {
