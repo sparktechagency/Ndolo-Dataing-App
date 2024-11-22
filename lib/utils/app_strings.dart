@@ -1,4 +1,108 @@
 class AppStrings {
-  //=============================> Onboarding Screen <==============================
+  //============================> Onboarding Screen <===========================
   static String getStarted = 'Get Started';
+  static String meetAndConnect = 'Meet and Connect with Cameroonians near you';
+//=========================> Authentication Section <===========================
+  static String signIn = 'Sign In';
+  static String welcomeBack = 'Welcome Back! Please enter your details.';
+  static String userEmail = 'User Email';
+  static String email = 'Email';
+  static String userPassword = 'User Password';
+  static String password = 'Password';
+  static String rememberMe = 'Remember Me';
+  static String forgot_Password = 'Forgot Password?';
+  static String forgotPassword = 'Forgot Password';
+  static String donotHaveAccount = 'Don’t have an account?';
+  static String signUp = 'Sign Up';
+  static String pleaseEnterYourEmail = 'Please enter your email address to reset your password.';
+  static String getOTP = 'Get OTP';
+  static String oTP = 'OTP';
+  static String pleaseEnterOTP = 'Please enter the OTP code, sent you in your email.';
+  static String didnotReceiveCode = 'Didn’t receive the code?';
+  static String verify = 'Verify';
+  static String resetPassword = 'Reset Password';
+  static String passwordMustHave = 'Password must have 8-10 characters.';
+  static String confirmPassword = 'Confirm Password';
+  static String createAccount = 'Create Account';
+  static String fillTheInformation = 'Fill the information to create a new account.';
+  static String userName = 'User Name';
+  static String agreeWith = 'Agree with';
+  static String termsOfServices = 'Terms of Services';
+  static String alreadyHaveAccount = 'Already have an account?';
+  static String uploadPhotos = 'Upload Photos';
+  static String uploadYourBestPhotos = 'Upload your best photos to find a good match!';
+  static String next = 'Next';
+  static String personalDetails = 'Personal Details';
+  static String success = 'Success';
+  static String congratulationsYouHaveSuccessfully = 'Congratulations! You have successfully created your account with Ndolo.';
+  static String dateOfBirth = 'Date of Birth';
+  static String gender = 'Gender';
+  static String male = 'Male';
+  static String female = 'Female';
+  static String location = 'Location';
+  static String enterYourAddress = 'Enter your address/location';
+  static String bio = 'Bio';
+  static String writeShortBio = 'Write a short bio about you';
+  static String selectInterest = 'Select Interest';
+  static String enterYourInterest = 'Enter your interest';
+  static String completeProfile = 'Complete Profile';
+//=============================> Home Section <=================================
+  static String idealMatch = 'Ideal Match';
+  static String love = 'Love';
+  static String livenToHaveOne = 'Liven to have one another.';
+  static String friends = 'Friends';
+  static String iWantToMeet = 'I want to meet new friends.';
+  static String comeWeStay = 'Come-We-Stay';
+  static String livenToHelp = 'Liven to help one another.';
+  static String imFreeToday = 'I\'m Free Today';
+  static String casualOrReady = 'Casual or ready for fun.';
+  static String business = 'Business';
+  static String meetBusinessOriented = 'Meet business oriented people';
+  static String continues = 'Continue';
+  static String findYourMatch = 'Find Your Match!';
+  static String congratulations = 'Congratulations';
+  static String itMatch = 'It’s a match';
+  static String startConversation = 'Start conversation now each other';
+  static String sayHello = 'Say Hello';
+  static String keepSwiping = 'Keep Swiping';
+  static String profileDetails = 'Profile Details';
+  static String about = 'About';
+  static String interest = 'Interest';
+  static String gallery = 'Gallery';
+  static String notifications = 'Notifications';
+//=============================> Matches Section <==============================
+  static String matches = 'Matches';
+  static String sendMessage = 'Send Message';
+//=============================> Message Section <==============================
+  static String message = 'Message';
+  static String slideToAnswer = 'Slide to answer';
+  //===========================> User Profile Section <=========================
+  static String updatePictures = 'Update Pictures';
+  static String accountInformation = 'Account Information';
+  static String logOut = 'Log Out';
+  static String name = 'Name';
+  static String eatingPractice = 'Eating Practice';
+  static String favoriteCuisine = 'Favorite Cuisine';
+  static String edit = 'Edit';
+  static String editAccountInformation = 'Edit Account Information';
+  static String areYouSureToLogOut = 'Are you sure you want to log out your Account?';
+  static String cancel = 'Cancel';
+  static String yesLogOut = 'Yes, Log Out';
+//============================> Settings Section <==============================
+  static String settings = 'Settings';
+  static String changePassword = 'Change Password';
+  static String setDistance = 'Set a distance';
+  static String privacyPolicy = 'Privacy Policy';
+  static String aboutUs = 'About Us';
+  static String deleteAccount = 'Delete Account';
+  static String currentPassword = 'Current Password';
+  static String enterYourPassword = 'Enter your password';
+  static String newPassword = 'New Password';
+  static String enterNewPassword = 'Enter new password';
+  static String confirmNewPassword = 'Confirm New Password';
+  static String reEnterNewPassword = 'Re-enter new password';
+  static String updatePassword = 'Update Password';
+  static String enterYourPasswordToDeleteAccount = 'Enter your current password to delete your account.';
+  static String areYouSureDeleteAccount = 'Are you sure you want to delete your Account?';
+  static String yesDelete = 'Yes, Delete';
 }

@@ -6,7 +6,7 @@ import '../utils/app_colors.dart';
 ThemeData light({Color color = const Color(0xFFFFFFFF)}) => ThemeData(
   fontFamily: 'DM Sans',
   primaryColor: color,
-  scaffoldBackgroundColor: Colors.transparent,
+  scaffoldBackgroundColor: Colors.white,
   secondaryHeaderColor: AppColors.textColor,
   disabledColor: AppColors.subTextColor,
   brightness: Brightness.dark,
