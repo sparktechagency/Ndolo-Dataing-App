@@ -13,12 +13,14 @@ class AppIcons{
   static String eyeOffIcon="$baseUrl/eye-off.svg";
   static String cardIcon="$baseUrl/credit-card.svg";
   static String personalIcon="$baseUrl/parsong_icon-card.svg";
-  static String calenderIcon="$baseUrl/calender-card.svg";
+  static String calenderIcon="$baseUrl/calender.svg";
   static String appLogo="$baseUrl/Logo.svg";
   static String email="$baseUrl/email.svg";
   static String lock="$baseUrl/lock.svg";
   static String user="$baseUrl/user.svg";
   static String cancel="$baseUrl/cancel.svg";
   static String add="$baseUrl/add.svg";
+  static String location="$baseUrl/location.svg";
+  static String downArrow="$baseUrl/downArrow.svg";
 
 }
