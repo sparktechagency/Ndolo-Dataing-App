@@ -70,6 +70,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       keyboardType: widget.keyboardType,
       obscuringCharacter: widget.obscureCharacrter!,
       validator: widget.validator,
+      autovalidateMode: AutovalidateMode.always,
       /*validator: widget.validator ??
               (value) {
             if (widget.isEmail == null) {
