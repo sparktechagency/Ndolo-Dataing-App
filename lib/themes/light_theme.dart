@@ -34,6 +34,7 @@ ThemeData light({Color color = const Color(0xFFFFFFFF)}) => ThemeData(
     unselectedLabelStyle: const TextStyle(color: Colors.red),
   ),
   appBarTheme: AppBarTheme(
+    backgroundColor: Colors.white,
       centerTitle: true,
       titleTextStyle: TextStyle(
           fontWeight: FontWeight.w600,
