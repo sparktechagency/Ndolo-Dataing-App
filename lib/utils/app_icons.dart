@@ -17,5 +17,6 @@ class AppIcons{
   static String appLogo="$baseUrl/Logo.svg";
   static String email="$baseUrl/email.svg";
   static String lock="$baseUrl/lock.svg";
+  static String user="$baseUrl/user.svg";
 
 }
