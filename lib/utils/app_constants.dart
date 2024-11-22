@@ -2,7 +2,7 @@ import '../models/language_model.dart';
 
 class AppConstants{
 
-  static String APP_NAME = "Project-Demo";
+  static String APP_NAME = "Ndolo Dating";
   static String fcmToken = "fcmToken";
 
 
