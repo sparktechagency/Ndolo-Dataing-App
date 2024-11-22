@@ -59,7 +59,7 @@ class OtpScreen extends StatelessWidget {
               //=======================> Verify Button <=====================
               CustomButton(
                   onTap: () {
-                    Get.offAllNamed(AppRoutes.otpScreen);
+                    Get.offAllNamed(AppRoutes.resetPasswordScreen);
                   },
                   text: AppStrings.verify.tr),
             ],
