@@ -22,5 +22,10 @@ class AppIcons{
   static String add="$baseUrl/add.svg";
   static String location="$baseUrl/location.svg";
   static String downArrow="$baseUrl/downArrow.svg";
+  static String love="$baseUrl/love.svg";
+  static String come="$baseUrl/come.svg";
+  static String today="$baseUrl/today.svg";
+  static String friends="$baseUrl/friends.svg";
+  static String business="$baseUrl/business.svg";
 
 }

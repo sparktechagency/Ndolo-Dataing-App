@@ -39,7 +39,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
-                  child: SvgPicture.asset(AppIcons.appLogo),
+                  child: SvgPicture.asset(AppIcons.appLogo, height: 150.h,width: 166.w),
                 ),
                 SizedBox(height: 16.h),
                 Center(
@@ -126,7 +126,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 //=======================> Agree with <=====================
                 _checkboxSection(),
-
                 //=======================> Sign Up Button <=====================
                 CustomButton(
                     onTap: () {
@@ -157,7 +156,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                     ),
                   ],
-                )
+                ),
+                SizedBox(height: 24.h),
               ],
             ),
           ),
