@@ -35,8 +35,9 @@ class BottomMenu extends StatelessWidget {
     final theme = Theme.of(context);
     List<BottomNavigationBarItem> menuItems = [
       getItem(menuIndex ==0 ? AppIcons.homeOut: AppIcons.home, 'Home', theme, 0),
-      getItem( menuIndex ==1 ? AppIcons.categoriFill :  AppIcons.categories, 'Categories', theme, 1),
-      getItem(menuIndex ==2 ? AppIcons.profileOutline: AppIcons.profile, 'Profile', theme, 2),
+      getItem(menuIndex ==1 ? AppIcons.matchOut :  AppIcons.match, 'Matches', theme, 1),
+      getItem(menuIndex ==2 ? AppIcons.messageOut: AppIcons.message, 'Message', theme, 2),
+      getItem(menuIndex ==3 ? AppIcons.profileOut: AppIcons.profile, 'Profile', theme, 3),
     ];
 
     return Container(
@@ -66,6 +67,9 @@ class BottomMenu extends StatelessWidget {
                 Get.offAndToNamed(AppRoutes.categoriesScreen);
                 break;
               case 2:
+                Get.offAndToNamed(AppRoutes.profileScreen);
+                break;
+                case 3:
                 Get.offAndToNamed(AppRoutes.profileScreen);
                 break;
             }

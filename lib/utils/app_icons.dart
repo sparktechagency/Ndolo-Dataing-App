@@ -2,11 +2,10 @@ class AppIcons{
   static String baseUrl="assets/icons";
   static String homeIcon="$baseUrl/home_icon.svg";
   static String walletIcon="$baseUrl/wallet_icon.svg";
-  static String profileIcon="$baseUrl/profile_icon.svg";
+  static String profile="$baseUrl/profile_icon.svg";
+  static String profileOut ="$baseUrl/profileOutline.svg";
   static String home="$baseUrl/home.svg";
   static String categoriFill ="$baseUrl/categoriFill.svg";
-  static String profile ="$baseUrl/profile.svg";
-  static String profileOutline ="$baseUrl/profileOutline.svg";
   static String homeOut ="$baseUrl/homeOut.svg";
   static String categories="$baseUrl/categories.svg";
   static String eyeIcon="$baseUrl/eye.svg";
@@ -27,5 +26,10 @@ class AppIcons{
   static String today="$baseUrl/today.svg";
   static String friends="$baseUrl/friends.svg";
   static String business="$baseUrl/business.svg";
+  static String match="$baseUrl/match.svg";
+  static String matchOut="$baseUrl/matchOut.svg";
+  static String message="$baseUrl/message.svg";
+  static String messageOut="$baseUrl/messageOut.svg";
+  static String notification="$baseUrl/notification.svg";
 
 }
