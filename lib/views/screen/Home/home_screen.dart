@@ -6,7 +6,6 @@ import 'package:ndolo_dating/utils/app_icons.dart';
 import 'package:ndolo_dating/utils/app_strings.dart';
 import 'package:ndolo_dating/views/base/custom_text.dart';
 import 'package:tcard/tcard.dart';
-
 import '../../../helpers/route.dart';
 import '../../../utils/app_images.dart';
 import '../../base/bottom_menu..dart';
