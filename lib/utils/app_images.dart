@@ -8,4 +8,8 @@ class AppImages{
   static String applyPay="$baseUrl/apples.png";
   static String onbording="$baseUrl/onbording.png";
   static String appLogo="$baseUrl/appLogo.png";
+  static String man="$baseUrl/man.png";
+  static String woman="$baseUrl/woman.png";
+  static String woman1="$baseUrl/woman1.png";
+  static String woman2="$baseUrl/woman2.png";
 }
