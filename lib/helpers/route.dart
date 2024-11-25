@@ -7,9 +7,9 @@ import '../views/screen/Auth/ResetPass/reset_password_screen.dart';
 import '../views/screen/Auth/SignIn/sign_in_screen.dart';
 import '../views/screen/Auth/SignUp/sign_up_screen.dart';
 import '../views/screen/Auth/UploadPhotos/upload_photos_screen.dart';
-import '../views/screen/Categories/categories_screen.dart';
 import '../views/screen/Home/home_screen.dart';
 import '../views/screen/IdealMatch/ideal_match_screen.dart';
+import '../views/screen/Matches/matches_screen.dart';
 import '../views/screen/PrivacyPolicy/privacy_policy_screen.dart';
 import '../views/screen/Profile/profile_screen.dart';
 import '../views/screen/ProfileDetails/profile_details_screen.dart';
@@ -31,7 +31,7 @@ class AppRoutes{
   static String homeScreen="/home_screen";
   static String profileDetailsScreen="/profile_details_screen_screen";
   static String profileScreen="/profile_screen";
-  static String categoriesScreen="/categories_screen";
+  static String matchesScreen="/matches_screen";
   static String aboutUsScreen="/about_us_screen";
   static String privacyPolicyScreen="/privacy_policy_screen";
   static String termsServicesScreen="/terms_services_screen";
@@ -49,7 +49,7 @@ class AppRoutes{
    GetPage(name:idealMatchScreen, page: ()=> const IdealMatchScreen()),
    GetPage(name:homeScreen, page: ()=>const HomeScreen(),transition:Transition.noTransition),
    GetPage(name:profileDetailsScreen, page: ()=>const ProfileDetailsScreen()),
-    GetPage(name:categoriesScreen, page: ()=>const CategoriesScreen(),transition:Transition.noTransition),
+    GetPage(name:matchesScreen, page: ()=>const MatchesScreen(),transition:Transition.noTransition),
     GetPage(name:profileScreen, page: ()=>const ProfileScreen(),transition: Transition.noTransition),
     GetPage(name:aboutUsScreen, page: ()=>const AboutUsScreen()),
     GetPage(name:privacyPolicyScreen, page: ()=>const PrivacyPolicyScreen()),
