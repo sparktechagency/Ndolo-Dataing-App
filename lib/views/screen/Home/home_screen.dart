@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
     AppImages.woman1,
     AppImages.woman2,
   ];
+
   void _onSwipe(SwipDirection direction, int index) {
     if (direction == SwipDirection.Left) {
       setState(() {});
@@ -53,6 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: EdgeInsets.symmetric(horizontal: 24.w),
         child: Column(
           children: [
+            SizedBox(height: 16.h),
             //===========================> Logo And Notification Row <=============================
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -65,99 +67,175 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             SizedBox(height: 16.h),
-            CustomText(
-              text: AppStrings.findYourMatch,
-              fontSize: 24.sp,
-              fontWeight: FontWeight.w700,
-              color: const Color(0xff430750),
-            ),
-            _allSwiped
-                ? Center(
-                    child: CustomText(
-                      text: "No One Available",
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20.sp,
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    CustomText(
+                      text: AppStrings.findYourMatch,
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.w700,
+                      color: const Color(0xff430750),
                     ),
-                  )
-                : Column(
-                    children: [
-                      //==============================> Tinder Swipe Section <=================
-                      Center(
-                        child: Container(
-                          width: 355.w,
-                          height: 621.h,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.r),
-                          ),
-                          child: Column(
+                    _allSwiped
+                        ? Center(
+                            child: CustomText(
+                              text: "No One Available",
+                              fontWeight: FontWeight.w600,
+                              fontSize: 20.sp,
+                            ),
+                          )
+                        : Column(
                             children: [
-                              Expanded(
-                                flex: 5,
-                                child: TCard(
-                                  controller: _cardController,
-                                  cards: _images.asMap().entries.map((entry) {
-                                    return Stack(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            // Get.toNamed(AppRoutes.clubDetailsPlayerScreen);
-                                          },
-                                          child: CustomTinderCard(
-                                              imageUrl: entry.value,
-                                              index: entry.key),
-                                        ),
-                                        //===========================> Name and Position Positioned <===================
-                                        Positioned(
-                                          bottom: 50.h,
-                                          left: 40.w,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              CustomText(
-                                                  text: 'Kalvin, 23',
-                                                  fontSize: 32.sp,
-                                                  fontWeight: FontWeight.w700,
-                                              color: Colors.white,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Icon(Icons.location_on,
-                                                      color: Colors.white,
-                                                      size: 14.h),
-                                                  SizedBox(width: 4.w),
-                                                  CustomText(
-                                                      text: 'LOS Angeles • 20 kms away',
-                                                  color: Colors.white,
+                              //==============================> Tinder Swipe Section <=================
+                              Center(
+                                child: Container(
+                                  width: 345.w,
+                                  height: 495.h,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20.r),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        flex: 5,
+                                        child: TCard(
+                                          controller: _cardController,
+                                          cards: _images
+                                              .asMap()
+                                              .entries
+                                              .map((entry) {
+                                            return Stack(
+                                              children: [
+                                                CustomTinderCard(
+                                                    imageUrl: entry.value,
+                                                    index: entry.key),
+                                                //===========================> Name and Role Positioned <===================
+                                                Positioned(
+                                                  bottom: 20.h,
+                                                  left: 20.w,
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      //==================> Name <===================
+                                                      CustomText(
+                                                        text: 'Kalvin, 23',
+                                                        fontSize: 32.sp,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        color: Colors.white,
+                                                      ),
+                                                      //==================> Location Row <===================
+                                                      Row(
+                                                        children: [
+                                                          Icon(
+                                                              Icons.location_on,
+                                                              color:
+                                                                  Colors.white,
+                                                              size: 14.h),
+                                                          SizedBox(width: 4.w),
+                                                          CustomText(
+                                                            text:
+                                                                'LOS Angeles • 20 kms away',
+                                                            color: Colors.white,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: 6.h),
+                                                      //==================> Active Now Container <===================
+                                                      Container(
+                                                        decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.circular(8.r),
+                                                            border: Border.all(
+                                                                width: 1.w,
+                                                                color: Colors.green)),
+                                                        child: Padding(
+                                                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                                                          child: Row(
+                                                            children: [
+                                                              Icon(Icons.circle, color: Colors.green, size: 12.w),
+                                                              SizedBox(width: 4.w),
+                                                              CustomText(
+                                                                text: 'Active New',
+                                                                fontWeight: FontWeight.w500,
+                                                                color: Colors.white,
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
                                                   ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
+                                                ),
+                                              ],
+                                            );
+                                          }).toList(),
+                                          onForward: (index, info) {
+                                            _onSwipe(info.direction, index);
+                                          },
+                                          onEnd: () {
+                                            setState(() {
+                                              _allSwiped = true;
+                                            });
+                                            print(
+                                                '====================> All cards swiped!');
+                                          },
                                         ),
-                                      ],
-                                    );
-                                  }).toList(),
-                                  onForward: (index, info) {
-                                    _onSwipe(info.direction, index);
-                                  },
-                                  onEnd: () {
-                                    setState(() {
-                                      _allSwiped = true;
-                                    });
-                                    print('====================> All cards swiped!');
-                                  },
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],
                           ),
+                    SizedBox(height: 16.h),
+                    //===========================> Like Dislike Button Row <=============================
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        //====================> Dislike Button <=================
+                        GestureDetector(
+                          onTap: () {},
+                          child: _slideButton(
+                              SvgPicture.asset(AppIcons.dislike), Colors.red),
                         ),
-                      ),
-                    ],
-                  ),
+                        SizedBox(width: 12.w),
+                        //====================> Like Button <=================
+                        GestureDetector(
+                          onTap: () {},
+                          child: _slideButton(SvgPicture.asset(AppIcons.like),
+                              const Color(0xffFF9D33)),
+                        ),
+                        SizedBox(width: 12.w),
+                        //====================> Info Button <=================
+                        GestureDetector(
+                          onTap: () {},
+                          child: _slideButton(
+                              SvgPicture.asset(AppIcons.info), Colors.blue),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16.h),
+                  ],
+                ),
+              ),
+            )
           ],
         ),
       )),
+    );
+  }
+
+//================================> Slide Button <=========================
+  _slideButton(Widget icon, Color borderColor) {
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(width: 1.w, color: borderColor),
+      ),
+      child: Padding(padding: EdgeInsets.all(20.w), child: icon),
     );
   }
 }
