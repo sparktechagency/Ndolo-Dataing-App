@@ -211,7 +211,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         SizedBox(width: 12.w),
                         //====================> Info Button <=================
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            Get.toNamed(AppRoutes.profileDetailsScreen);
+                          },
                           child: _slideButton(
                               SvgPicture.asset(AppIcons.info), Colors.blue),
                         ),

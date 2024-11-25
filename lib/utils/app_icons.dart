@@ -34,5 +34,13 @@ class AppIcons{
   static String dislike="$baseUrl/dislike.svg";
   static String like="$baseUrl/like.svg";
   static String info="$baseUrl/info.svg";
+  static String movie="$baseUrl/movie.svg";
+  static String snooker="$baseUrl/snooker.svg";
+  static String swimming="$baseUrl/swimming.svg";
+  static String book="$baseUrl/book.svg";
+  static String photo="$baseUrl/photo.svg";
+  static String design="$baseUrl/design.svg";
+  static String music="$baseUrl/music.svg";
+  static String cooking="$baseUrl/cooking.svg";
 
 }
