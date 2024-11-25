@@ -32,6 +32,7 @@ class _IdealMatchScreenState extends State<IdealMatchScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: 16.h),
                 Image.asset(AppImages.appLogo, width: 121.w, height: 32.h),
                 SizedBox(height: 16.h),
                 CustomText(
