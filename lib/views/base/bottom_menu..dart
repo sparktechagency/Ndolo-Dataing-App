@@ -67,7 +67,7 @@ class BottomMenu extends StatelessWidget {
                 Get.offAndToNamed(AppRoutes.matchesScreen);
                 break;
               case 2:
-                Get.offAndToNamed(AppRoutes.profileScreen);
+                Get.offAndToNamed(AppRoutes.messageScreen);
                 break;
                 case 3:
                 Get.offAndToNamed(AppRoutes.profileScreen);

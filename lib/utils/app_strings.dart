@@ -71,7 +71,7 @@ class AppStrings {
   static String gallery = 'Gallery';
   static String notifications = 'Notifications';
 //=============================> Matches Section <==============================
-  static String matches = 'Matches';
+  static String  matches = 'Matches';
   static String sendMessage = 'Send Message';
 //=============================> Message Section <==============================
   static String message = 'Message';
