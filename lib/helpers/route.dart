@@ -13,6 +13,7 @@ import '../views/screen/Matches/matches_screen.dart';
 import '../views/screen/Message/chat_screen.dart';
 import '../views/screen/Message/message_screen.dart';
 import '../views/screen/PrivacyPolicy/privacy_policy_screen.dart';
+import '../views/screen/Profile/account_information_screen.dart';
 import '../views/screen/Profile/profile_screen.dart';
 import '../views/screen/ProfileDetails/profile_details_screen.dart';
 import '../views/screen/Splash/onboarding_screen.dart';
@@ -33,6 +34,7 @@ class AppRoutes{
   static String homeScreen="/home_screen";
   static String profileDetailsScreen="/profile_details_screen_screen";
   static String profileScreen="/profile_screen";
+  static String accountInformationScreen="/account_information_screen";
   static String matchesScreen="/matches_screen";
   static String messageScreen="/message_screen";
   static String chatScreen="/chat_screen";
@@ -57,6 +59,7 @@ class AppRoutes{
     GetPage(name:messageScreen, page: ()=>const MessageScreen(),transition:Transition.noTransition),
     GetPage(name:profileScreen, page: ()=>const ProfileScreen(),transition: Transition.noTransition),
     GetPage(name:chatScreen, page: ()=> ChatScreen()),
+    GetPage(name:accountInformationScreen, page: ()=> AccountInformationScreen()),
     GetPage(name:aboutUsScreen, page: ()=>const AboutUsScreen()),
     GetPage(name:privacyPolicyScreen, page: ()=>const PrivacyPolicyScreen()),
     GetPage(name:termsServicesScreen, page: ()=>const TermsServicesScreen()),

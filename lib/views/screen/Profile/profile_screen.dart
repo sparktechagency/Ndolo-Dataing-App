@@ -104,7 +104,9 @@ class ProfileScreen extends StatelessWidget {
               children: [
                 //=====================> Account Information List Tile <===================
                 CustomListTile(
-                  onTap: (){},
+                  onTap: (){
+                    Get.toNamed(AppRoutes.accountInformationScreen);
+                  },
                   title: AppStrings.accountInformation.tr,
                   prefixIcon: SvgPicture.asset(AppIcons.account),
                   suffixIcon: SvgPicture.asset(AppIcons.rightArrow),
