@@ -21,12 +21,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final TCardController _cardController = TCardController();
   bool _allSwiped = false;
-
   final List<String> _images = [
-    AppImages.man,
-    AppImages.woman,
-    AppImages.woman1,
-    AppImages.woman2,
+    'https://s3-alpha-sig.figma.com/img/a1c9/575c/4f24b44129bd1c1832d68d397b792497?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GwEsZ3WRA~UZBXPSyVn1~EP56OutWf9ks3Pp5SGI6MCjGGZAFlHEi2N4IlDVFviedcItZdtfZQtgWJHPudEZFWEcFDRzdXKF-VR8B1Sbr0xTBOs2pmjcEAJUy-mGNPoh0~QXEtajPrE9MKTiQrV2581Cm0gx8yNzIXLqrRy5xdqs6nyUprsgffdi~rkm3SylakKm40tW6mCca7fwwTduZ6hzxrjf1vsbiFdkl9ntcgMN89j3zasCaMxVOa9wueLCPiablbJiC1z5lO8nY5ensKpTa5AKMLg0pS6dIDBEst9u95IIhxLBaaheZC2JrOb6aAwBzMY2hq5R1IhXkaWpfg__',
+    'https://s3-alpha-sig.figma.com/img/d11d/ebff/2758987d01bb00c7afbb5e74c73d4808?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NNvCKlxW6oAOBhadua7uiKKhyr-FcnSBU-2upH5Hk9lOHnkdZAQ6Hj~kLkKPLyhC-zfK1WVmffrgadLxcowUtj8zCRAGebg1gyslqJ9w~89EaXIo6Ou7pnkPlanG1SMIgLGUtOjrhDE4zfQupfTDLZb2xutTEawa0TEYTYdxeV-2b2yhIJIvLt3Yixzsw-hCYiGlIphg3lwxIZ0vpJ4woFmSpsmgmh-S2BM54gwMuOLitzTlKlq2bkIhb8n2OY3TyFZuqZ7RDeLC~VcOFClhSTzH5MeWfwcsBAOmhiu99dl70vxC~1X~z5ai6Sw62XGKAo3jVfh0mseZR3Yyi1EDOA__',
+    'https://s3-alpha-sig.figma.com/img/fcc1/2042/078a0dcc8085c1ceb176db56ab1fbc80?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=n5VSWsYsg~5e4iyvKz5-2hBtFGbPtt8j4e3fA9fx-kfD~vTDonC25vJlJguKpmmrsEEKUvmwUGbRXfmeWRFO8uGcL2JFNat5xRr7Nardp3ipc7-B5WEZ9rDHJ~9iIYceLkb847fwhMIF3d4eREBn75I9WGmlCvzXVyp0ryNe4KCa2qRreHXI1dREtANPzM8IusPDCw~X9ax5wo15mhpe2BGCnx927Ei8l5LImWSuAlWSNW3G0aS7A0pnqGowxCwzLw668HJmkoitsIQ~~fpT42w-o0siqeSh14Q4-vab74UNOrpkDLxoIaJWLTT4xXGZiE1W8RdPG3r5rm9O9FOofA__',
+    'https://s3-alpha-sig.figma.com/img/2052/9a38/2fb230f545728379c6f60d80f137df06?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=N-clT1d5X~GISp4cONDqDLWWXVo827zOP0UEhZZMMO0kdeN7u9yn47jogRwuelR1dqoM6hb9D9nBOuM6JBiHMOCk5zHt0DC4GUixG5DJoA74sTiNMUE8KMh6jk72WayfoAHBhIglgBqIGUqFvvfVumdgJRew0hWJvL0LT7TRHnva9pbRFw8yuiEowyNAMUuONmwZNW3q2NvsibH~bLYGeAJV6oFZwV7s2eFTu5amqpeY~HAaI0J3uxYaJeBtFW9EYdKyPhXyPKdRRJ-hNx02kw3JycJKOy6jUBRUxYacLX12xR4GjMRRWU58cNTSLpkFEGYW~JzldyorXEMPDkbb-Q__',
   ];
 
   void _onSwipe(SwipDirection direction, int index) {
@@ -147,20 +146,37 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       //==================> Active Now Container <===================
                                                       Container(
                                                         decoration: BoxDecoration(
-                                                            borderRadius: BorderRadius.circular(8.r),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8.r),
                                                             border: Border.all(
                                                                 width: 1.w,
-                                                                color: Colors.green)),
+                                                                color: Colors
+                                                                    .green)),
                                                         child: Padding(
-                                                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      8.w,
+                                                                  vertical:
+                                                                      4.h),
                                                           child: Row(
                                                             children: [
-                                                              Icon(Icons.circle, color: Colors.green, size: 12.w),
-                                                              SizedBox(width: 4.w),
+                                                              Icon(Icons.circle,
+                                                                  color: Colors
+                                                                      .green,
+                                                                  size: 12.w),
+                                                              SizedBox(
+                                                                  width: 4.w),
                                                               CustomText(
-                                                                text: 'Active New',
-                                                                fontWeight: FontWeight.w500,
-                                                                color: Colors.white,
+                                                                text:
+                                                                    'Active New',
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                color: Colors
+                                                                    .white,
                                                               ),
                                                             ],
                                                           ),
@@ -191,34 +207,39 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
                     SizedBox(height: 16.h),
-                    //===========================> Like Dislike Button Row <=============================
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        //====================> Dislike Button <=================
-                        GestureDetector(
-                          onTap: () {},
-                          child: _slideButton(
-                              SvgPicture.asset(AppIcons.dislike), Colors.red),
-                        ),
-                        SizedBox(width: 12.w),
-                        //====================> Like Button <=================
-                        GestureDetector(
-                          onTap: () {},
-                          child: _slideButton(SvgPicture.asset(AppIcons.like),
-                              const Color(0xffFF9D33)),
-                        ),
-                        SizedBox(width: 12.w),
-                        //====================> Info Button <=================
-                        GestureDetector(
-                          onTap: () {
-                            Get.toNamed(AppRoutes.profileDetailsScreen);
-                          },
-                          child: _slideButton(
-                              SvgPicture.asset(AppIcons.info), Colors.blue),
-                        ),
-                      ],
-                    ),
+                    _allSwiped
+                        ? const SizedBox()
+                        //===========================> Like Dislike Button Row <=============================
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              //====================> Dislike Button <=================
+                              GestureDetector(
+                                onTap: () {},
+                                child: _slideButton(
+                                    SvgPicture.asset(AppIcons.dislike),
+                                    Colors.red),
+                              ),
+                              SizedBox(width: 12.w),
+                              //====================> Like Button <=================
+                              GestureDetector(
+                                onTap: () {},
+                                child: _slideButton(
+                                    SvgPicture.asset(AppIcons.like),
+                                    const Color(0xffFF9D33)),
+                              ),
+                              SizedBox(width: 12.w),
+                              //====================> Info Button <=================
+                              GestureDetector(
+                                onTap: () {
+                                  Get.toNamed(AppRoutes.profileDetailsScreen);
+                                },
+                                child: _slideButton(
+                                    SvgPicture.asset(AppIcons.info),
+                                    Colors.blue),
+                              ),
+                            ],
+                          ),
                     SizedBox(height: 16.h),
                   ],
                 ),
