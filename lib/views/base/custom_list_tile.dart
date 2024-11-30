@@ -30,16 +30,16 @@ class CustomListTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(8.r),
               color: const Color(0xffFDE0EE),
               border: Border.all(
-                  width: 1.w, color: borderColor ?? AppColors.borderColor)),
+                  width: 1.w, color: borderColor ?? AppColors.secondaryColor)),
           child: ListTile(
             leading: prefixIcon,
             trailing: suffixIcon,
             horizontalTitleGap: 16.w,
             dense: true,
             title: CustomText(
-              textAlign: TextAlign.left,
+              textAlign: TextAlign.start,
               text: title,
-              maxLine: 2,
+              maxLine: 50,
               fontSize: 16.sp,
               fontWeight: FontWeight.w400,
             ),

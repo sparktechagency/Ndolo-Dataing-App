@@ -27,7 +27,9 @@ class ProfileScreen extends StatelessWidget {
           children: [
             Image.asset(AppImages.appLogo, width: 121.w, height: 32.h),
             InkWell(
-                onTap: () {},
+                onTap: () {
+                  Get.toNamed(AppRoutes.settingsScreen);
+                },
                 child: SvgPicture.asset(AppIcons.settings,
                     width: 32.w, height: 32.h))
           ],
@@ -99,12 +101,14 @@ class ProfileScreen extends StatelessWidget {
           ),
           SizedBox(height: 24.h),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            padding: EdgeInsets.symmetric(horizontal: 24 .w),
             child: Column(
               children: [
                 //=====================> Account Information List Tile <===================
                 CustomListTile(
-                  onTap: (){},
+                  onTap: (){
+                    Get.toNamed(AppRoutes.accountInformationScreen);
+                  },
                   title: AppStrings.accountInformation.tr,
                   prefixIcon: SvgPicture.asset(AppIcons.account),
                   suffixIcon: SvgPicture.asset(AppIcons.rightArrow),

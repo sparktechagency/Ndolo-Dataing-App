@@ -21,8 +21,15 @@ class CustomAlert extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             CustomText(
-              text: 'Success',
-              fontSize: 16.sp,
+              text: AppStrings.deleteAccount.tr,
+              fontSize: 20.sp,
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+            ),
+            SizedBox(height: 24.h),
+            CustomText(
+              text: AppStrings.areYouSureDeleteAccount.tr,
+              fontSize: 18.sp,
               maxLine: 2,
             ),
             SizedBox(height: 24.h),
@@ -33,20 +40,19 @@ class CustomAlert extends StatelessWidget {
                     width: 120.w,
                     height: 40.h,
                     child: CustomButton(
-                      text: 'No',
+                      text: 'Cancel'.tr,
                       onTap: () {
                         Get.back();
                       },
                       color: Colors.white,
-                      textStyle: TextStyle(color: AppColors.primaryColor),
+                      textColor: AppColors.primaryColor,
                     )),
                 SizedBox(
                     width: 120.w,
                     height: 40.h,
                     child: CustomButton(
-                        text: 'Yes',
-                        textColor: Colors.white,
-                        onTap: () async {})),
+                        text: 'Yes'.tr,
+                        onTap: () {Get.back();})),
               ],
             )
           ],

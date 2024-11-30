@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import '../views/screen/AboutUs/about_us_screen.dart';
+import '../views/screen/Auth/ChangePass/change_password_screen.dart';
 import '../views/screen/Auth/CompleteProfile/complete_profile_screen.dart';
 import '../views/screen/Auth/ForgotPass/forgot_password_screen.dart';
 import '../views/screen/Auth/OTPScreen/otp_screen.dart';
@@ -13,8 +14,11 @@ import '../views/screen/Matches/matches_screen.dart';
 import '../views/screen/Message/chat_screen.dart';
 import '../views/screen/Message/message_screen.dart';
 import '../views/screen/PrivacyPolicy/privacy_policy_screen.dart';
+import '../views/screen/Profile/account_information_screen.dart';
+import '../views/screen/Profile/edit_account_information.dart';
 import '../views/screen/Profile/profile_screen.dart';
 import '../views/screen/ProfileDetails/profile_details_screen.dart';
+import '../views/screen/Settings/settings_screen.dart';
 import '../views/screen/Splash/onboarding_screen.dart';
 import '../views/screen/Splash/splash_screen.dart';
 import '../views/screen/TermsofServices/terms_services_screen.dart';
@@ -28,14 +32,18 @@ class AppRoutes{
   static String otpScreen="/otp_screen";
   static String resetPasswordScreen="/reset_password_screen";
   static String uploadPhotosScreen="/upload_photos_screen";
+  static String changePasswordScreen="/change_password_screen";
   static String completeProfileScreen="/complete_profile_screen";
   static String idealMatchScreen="/ideal_match_screen";
   static String homeScreen="/home_screen";
   static String profileDetailsScreen="/profile_details_screen_screen";
   static String profileScreen="/profile_screen";
+  static String accountInformationScreen="/account_information_screen";
+  static String editAccountInformation="/edit_account_information";
   static String matchesScreen="/matches_screen";
   static String messageScreen="/message_screen";
   static String chatScreen="/chat_screen";
+  static String settingsScreen="/settings_screen";
   static String aboutUsScreen="/about_us_screen";
   static String privacyPolicyScreen="/privacy_policy_screen";
   static String termsServicesScreen="/terms_services_screen";
@@ -48,6 +56,7 @@ class AppRoutes{
    GetPage(name:forgotPasswordScreen, page: ()=> const ForgotPasswordScreen()),
    GetPage(name:otpScreen, page: ()=> const OtpScreen()),
    GetPage(name:resetPasswordScreen, page: ()=> const ResetPasswordScreen()),
+   GetPage(name:changePasswordScreen, page: ()=> const ChangePasswordScreen()),
    GetPage(name:uploadPhotosScreen, page: ()=> const UploadPhotosScreen()),
    GetPage(name:completeProfileScreen, page: ()=> const CompleteProfileScreen()),
    GetPage(name:idealMatchScreen, page: ()=> const IdealMatchScreen()),
@@ -57,6 +66,9 @@ class AppRoutes{
     GetPage(name:messageScreen, page: ()=>const MessageScreen(),transition:Transition.noTransition),
     GetPage(name:profileScreen, page: ()=>const ProfileScreen(),transition: Transition.noTransition),
     GetPage(name:chatScreen, page: ()=> ChatScreen()),
+    GetPage(name:settingsScreen, page: ()=> SettingsScreen()),
+    GetPage(name:accountInformationScreen, page: ()=> AccountInformationScreen()),
+    GetPage(name:editAccountInformation, page: ()=> EditAccountInformation()),
     GetPage(name:aboutUsScreen, page: ()=>const AboutUsScreen()),
     GetPage(name:privacyPolicyScreen, page: ()=>const PrivacyPolicyScreen()),
     GetPage(name:termsServicesScreen, page: ()=>const TermsServicesScreen()),
