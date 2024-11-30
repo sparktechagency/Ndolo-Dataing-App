@@ -10,6 +10,7 @@ import '../views/screen/Auth/UploadPhotos/upload_photos_screen.dart';
 import '../views/screen/Home/home_screen.dart';
 import '../views/screen/IdealMatch/ideal_match_screen.dart';
 import '../views/screen/Matches/matches_screen.dart';
+import '../views/screen/Message/chat_screen.dart';
 import '../views/screen/Message/message_screen.dart';
 import '../views/screen/PrivacyPolicy/privacy_policy_screen.dart';
 import '../views/screen/Profile/profile_screen.dart';
@@ -34,6 +35,7 @@ class AppRoutes{
   static String profileScreen="/profile_screen";
   static String matchesScreen="/matches_screen";
   static String messageScreen="/message_screen";
+  static String chatScreen="/chat_screen";
   static String aboutUsScreen="/about_us_screen";
   static String privacyPolicyScreen="/privacy_policy_screen";
   static String termsServicesScreen="/terms_services_screen";
@@ -54,6 +56,7 @@ class AppRoutes{
     GetPage(name:matchesScreen, page: ()=>const MatchesScreen(),transition:Transition.noTransition),
     GetPage(name:messageScreen, page: ()=>const MessageScreen(),transition:Transition.noTransition),
     GetPage(name:profileScreen, page: ()=>const ProfileScreen(),transition: Transition.noTransition),
+    GetPage(name:chatScreen, page: ()=> ChatScreen()),
     GetPage(name:aboutUsScreen, page: ()=>const AboutUsScreen()),
     GetPage(name:privacyPolicyScreen, page: ()=>const PrivacyPolicyScreen()),
     GetPage(name:termsServicesScreen, page: ()=>const TermsServicesScreen()),

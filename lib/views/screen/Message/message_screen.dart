@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:ndolo_dating/helpers/route.dart';
 import 'package:ndolo_dating/views/base/custom_network_image.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_strings.dart';
@@ -29,7 +30,9 @@ class MessageScreen extends StatelessWidget {
             return Padding(
               padding: EdgeInsets.only(bottom: 16.h),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Get.toNamed(AppRoutes.chatScreen);
+                },
                 child: Container(
                   decoration: BoxDecoration(
                     color: AppColors.cardColor,

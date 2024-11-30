@@ -42,5 +42,9 @@ class AppIcons{
   static String design="$baseUrl/design.svg";
   static String music="$baseUrl/music.svg";
   static String cooking="$baseUrl/cooking.svg";
+  static String attach="$baseUrl/attach.svg";
+  static String sendIcon="$baseUrl/sendIcon.svg";
+  static String audio="$baseUrl/audio.svg";
+  static String video="$baseUrl/video.svg";
 
 }
