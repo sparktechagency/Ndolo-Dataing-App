@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:ndolo_dating/helpers/route.dart';
 import 'package:ndolo_dating/utils/app_strings.dart';
 import 'package:ndolo_dating/views/base/custom_app_bar.dart';
 import 'package:ndolo_dating/views/base/custom_button.dart';
@@ -90,7 +91,11 @@ class AccountInformationScreen extends StatelessWidget {
                       'Lorem ipsum dolor sit amet consectetur. Cras quam ut turpis lorem fermentum diam integer. Elementum in purus ut nunc hendrerit eget. Sed sem ullamcorper sed nunc orci tempor purus vel. Netus elementum accumsan et nunc tellus quis.'),
               SizedBox(height: 32.h),
               //======================> Edit Button <========================
-              CustomButton(onTap: () {}, text: AppStrings.edit.tr),
+              CustomButton(
+                  onTap: () {
+                    Get.toNamed(AppRoutes.editAccountInformation);
+                  },
+                  text: AppStrings.edit.tr),
               SizedBox(height: 32.h),
             ],
           ),

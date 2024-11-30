@@ -3,6 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:ndolo_dating/utils/app_strings.dart';
+import 'package:ndolo_dating/views/base/custom_text.dart';
+import '../../../../helpers/route.dart';
+import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_icons.dart';
 import '../../../base/custom_app_bar.dart';
 import '../../../base/custom_button.dart';
@@ -31,6 +34,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             children: [
               SizedBox(height: 20.h),
               //==========================> Current password Text Field <===================
+              CustomText(
+                text: AppStrings.currentPassword.tr,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
+                bottom: 8.h,
+              ),
               CustomTextField(
                 isPassword: true,
                 controller: _oldPassCTRL,
@@ -42,6 +51,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               ),
               SizedBox(height: 16.h),
               //==========================> New password Text Field <===================
+              CustomText(
+                text: AppStrings.newPassword.tr,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
+                bottom: 8.h,
+              ),
               CustomTextField(
                 isPassword: true,
                 controller: _passCTRL,
@@ -53,6 +68,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               ),
               SizedBox(height: 16.h),
               //==========================> Confirm Password Text Field <===================
+              CustomText(
+                text: AppStrings.confirmPassword.tr,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
+                bottom: 8.h,
+              ),
               CustomTextField(
                 isPassword: true,
                 controller: _confirmPassCTRL,
@@ -62,9 +83,28 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 ),
                 hintText: AppStrings.confirmPassword.tr,
               ),
-              SizedBox(height: 395.h),
+              SizedBox(height: 16.h),
+              //==========================> Forgot Password Text Field <===================
+              Align(
+                alignment: Alignment.topRight,
+                child: InkWell(
+                  onTap: () {
+                    Get.toNamed(AppRoutes.forgotPasswordScreen);
+                  },
+                  child: CustomText(
+                    text: AppStrings.forgot_Password.tr,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primaryColor,
+                  ),
+                ),
+              ),
+              SizedBox(height: 268.h),
               //==========================> Update Password Button <=======================
-              CustomButton(onTap: () {}, text: AppStrings.updatePassword.tr,),
+              CustomButton(
+                onTap: () {},
+                text: AppStrings.updatePassword.tr,
+              ),
             ],
           ),
         ),
