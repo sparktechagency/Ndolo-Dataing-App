@@ -7,6 +7,7 @@ import 'package:ndolo_dating/utils/app_icons.dart';
 import 'package:ndolo_dating/utils/app_images.dart';
 import 'package:ndolo_dating/utils/app_strings.dart';
 import 'package:ndolo_dating/views/base/custom_app_bar.dart';
+import 'package:ndolo_dating/views/base/custom_network_image.dart';
 import 'package:ndolo_dating/views/base/custom_text.dart';
 
 class ProfileDetailsScreen extends StatelessWidget {
@@ -23,14 +24,13 @@ class ProfileDetailsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               //========================> Image Container <==========================
-              Container(
-                height: 500.h,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(8.r),
-                        topRight: Radius.circular(8.r)),
-                    image: DecorationImage(
-                        image: AssetImage(AppImages.woman), fit: BoxFit.cover)),
+              CustomNetworkImage(
+                imageUrl: 'https://s3-alpha-sig.figma.com/img/a1c9/575c/4f24b44129bd1c1832d68d397b792497?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GwEsZ3WRA~UZBXPSyVn1~EP56OutWf9ks3Pp5SGI6MCjGGZAFlHEi2N4IlDVFviedcItZdtfZQtgWJHPudEZFWEcFDRzdXKF-VR8B1Sbr0xTBOs2pmjcEAJUy-mGNPoh0~QXEtajPrE9MKTiQrV2581Cm0gx8yNzIXLqrRy5xdqs6nyUprsgffdi~rkm3SylakKm40tW6mCca7fwwTduZ6hzxrjf1vsbiFdkl9ntcgMN89j3zasCaMxVOa9wueLCPiablbJiC1z5lO8nY5ensKpTa5AKMLg0pS6dIDBEst9u95IIhxLBaaheZC2JrOb6aAwBzMY2hq5R1IhXkaWpfg__',
+                  height: 500.h,
+                  width: double.infinity,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8.r),
+                    topRight: Radius.circular(8.r)),
               ),
               //========================> Name and Location Container <==========================
               Container(
@@ -152,11 +152,11 @@ class ProfileDetailsScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: List.generate(4, (index) {
-                  return Container(
-                    margin: EdgeInsets.symmetric(horizontal: 8.w),
+                  return CustomNetworkImage(
+                      imageUrl: 'https://s3-alpha-sig.figma.com/img/a1c9/575c/4f24b44129bd1c1832d68d397b792497?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GwEsZ3WRA~UZBXPSyVn1~EP56OutWf9ks3Pp5SGI6MCjGGZAFlHEi2N4IlDVFviedcItZdtfZQtgWJHPudEZFWEcFDRzdXKF-VR8B1Sbr0xTBOs2pmjcEAJUy-mGNPoh0~QXEtajPrE9MKTiQrV2581Cm0gx8yNzIXLqrRy5xdqs6nyUprsgffdi~rkm3SylakKm40tW6mCca7fwwTduZ6hzxrjf1vsbiFdkl9ntcgMN89j3zasCaMxVOa9wueLCPiablbJiC1z5lO8nY5ensKpTa5AKMLg0pS6dIDBEst9u95IIhxLBaaheZC2JrOb6aAwBzMY2hq5R1IhXkaWpfg__',
+                      height: 75.h,
                     width: 70.w,
-                    height: 75.h,
-                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(4.r),
                   );
                 }),
               ),

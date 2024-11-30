@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ndolo_dating/views/base/custom_network_image.dart';
 
 class CustomTinderCard extends StatelessWidget {
   final String imageUrl;
@@ -26,11 +27,10 @@ class CustomTinderCard extends StatelessWidget {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(8.r),
-          child: Image.asset(
-            imageUrl,
-            fit: BoxFit.cover,
-            width: double.infinity,
-          ),
+          child: CustomNetworkImage(
+            imageUrl: imageUrl,
+            height: 465.h,
+            width: double.infinity)
         ),
       ),
     );
