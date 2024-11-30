@@ -391,7 +391,7 @@ class _NessaryFuncationsState extends State<NessaryFuncations> {
             children: [
               const Icon(Icons.block, color: Colors.black54),
               SizedBox(width: 10.w),
-              const Text(
+              const Text( 
                 'Block',
                 style: TextStyle(color: Colors.black),
               ),

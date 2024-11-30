@@ -87,7 +87,7 @@ class AppStrings {
   static String editAccountInformation = 'Edit Account Information';
   static String areYouSureToLogOut = 'Are you sure you want to log out your Account?';
   static String cancel = 'Cancel';
-  static String yesLogOut = 'Yes, Log Out';
+  static String yes = 'Yes';
 //============================> Settings Section <==============================
   static String settings = 'Settings';
   static String changePassword = 'Change Password';
@@ -105,4 +105,5 @@ class AppStrings {
   static String enterYourPasswordToDeleteAccount = 'Enter your current password to delete your account.';
   static String areYouSureDeleteAccount = 'Are you sure you want to delete your Account?';
   static String yesDelete = 'Yes, Delete';
+  static String language = 'Language';
 }
