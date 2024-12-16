@@ -1,4 +1,3 @@
-/*
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,15 +12,17 @@ import '../utils/app_constants.dart';
 
 class AuthController extends GetxController {
   //================================> Sign Up <=================================
-  final TextEditingController nameCtrl = TextEditingController();
-  final TextEditingController emailCtrl = TextEditingController();
-  final TextEditingController passwordCtrl = TextEditingController();
-  final TextEditingController confirmCtrl = TextEditingController();
+  final TextEditingController userNameCTR = TextEditingController();
+  final TextEditingController emailCTR = TextEditingController();
+  final TextEditingController passCTR = TextEditingController();
+  final TextEditingController birthDateCTRL = TextEditingController();
+  final TextEditingController locationCTRL = TextEditingController();
+  final TextEditingController bioCTRL = TextEditingController();
 
   // RxBool isSelectedRole = true.obs;
-  var selectDivision = ''.obs;
   var signUpLoading = false.obs;
   var token = "";
+/*
 
   handleSignUp() async {
     signUpLoading(true);
@@ -59,36 +60,13 @@ class AuthController extends GetxController {
       update();
     }
   }
+*/
 
-  //======================> Select Country and Birth Day <======================
-  final TextEditingController countryCTRL = TextEditingController();
-  final TextEditingController birthDayCTRL = TextEditingController();
-  var selectCountryLoading = false.obs;
-
-  selectCountry() async {
-    selectCountryLoading(true);
-    update();
-    Map<String, dynamic> body = {
-      "country": countryCTRL.text.trim(),
-      "dataOfBirth": birthDayCTRL.text.trim(),
-    };
-    Response response = await ApiClient.putData(
-        ApiConstants.profileDataEndPoint, jsonEncode(body));
-    if (response.statusCode == 200) {
-      Get.toNamed(AppRoutes.signInScreen);
-      countryCTRL.clear();
-      birthDayCTRL.clear();
-    } else {
-      ApiChecker.checkApi(response);
-    }
-
-    selectCountryLoading(false);
-    update();
-  }
-
-  //==================================> Log In <================================
+  //==================================> Sign In <================================
   TextEditingController signInEmailCtrl = TextEditingController();
   TextEditingController signInPassCtrl = TextEditingController();
+
+  /*
   var signInLoading = false.obs;
   handleLogIn() async {
     signInLoading(true);
@@ -133,10 +111,10 @@ class AuthController extends GetxController {
     }
     signInLoading(false);
   }
-
+*/
   //=================> Resend otp <=====================
   var resendOtpLoading = false.obs;
-  resendOtp(String email) async {
+  /* resendOtp(String email) async {
     resendOtpLoading(true);
     var body = {"email": email};
     Map<String, String> header = {'Content-Type': 'application/json'};
@@ -154,11 +132,11 @@ class AuthController extends GetxController {
     }
     resendOtpLoading(false);
   }
-
+*/
   //===================> Otp very <=======================
   TextEditingController otpCtrl = TextEditingController();
   var verifyLoading = false.obs;
-  handleOtpVery(
+  /* handleOtpVery(
       {required String email,
       required String otp,
       required String type}) async {
@@ -194,11 +172,12 @@ class AuthController extends GetxController {
       print("===> s : $s");
     }
     verifyLoading(false);
-  }
+  }*/
 
   //====================> Forgot pass word <=====================
   TextEditingController forgetEmailTextCtrl = TextEditingController();
   var forgotLoading = false.obs;
+/*
 
   handleForget() async {
     forgotLoading(true);
@@ -220,13 +199,14 @@ class AuthController extends GetxController {
     }
     forgotLoading(false);
   }
+*/
 
   //======================> Handle Change password <============================
   var changeLoading = false.obs;
-  TextEditingController oldPasswordCtrl = TextEditingController();
+  TextEditingController currentPasswordCtrl = TextEditingController();
   TextEditingController newPasswordCtrl = TextEditingController();
   TextEditingController confirmPassController = TextEditingController();
-
+/*
   handleChangePassword(String oldPassword, String newPassword) async {
     changeLoading(true);
     var body = {"oldPassword": oldPassword, "newPassword": newPassword};
@@ -246,9 +226,11 @@ class AuthController extends GetxController {
     }
     changeLoading(false);
   }
+*/
 
   //=============================> Set New password <===========================
   var resetPasswordLoading = false.obs;
+/*
   resetPassword(String email, String password) async {
     print("=======> $email, and $password");
     resetPasswordLoading(true);
@@ -285,5 +267,5 @@ class AuthController extends GetxController {
     }
     resetPasswordLoading(false);
   }
-}
 */
+}

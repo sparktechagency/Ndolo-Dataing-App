@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import '../../../../controllers/auth_controller.dart';
 import '../../../../helpers/route.dart';
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_icons.dart';
@@ -19,9 +20,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  final TextEditingController _userNameCTR = TextEditingController();
-  final TextEditingController _emailCTR = TextEditingController();
-  final TextEditingController _passCTR = TextEditingController();
+  final AuthController _authController  = Get.put(AuthController());
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isChecked = false;
 
@@ -66,7 +65,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   bottom: 8.h,
                 ),
                 CustomTextField(
-                  controller: _userNameCTR,
+                  controller: _authController.userNameCTR,
                   hintText: AppStrings.userName.tr,
                   prefixIcon: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -88,7 +87,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   bottom: 8.h,
                 ),
                 CustomTextField(
-                  controller: _emailCTR,
+                  controller: _authController.emailCTR,
                   hintText: AppStrings.email.tr,
                   prefixIcon: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -111,7 +110,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 CustomTextField(
                   isPassword: true,
-                  controller: _passCTR,
+                  controller: _authController.passCTR,
                   hintText: AppStrings.password.tr,
                   prefixIcon: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w),

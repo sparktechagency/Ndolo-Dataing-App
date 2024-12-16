@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:ndolo_dating/controllers/auth_controller.dart';
 import 'package:ndolo_dating/helpers/route.dart';
 import 'package:ndolo_dating/utils/app_icons.dart';
 import 'package:ndolo_dating/utils/app_strings.dart';
@@ -18,8 +19,7 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  final TextEditingController _emailCTR = TextEditingController();
-  final TextEditingController _passCTR = TextEditingController();
+  final AuthController _authController  = Get.put(AuthController());
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isChecked = false;
 
@@ -35,7 +35,12 @@ class _SignInScreenState extends State<SignInScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 84.h),
+                SizedBox(height: 40.h),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: _popupMenuButton(),
+                ),
+                SizedBox(height: 40.h),
                 Center(
                   child: SvgPicture.asset(AppIcons.appLogo),
                 ),
@@ -65,7 +70,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   bottom: 8.h,
                 ),
                 CustomTextField(
-                  controller: _emailCTR,
+                  controller: _authController.signInEmailCtrl,
                   hintText: AppStrings.email.tr,
                   prefixIcon: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -88,7 +93,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
                 CustomTextField(
                   isPassword: true,
-                  controller: _passCTR,
+                  controller: _authController.signInPassCtrl,
                   hintText: AppStrings.password.tr,
                   prefixIcon: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -179,6 +184,43 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  //================================> Popup Menu Button Method <=============================
+  PopupMenuButton<int> _popupMenuButton() {
+    return PopupMenuButton<int>(
+      padding: EdgeInsets.zero,
+      icon: const Icon(Icons.more_vert),
+      onSelected: (int result) {
+        if (result == 0) {
+          print('French');
+        } else if (result == 1) {
+          print('English');
+        }
+      },
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
+        PopupMenuItem<int>(
+          onTap: (){},
+          value: 0,
+          child: const Text(
+            'France',
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+        PopupMenuItem<int>(
+          onTap: (){},
+          value: 1,
+          child: const Text(
+            'English',
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+      ],
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
     );
   }
 }

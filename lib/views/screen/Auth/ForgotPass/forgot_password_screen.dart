@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:ndolo_dating/views/base/custom_app_bar.dart';
+import '../../../../controllers/auth_controller.dart';
 import '../../../../helpers/route.dart';
 import '../../../../utils/app_icons.dart';
 import '../../../../utils/app_strings.dart';
@@ -18,7 +19,7 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  final TextEditingController _emailCTR = TextEditingController();
+  final AuthController _authController  = Get.put(AuthController());
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isChecked = false;
 
@@ -64,7 +65,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   bottom: 8.h,
                 ),
                 CustomTextField(
-                  controller: _emailCTR,
+                  controller: _authController.forgetEmailTextCtrl,
                   hintText: AppStrings.email.tr,
                   prefixIcon: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w),

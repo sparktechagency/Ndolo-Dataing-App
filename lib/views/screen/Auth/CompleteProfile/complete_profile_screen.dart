@@ -6,6 +6,7 @@ import 'package:ndolo_dating/utils/app_colors.dart';
 import 'package:ndolo_dating/utils/app_icons.dart';
 import 'package:ndolo_dating/views/base/custom_button.dart';
 import 'package:ndolo_dating/views/base/custom_text_field.dart';
+import '../../../../controllers/auth_controller.dart';
 import '../../../../helpers/route.dart';
 import '../../../../utils/app_strings.dart';
 import '../../../base/custom_app_bar.dart';
@@ -19,9 +20,7 @@ class CompleteProfileScreen extends StatefulWidget {
 }
 
 class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
-  final TextEditingController _birthDateCTRL = TextEditingController();
-  final TextEditingController _locationCTRL = TextEditingController();
-  final TextEditingController _bioCTRL = TextEditingController();
+  final AuthController _authController  = Get.put(AuthController());
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? selectedGender;
   String? selectedInterest;
@@ -78,7 +77,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                     _pickBirthDate(context);
                   },
                   readOnly: true,
-                  controller: _birthDateCTRL,
+                  controller: _authController.birthDateCTRL,
                   hintText: 'DD-MM-YYYY',
                   suffixIcons: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8.w),
@@ -108,7 +107,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                   bottom: 8.h,
                 ),
                 CustomTextField(
-                  controller: _locationCTRL,
+                  controller: _authController.locationCTRL,
                   hintText: AppStrings.enterYourAddress.tr,
                   suffixIcons: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8.w),
@@ -129,7 +128,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                   bottom: 8.h,
                 ),
                 CustomTextField(
-                  controller: _bioCTRL,
+                  controller: _authController.bioCTRL,
                   hintText: AppStrings.writeShortBio.tr,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -294,7 +293,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
     );
     if (pickedDate != null) {
       setState(() {
-        _birthDateCTRL.text =
+        _authController.birthDateCTRL.text =
             "${pickedDate.month}-${pickedDate.day}-${pickedDate.year}";
       });
     }
