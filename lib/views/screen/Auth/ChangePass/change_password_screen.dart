@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:ndolo_dating/utils/app_strings.dart';
 import 'package:ndolo_dating/views/base/custom_text.dart';
+import '../../../../controllers/auth_controller.dart';
 import '../../../../helpers/route.dart';
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_icons.dart';
@@ -19,9 +20,7 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
-  final TextEditingController _oldPassCTRL = TextEditingController();
-  final TextEditingController _passCTRL = TextEditingController();
-  final TextEditingController _confirmPassCTRL = TextEditingController();
+  final AuthController _authController  = Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +41,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               ),
               CustomTextField(
                 isPassword: true,
-                controller: _oldPassCTRL,
+                controller: _authController.currentPasswordCtrl,
                 prefixIcon: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: SvgPicture.asset(AppIcons.lock),
@@ -59,7 +58,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               ),
               CustomTextField(
                 isPassword: true,
-                controller: _passCTRL,
+                controller: _authController.newPasswordCtrl,
                 prefixIcon: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: SvgPicture.asset(AppIcons.lock),
@@ -76,7 +75,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               ),
               CustomTextField(
                 isPassword: true,
-                controller: _confirmPassCTRL,
+                controller: _authController.confirmPassController,
                 prefixIcon: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: SvgPicture.asset(AppIcons.lock),

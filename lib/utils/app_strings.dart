@@ -106,4 +106,5 @@ class AppStrings {
   static String areYouSureDeleteAccount = 'Are you sure you want to delete your Account?';
   static String yesDelete = 'Yes, Delete';
   static String language = 'Language';
+  static String chooseYourLanguage = 'Choose your language';
 }

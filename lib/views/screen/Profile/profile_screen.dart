@@ -50,7 +50,7 @@ class ProfileScreen extends StatelessWidget {
                 //=============================> Profile Picture <=============================
                 CustomNetworkImage(
                   imageUrl:
-                      'https://s3-alpha-sig.figma.com/img/a1c9/575c/4f24b44129bd1c1832d68d397b792497?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GwEsZ3WRA~UZBXPSyVn1~EP56OutWf9ks3Pp5SGI6MCjGGZAFlHEi2N4IlDVFviedcItZdtfZQtgWJHPudEZFWEcFDRzdXKF-VR8B1Sbr0xTBOs2pmjcEAJUy-mGNPoh0~QXEtajPrE9MKTiQrV2581Cm0gx8yNzIXLqrRy5xdqs6nyUprsgffdi~rkm3SylakKm40tW6mCca7fwwTduZ6hzxrjf1vsbiFdkl9ntcgMN89j3zasCaMxVOa9wueLCPiablbJiC1z5lO8nY5ensKpTa5AKMLg0pS6dIDBEst9u95IIhxLBaaheZC2JrOb6aAwBzMY2hq5R1IhXkaWpfg__',
+                      'https://s3-alpha-sig.figma.com/img/a1c9/575c/4f24b44129bd1c1832d68d397b792497?Expires=1735516800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=gApV0GgAScr~HmAV30lTtGq6BCRcp7zXc4yxQ3KC4wfdZsWZ3jW4~e9az0FVvntpJnwhLbDi3LuFjoaVruQH2hGvaRs2P7-nqKgswWdSvUlnZ9~HTp~6AN11Z8O4KaVY5NUnTrPEJ7Qj6ywAfkHO6aB6LLjlbfNG7RuYLIEGUEBJ5mHVNfVpa9xwonMeMCAWv2tCQLqqFhFn4YqZqe4eNphtaZGWV3GwTPHfIimceEhMzZYAYSUAYXmkjPQks2qH59XsQ-yn40ag40WRGMZpMP~hKWR1moDqleylqfTM7oAU0MoEqiQGtssCfJEgN8vw4DHlC-CNhbwm~QXu-fXxaA__',
                   height: 136.h,
                   width: 136.w,
                   boxShape: BoxShape.circle,
@@ -101,12 +101,12 @@ class ProfileScreen extends StatelessWidget {
           ),
           SizedBox(height: 24.h),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24 .w),
+            padding: EdgeInsets.symmetric(horizontal: 24.w),
             child: Column(
               children: [
                 //=====================> Account Information List Tile <===================
                 CustomListTile(
-                  onTap: (){
+                  onTap: () {
                     Get.toNamed(AppRoutes.accountInformationScreen);
                   },
                   title: AppStrings.accountInformation.tr,
@@ -115,8 +115,8 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 //=====================> Language List Tile <===================
                 CustomListTile(
-                  onTap: (){
-                    _popupMenuButton();
+                  onTap: () {
+                    _languageBottomSheet(context);
                   },
                   title: AppStrings.language.tr,
                   prefixIcon: SvgPicture.asset(AppIcons.lan),
@@ -124,15 +124,13 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 //=====================> Log Out List Tile <===================
                 CustomListTile(
-                  onTap: (){
+                  onTap: () {
                     _showCustomBottomSheet(context);
                   },
                   title: AppStrings.logOut.tr,
                   prefixIcon: SvgPicture.asset(AppIcons.logOut),
                   suffixIcon: SvgPicture.asset(AppIcons.rightArrow),
                 ),
-
-
               ],
             ),
           )
@@ -179,6 +177,7 @@ class ProfileScreen extends StatelessWidget {
               SizedBox(height: 20.h),
               CustomText(
                 text: AppStrings.areYouSureToLogOut.tr,
+                maxLine: 3,
                 fontSize: 16.sp,
               ),
               SizedBox(height: 20.h),
@@ -213,16 +212,15 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-
 //================================> Popup Menu Button Method <=============================
   PopupMenuButton<int> _popupMenuButton() {
     return PopupMenuButton<int>(
-    //  icon: const Icon(Icons.more_vert),
+      //  icon: const Icon(Icons.more_vert),
       onSelected: (int result) {
         if (result == 0) {
-          print('Report selected');
+          print('French');
         } else if (result == 1) {
-          print('Block selected');
+          print('English');
         }
       },
       itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
@@ -260,5 +258,76 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-
+  //===============================> Language Bottom Sheet <===============================
+  _languageBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20.r),
+        ),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20.r),
+              topRight: Radius.circular(20.r),
+            ),
+            color: AppColors.cardColor,
+          ),
+          height: 265,
+          padding: EdgeInsets.all(16.w),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomText(
+                text: AppStrings.language.tr,
+                fontWeight: FontWeight.bold,
+                fontSize: 24.sp,
+                color: AppColors.primaryColor,
+              ),
+              SizedBox(height: 20.h),
+              Divider(
+                thickness: 1,
+                color: AppColors.primaryColor,
+                indent: 15.w,
+              ),
+              SizedBox(height: 20.h),
+              CustomText(
+                text: AppStrings.chooseYourLanguage.tr,
+                maxLine: 2,
+                fontSize: 16.sp,
+              ),
+              SizedBox(height: 20.h),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomButton(
+                    width: 120.w,
+                    onTap: () {
+                      Get.back();
+                      print('==============> Select French Language');
+                    },
+                    text: "France",
+                    color: Colors.white,
+                    textColor: AppColors.primaryColor,
+                  ),
+                  SizedBox(width: 16.w),
+                  CustomButton(
+                      width: 120.w,
+                      onTap: () {
+                        Get.back();
+                        print('==============> Select English Language');
+                      },
+                      text: "English"),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }

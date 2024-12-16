@@ -99,5 +99,6 @@
   "updatePassword": "Update Password",
   "enterYourPasswordToDeleteAccount": "Enter your current password to delete your account.",
   "areYouSureDeleteAccount": "Are you sure you want to delete your Account?",
-  "yesDelete": "Yes, Delete"
+  "yesDelete": "Yes, Delete",
+  "chooseYourLanguage": "Choose your language"
 }
