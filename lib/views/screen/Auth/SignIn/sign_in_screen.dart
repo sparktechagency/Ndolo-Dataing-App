@@ -40,7 +40,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   alignment: Alignment.topRight,
                   child: _popupMenuButton(),
                 ),
-                SizedBox(height: 40.h),
+                SizedBox(height: 16.h),
                 Center(
                   child: SvgPicture.asset(AppIcons.appLogo),
                 ),
@@ -139,7 +139,8 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                     ),
                   ],
-                )
+                ),
+                SizedBox(height: 32.h),
               ],
             ),
           ),
