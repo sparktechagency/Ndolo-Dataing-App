@@ -22,6 +22,8 @@ class _SignInScreenState extends State<SignInScreen> {
   final AuthController _authController  = Get.put(AuthController());
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isChecked = false;
+  final List<String> language = ['English', 'French'];
+  String? selectedLanguage;
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +38,69 @@ class _SignInScreenState extends State<SignInScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 40.h),
+                //===========================> Language Dropdown Button <===================================
                 Align(
                   alignment: Alignment.topRight,
-                  child: _popupMenuButton(),
+                  child:  Container(
+                   width: 110.w,
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    decoration: BoxDecoration(
+                      color: AppColors.fillColor,
+                      borderRadius: BorderRadius.circular(16.r),
+                      border: Border.all(color: AppColors.borderColor, width: 1),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        focusColor: Colors.white,
+                        value: selectedLanguage,
+                        dropdownColor: AppColors.borderColor,
+                        style: TextStyle(
+                          color: AppColors.borderColor,
+                          fontSize: 14.sp,
+                        ),
+                        menuWidth: 132.w,
+                        borderRadius: BorderRadius.circular(8.r),
+                        hint: CustomText(
+                          text: 'English'.tr,
+                          fontSize: 14.sp,
+                          color: AppColors.borderColor,
+                        ),
+                        icon: SvgPicture.asset(
+                          AppIcons.downArrow,
+                          color: AppColors.borderColor,
+                        ),
+                        isExpanded: true,
+                        items: language.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: CustomText(
+                              text: value,
+                              fontSize: 14.sp,
+                              color: AppColors.backgroundColor, // Item text color
+                            ),
+                          );
+                        }).toList(),
+                        selectedItemBuilder: (BuildContext context) {
+                          return language.map((String value) {
+                            return Align(
+                              alignment: Alignment.centerLeft,
+                              child: CustomText(
+                                text: value,
+                                fontSize: 14.sp,
+                                color: AppColors.borderColor,
+                              ),
+                            );
+                          }).toList();
+                        },
+                        onChanged: (newValue) {
+                          setState(() {
+                            selectedLanguage = newValue;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  //_popupMenuButton(),
                 ),
                 SizedBox(height: 16.h),
                 Center(
@@ -205,7 +267,7 @@ class _SignInScreenState extends State<SignInScreen> {
           onTap: (){},
           value: 0,
           child: const Text(
-            'France',
+            'French',
             style: TextStyle(color: Colors.black),
           ),
         ),
@@ -222,6 +284,34 @@ class _SignInScreenState extends State<SignInScreen> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),
+    );
+  }
+}
+class LanguageButton extends StatelessWidget {
+  final String language;
+
+  const LanguageButton({Key? key, required this.language}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        // Handle language selection
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Language Selected'),
+            content: CustomText(text: 'You selected $language.', color: Colors.white,),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: CustomText(text: 'Close', color: Colors.white,),
+              ),
+            ],
+          ),
+        );
+      },
+      child: Text(language),
     );
   }
 }
