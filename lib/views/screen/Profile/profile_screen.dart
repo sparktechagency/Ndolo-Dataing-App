@@ -200,7 +200,7 @@ class ProfileScreen extends StatelessWidget {
                       width: 115.w,
                       child: CustomButton(
                           onTap: () {
-                            Get.offAllNamed(AppRoutes.homeScreen);
+                            Get.offAllNamed(AppRoutes.signInScreen);
                           },
                           text: "Yes")),
                 ],
