@@ -57,4 +57,5 @@ class AppIcons {
   static String terms = "$baseUrl/terms.svg";
   static String about = "$baseUrl/about.svg";
   static String delete = "$baseUrl/delete.svg";
+  static String filter = "$baseUrl/filter.svg";
 }

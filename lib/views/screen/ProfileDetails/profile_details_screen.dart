@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:ndolo_dating/helpers/route.dart';
 import 'package:ndolo_dating/utils/app_colors.dart';
 import 'package:ndolo_dating/utils/app_icons.dart';
-import 'package:ndolo_dating/utils/app_images.dart';
 import 'package:ndolo_dating/utils/app_strings.dart';
 import 'package:ndolo_dating/views/base/custom_app_bar.dart';
 import 'package:ndolo_dating/views/base/custom_network_image.dart';
@@ -25,9 +25,10 @@ class ProfileDetailsScreen extends StatelessWidget {
             children: [
               //========================> Image Container <==========================
               CustomNetworkImage(
-                imageUrl: 'https://s3-alpha-sig.figma.com/img/a1c9/575c/4f24b44129bd1c1832d68d397b792497?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GwEsZ3WRA~UZBXPSyVn1~EP56OutWf9ks3Pp5SGI6MCjGGZAFlHEi2N4IlDVFviedcItZdtfZQtgWJHPudEZFWEcFDRzdXKF-VR8B1Sbr0xTBOs2pmjcEAJUy-mGNPoh0~QXEtajPrE9MKTiQrV2581Cm0gx8yNzIXLqrRy5xdqs6nyUprsgffdi~rkm3SylakKm40tW6mCca7fwwTduZ6hzxrjf1vsbiFdkl9ntcgMN89j3zasCaMxVOa9wueLCPiablbJiC1z5lO8nY5ensKpTa5AKMLg0pS6dIDBEst9u95IIhxLBaaheZC2JrOb6aAwBzMY2hq5R1IhXkaWpfg__',
-                  height: 500.h,
-                  width: double.infinity,
+                imageUrl:
+                    'https://s3-alpha-sig.figma.com/img/a1c9/575c/4f24b44129bd1c1832d68d397b792497?Expires=1736121600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=HP~g2isaLmKYYEX7JW5pkf3BqASThNhk2qr9Lwm4n~hb3-MNOCkMkSKisOmJR1Ek1RbvHPJg0FR0JQMftfttFmCtbeAzM92m1pgnyTco2JJSLsO5FRaNeULov3LA1cjRd1PhnJptohNDdsWFaR2MD8KnrfxfxKZ3svY5SPrGvRQZVLJ44z0tGYwRxkd8PvJP0TTUdQZNodflp7pIQQZN3oVyanZ~68VCaFlQc6j8jzOSFYeYpSPk6CSs2R61QZhvdCJ1Ys1re~sL5TUgZmDIeBobPPnuYe~u36UYZf8yl4JRCfJO50xNVW7mD9Twq3HtYS8RHCqjoAYHrwt3Sbf8mg__',
+                height: 500.h,
+                width: double.infinity,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(8.r),
                     topRight: Radius.circular(8.r)),
@@ -63,7 +64,9 @@ class ProfileDetailsScreen extends StatelessWidget {
                           ),
                           const Spacer(),
                           InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                Get.toNamed(AppRoutes.chatScreen);
+                              },
                               child: SvgPicture.asset(
                                 AppIcons.messageOut,
                                 color: const Color(0xff430750),
@@ -133,9 +136,12 @@ class ProfileDetailsScreen extends StatelessWidget {
                 children: [
                   _interestChip(SvgPicture.asset(AppIcons.movie), 'Movie'),
                   _interestChip(SvgPicture.asset(AppIcons.movie), 'Snooker'),
-                  _interestChip(SvgPicture.asset(AppIcons.swimming), 'Swimming'),
-                  _interestChip(SvgPicture.asset(AppIcons.book), 'Books Reading'),
-                  _interestChip(SvgPicture.asset(AppIcons.photo), 'Photography'),
+                  _interestChip(
+                      SvgPicture.asset(AppIcons.swimming), 'Swimming'),
+                  _interestChip(
+                      SvgPicture.asset(AppIcons.book), 'Books Reading'),
+                  _interestChip(
+                      SvgPicture.asset(AppIcons.photo), 'Photography'),
                   _interestChip(SvgPicture.asset(AppIcons.design), 'Design'),
                   _interestChip(SvgPicture.asset(AppIcons.music), 'Music'),
                   _interestChip(SvgPicture.asset(AppIcons.cooking), 'Cooking'),
@@ -153,8 +159,9 @@ class ProfileDetailsScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: List.generate(4, (index) {
                   return CustomNetworkImage(
-                      imageUrl: 'https://s3-alpha-sig.figma.com/img/a1c9/575c/4f24b44129bd1c1832d68d397b792497?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GwEsZ3WRA~UZBXPSyVn1~EP56OutWf9ks3Pp5SGI6MCjGGZAFlHEi2N4IlDVFviedcItZdtfZQtgWJHPudEZFWEcFDRzdXKF-VR8B1Sbr0xTBOs2pmjcEAJUy-mGNPoh0~QXEtajPrE9MKTiQrV2581Cm0gx8yNzIXLqrRy5xdqs6nyUprsgffdi~rkm3SylakKm40tW6mCca7fwwTduZ6hzxrjf1vsbiFdkl9ntcgMN89j3zasCaMxVOa9wueLCPiablbJiC1z5lO8nY5ensKpTa5AKMLg0pS6dIDBEst9u95IIhxLBaaheZC2JrOb6aAwBzMY2hq5R1IhXkaWpfg__',
-                      height: 75.h,
+                    imageUrl:
+                        'https://s3-alpha-sig.figma.com/img/a1c9/575c/4f24b44129bd1c1832d68d397b792497?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GwEsZ3WRA~UZBXPSyVn1~EP56OutWf9ks3Pp5SGI6MCjGGZAFlHEi2N4IlDVFviedcItZdtfZQtgWJHPudEZFWEcFDRzdXKF-VR8B1Sbr0xTBOs2pmjcEAJUy-mGNPoh0~QXEtajPrE9MKTiQrV2581Cm0gx8yNzIXLqrRy5xdqs6nyUprsgffdi~rkm3SylakKm40tW6mCca7fwwTduZ6hzxrjf1vsbiFdkl9ntcgMN89j3zasCaMxVOa9wueLCPiablbJiC1z5lO8nY5ensKpTa5AKMLg0pS6dIDBEst9u95IIhxLBaaheZC2JrOb6aAwBzMY2hq5R1IhXkaWpfg__',
+                    height: 75.h,
                     width: 70.w,
                     borderRadius: BorderRadius.circular(4.r),
                   );
