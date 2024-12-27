@@ -8,16 +8,19 @@ import '../views/screen/Auth/ResetPass/reset_password_screen.dart';
 import '../views/screen/Auth/SignIn/sign_in_screen.dart';
 import '../views/screen/Auth/SignUp/sign_up_screen.dart';
 import '../views/screen/Auth/UploadPhotos/upload_photos_screen.dart';
+import '../views/screen/Filter/filter_screen.dart';
 import '../views/screen/Home/home_screen.dart';
 import '../views/screen/IdealMatch/ideal_match_screen.dart';
 import '../views/screen/Matches/matches_screen.dart';
 import '../views/screen/Message/chat_screen.dart';
 import '../views/screen/Message/message_screen.dart';
+import '../views/screen/Notifications/notifications_screen.dart';
 import '../views/screen/PrivacyPolicy/privacy_policy_screen.dart';
 import '../views/screen/Profile/account_information_screen.dart';
 import '../views/screen/Profile/edit_account_information.dart';
 import '../views/screen/Profile/profile_screen.dart';
 import '../views/screen/ProfileDetails/profile_details_screen.dart';
+import '../views/screen/SearchResult/search_result_screen.dart';
 import '../views/screen/Settings/settings_screen.dart';
 import '../views/screen/Splash/onboarding_screen.dart';
 import '../views/screen/Splash/splash_screen.dart';
@@ -47,6 +50,9 @@ class AppRoutes{
   static String aboutUsScreen="/about_us_screen";
   static String privacyPolicyScreen="/privacy_policy_screen";
   static String termsServicesScreen="/terms_services_screen";
+  static String notificationsScreen="/notifications_screen";
+  static String filterScreen="/filter_screen";
+  static String searchResultScreen="/search_result_screen";
 
  static List<GetPage> page=[
     GetPage(name:splashScreen, page: ()=>const SplashScreen()),
@@ -72,5 +78,8 @@ class AppRoutes{
     GetPage(name:aboutUsScreen, page: ()=>const AboutUsScreen()),
     GetPage(name:privacyPolicyScreen, page: ()=>const PrivacyPolicyScreen()),
     GetPage(name:termsServicesScreen, page: ()=>const TermsServicesScreen()),
+    GetPage(name:notificationsScreen, page: ()=> const NotificationsScreen()),
+    GetPage(name:filterScreen, page: ()=>  FilterScreen()),
+    GetPage(name:searchResultScreen, page: ()=>  SearchResultScreen()),
   ];
 }

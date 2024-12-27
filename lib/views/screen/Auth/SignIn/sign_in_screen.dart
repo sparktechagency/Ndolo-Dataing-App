@@ -10,6 +10,7 @@ import 'package:ndolo_dating/views/base/custom_button.dart';
 import 'package:ndolo_dating/views/base/custom_text.dart';
 import 'package:ndolo_dating/views/base/custom_text_field.dart';
 import '../../../../utils/app_colors.dart';
+import '../../../../utils/app_images.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -19,7 +20,7 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  final AuthController _authController  = Get.put(AuthController());
+  final AuthController _authController = Get.put(AuthController());
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isChecked = false;
   final List<String> language = ['English', 'French'];
@@ -41,13 +42,14 @@ class _SignInScreenState extends State<SignInScreen> {
                 //===========================> Language Dropdown Button <===================================
                 Align(
                   alignment: Alignment.topRight,
-                  child:  Container(
-                   width: 110.w,
+                  child: Container(
+                    width: 110.w,
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                     decoration: BoxDecoration(
                       color: AppColors.fillColor,
                       borderRadius: BorderRadius.circular(16.r),
-                      border: Border.all(color: AppColors.borderColor, width: 1),
+                      border:
+                          Border.all(color: AppColors.borderColor, width: 1),
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
@@ -76,7 +78,8 @@ class _SignInScreenState extends State<SignInScreen> {
                             child: CustomText(
                               text: value,
                               fontSize: 14.sp,
-                              color: AppColors.backgroundColor, // Item text color
+                              color:
+                                  AppColors.backgroundColor, // Item text color
                             ),
                           );
                         }).toList(),
@@ -179,7 +182,50 @@ class _SignInScreenState extends State<SignInScreen> {
                       }
                     },
                     text: AppStrings.signIn.tr),
-                SizedBox(height: 32.h),
+                SizedBox(height: 16.h),
+                //=======================> Or  <=====================
+                Center(
+                  child: CustomText(
+                    text: 'Or'.tr,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18.sp,
+                    bottom: 16.h,
+                  ),
+                ),
+                //=======================> Google and Facebook Button <=====================
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16.r),
+                              border: Border.all(
+                                  width: 1.w, color: AppColors.primaryColor)),
+                          child: Padding(
+                            padding: EdgeInsets.all(8.w),
+                            child: Image.asset(AppImages.googleLogo,
+                                width: 32.w, height: 32.h),
+                          )),
+                    ),
+                    SizedBox(width: 12.w),
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16.r),
+                              border: Border.all(
+                                  width: 1.w, color: AppColors.primaryColor)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.asset(AppImages.facebookLogo,
+                                width: 32.w, height: 32.h),
+                          )),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16.h),
                 //=======================> Don’t have an account <=====================
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -249,7 +295,6 @@ class _SignInScreenState extends State<SignInScreen> {
       ],
     );
   }
-
   //================================> Popup Menu Button Method <=============================
   PopupMenuButton<int> _popupMenuButton() {
     return PopupMenuButton<int>(
@@ -264,7 +309,7 @@ class _SignInScreenState extends State<SignInScreen> {
       },
       itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
         PopupMenuItem<int>(
-          onTap: (){},
+          onTap: () {},
           value: 0,
           child: const Text(
             'French',
@@ -272,7 +317,7 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
         ),
         PopupMenuItem<int>(
-          onTap: (){},
+          onTap: () {},
           value: 1,
           child: const Text(
             'English',
@@ -284,34 +329,6 @@ class _SignInScreenState extends State<SignInScreen> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),
-    );
-  }
-}
-class LanguageButton extends StatelessWidget {
-  final String language;
-
-  const LanguageButton({Key? key, required this.language}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        // Handle language selection
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text('Language Selected'),
-            content: CustomText(text: 'You selected $language.', color: Colors.white,),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: CustomText(text: 'Close', color: Colors.white,),
-              ),
-            ],
-          ),
-        );
-      },
-      child: Text(language),
     );
   }
 }
