@@ -28,8 +28,6 @@ class ProfileController extends GetxController {
   final TextEditingController dateBirthCTRL = TextEditingController();
   final TextEditingController locationCTRL = TextEditingController();
   final TextEditingController bioCTRL = TextEditingController();
-  final TextEditingController eatingCTRL = TextEditingController();
-  final TextEditingController favoriteCTRL = TextEditingController();
 
   //===============================> Image Picker <=============================
   Future pickImage(ImageSource source) async {
