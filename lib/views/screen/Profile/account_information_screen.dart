@@ -67,28 +67,6 @@ class AccountInformationScreen extends StatelessWidget {
               CustomListTile(
                   title:
                       'Hello there! I\'m Rida, seeking a lifelong adventure partner. A blend of tradition and modernity, I find joy in the simple moments and cherish family values. With a heart that believes in love\'s magic, I\'m looking for someone to share happiness.'),
-              SizedBox(height: 16.h),
-              //======================> Eating Practice List Tile <========================
-              CustomText(
-                text: AppStrings.eatingPractice.tr,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.bold,
-                bottom: 8.h,
-              ),
-              CustomListTile(
-                  title:
-                      'Lorem ipsum dolor sit amet consectetur. Protein id mass consectetur magna urn. Sed sed curability est tongue null habitat gestates. Interdict et sed riviera adipiscing. Mi venation habitat incident id integer sed vitae.'),
-              SizedBox(height: 16.h),
-              //======================> Favorite Cuisine List Tile <========================
-              CustomText(
-                text: AppStrings.favoriteCuisine.tr,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.bold,
-                bottom: 8.h,
-              ),
-              CustomListTile(
-                  title:
-                      'Lorem ipsum dolor sit amet consectetur. Cras quam ut turpis lorem fermentum diam integer. Elementum in purus ut nunc hendrerit eget. Sed sem ullamcorper sed nunc orci tempor purus vel. Netus elementum accumsan et nunc tellus quis.'),
               SizedBox(height: 32.h),
               //======================> Edit Button <========================
               CustomButton(

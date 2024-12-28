@@ -60,23 +60,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 SizedBox(height: 16.h),
-                //=======================> User Name Field <=====================
+                //=======================> First Name Field <=====================
                 CustomText(
-                  text: AppStrings.userName.tr,
+                  text: 'First Name'.tr,
                   fontWeight: FontWeight.w500,
                   fontSize: 16.sp,
                   bottom: 8.h,
                 ),
                 CustomTextField(
-                  controller: _authController.userNameCTR,
-                  hintText: AppStrings.userName.tr,
+                  controller: _authController.firstNameCTR,
+                  hintText: 'Type first name'.tr,
                   prefixIcon: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
                     child: SvgPicture.asset(AppIcons.user),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Please enter your email";
+                      return "Please enter your first name";
                     }
                     return null;
                   },
@@ -340,7 +340,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               const TextSpan(text: ' & '),
               TextSpan(
-                text: 'Privacy Policy',
+                text: 'Privacy Policy\n',
                 style: TextStyle(
                     color: AppColors.primaryColor,
                     fontSize: 14.w,
@@ -350,7 +350,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Get.toNamed(AppRoutes.privacyPolicyScreen);
                   },
               ),
-              const TextSpan(text: '\n to learn more '),
+             // const TextSpan(text: '\n to learn more '),
               TextSpan(
                 text: 'About Us.',
                 style: TextStyle(

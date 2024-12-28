@@ -178,7 +178,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 CustomButton(
                     onTap: () {
                       if (_formKey.currentState!.validate()) {
-                        Get.offAllNamed(AppRoutes.homeScreen);
+                        Get.offAllNamed(AppRoutes.idealMatchScreen);
                       }
                     },
                     text: AppStrings.signIn.tr),

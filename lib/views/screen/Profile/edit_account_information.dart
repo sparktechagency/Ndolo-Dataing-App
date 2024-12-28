@@ -81,35 +81,7 @@ class EditAccountInformation extends StatelessWidget {
                     'Lorem ipsum dolor sit amet consectetur. Proin id massa consectetur magna urna. Sed sed curabitur est congue nulla habitant egestas. Interdum et sed viverra adipiscing. Mi venenatis habitant tincidunt id integer sed vitae.',
                 maxLines: 5,
               ),
-              SizedBox(height: 16.h),
-              //======================> Eating Practice Text Field <========================
-              CustomText(
-                text: AppStrings.eatingPractice.tr,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.bold,
-                bottom: 8.h,
-              ),
-              CustomTextField(
-                controller: _profileController.eatingCTRL,
-                hintText:
-                    'Lorem ipsum dolor sit amet consectetur. Proin id massa consectetur magna urna. Sed sed curabitur est congue nulla habitant egestas. Interdum et sed viverra adipiscing. Mi venenatis habitant tincidunt id integer sed vitae.',
-                maxLines: 5,
-              ),
-              SizedBox(height: 16.h),
-              //======================> Favorite Cuisine Text Field <========================
-              CustomText(
-                text: AppStrings.favoriteCuisine.tr,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.bold,
-                bottom: 8.h,
-              ),
-              CustomTextField(
-                controller: _profileController.favoriteCTRL,
-                hintText:
-                    'Lorem ipsum dolor sit amet consectetur. Prion id mass consectetur magna urn. Sed sed curability est tongue nulla habitant egestas. Interdum et sed viverra adipiscing. Mi venenatis habitant tincidunt id integer sed vitae.',
-                maxLines: 5,
-              ),
-              SizedBox(height: 32.h),
+             SizedBox(height: 132.h),
               //======================> Update Button <========================
               CustomButton(
                   onTap: () {

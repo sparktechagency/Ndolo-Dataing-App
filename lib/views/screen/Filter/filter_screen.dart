@@ -17,96 +17,184 @@ class FilterScreen extends StatefulWidget {
 class _FilterScreenState extends State<FilterScreen> {
   double _minDistance = 0;
   double _maxDistance = 200;
-  final List<String> gender = ['Male ', 'Female', 'Other'];
-  double _minAge = 0;
-  double _maxAge = 60;
+  final List<String> country = ['It\'s come from Api '];
+  final List<String> gender = ['Male ', 'Female'];
+  final List<String> match = ['Love ', 'Come-We-Stay','I\'m Free Today','Friends', 'Business'];
+  double _minAge = 18;
+  double _maxAge = 80;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: 'Filter'.tr),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //=======================> Distance Range Slider <==================
-            Text('Distance (Mi)'.tr,
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.sp)),
-            const SizedBox(height: 8),
-            _distancePriceSlider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _priceTag('Minimum', _minDistance),
-                _priceTag('Maximum', _maxDistance),
-              ],
-            ),
-            SizedBox(height: 24.h),
-            //=======================> Show Me <==================
-            CustomText(
-              text: 'Show Me'.tr,
-              fontWeight: FontWeight.w700,
-              fontSize: 18.sp,
-              bottom: 8.h,
-            ),
-            //===============================> Dropdowns <======================
-            DropdownButtonFormField<String>(
-              dropdownColor: Colors.white,
-              icon: const Icon(
-                Icons.arrow_drop_down,
-                color: Colors.black,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              //=======================> Country <==================
+              CustomText(
+                text: 'Country'.tr,
+                fontWeight: FontWeight.w700,
+                fontSize: 18.sp,
+                bottom: 8.h,
               ),
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.r),
-                  borderSide: BorderSide(color: AppColors.primaryColor),
+              //===============================> Dropdowns <======================
+              DropdownButtonFormField<String>(
+                dropdownColor: Colors.white,
+                icon: const Icon(
+                  Icons.arrow_drop_down,
+                  color: Colors.black,
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.r),
-                  borderSide:
-                      BorderSide(color: AppColors.primaryColor, width: 1.5),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.r),
+                    borderSide: BorderSide(color: AppColors.primaryColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.r),
+                    borderSide:
+                    BorderSide(color: AppColors.primaryColor, width: 1.5),
+                  ),
                 ),
-              ),
-              items: gender
-                  .map(
-                    (e) => DropdownMenuItem(
-                      value: e,
-                      child: Text(
-                        e,
-                        style: const TextStyle(color: Colors.black),
-                      ),
+                items: country
+                    .map(
+                      (e) => DropdownMenuItem(
+                    value: e,
+                    child: Text(
+                      e,
+                      style: const TextStyle(color: Colors.black),
                     ),
-                  )
-                  .toList(),
-              onChanged: (value) {},
-              hint: Text(
-                'Looking for..',
-                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),
+                  ),
+                )
+                    .toList(),
+                onChanged: (value) {},
+                hint: Text(
+                  'Select Country..',
+                  style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),
+                ),
               ),
-            ),
-            SizedBox(height: 24.h),
-            //=======================> Price Range Slider <==================
-            Text('Age'.tr,
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.sp)),
-            const SizedBox(height: 8),
-            _agePriceSlider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _priceTag('Minimum', _minAge),
-                _priceTag('Maximum', _maxAge),
-              ],
-            ),
-            const Spacer(),
-            //====================> Fin
-            CustomButton(
-                onTap: () {
-                  Get.toNamed(AppRoutes.searchResultScreen);
-                },
-                text: 'Find Friends'),
-            SizedBox(height: 32.h),
-          ],
+              SizedBox(height: 24.h),
+              //=======================> Distance Range Slider <==================
+              Text('Distance (Mi)'.tr,
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.sp)),
+              _distancePriceSlider(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _priceTag('Minimum', _minDistance),
+                  _priceTag('Maximum', _maxDistance),
+                ],
+              ),
+              SizedBox(height: 24.h),
+              //=======================> Show Me <==================
+              CustomText(
+                text: 'Looking For'.tr,
+                fontWeight: FontWeight.w700,
+                fontSize: 18.sp,
+                bottom: 8.h,
+              ),
+              //===============================> Dropdowns <======================
+              DropdownButtonFormField<String>(
+                dropdownColor: Colors.white,
+                icon: const Icon(
+                  Icons.arrow_drop_down,
+                  color: Colors.black,
+                ),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.r),
+                    borderSide: BorderSide(color: AppColors.primaryColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.r),
+                    borderSide:
+                        BorderSide(color: AppColors.primaryColor, width: 1.5),
+                  ),
+                ),
+                items: gender
+                    .map(
+                      (e) => DropdownMenuItem(
+                        value: e,
+                        child: Text(
+                          e,
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value) {},
+                hint: Text(
+                  'Looking for..',
+                  style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),
+                ),
+              ),
+              SizedBox(height: 24.h),
+              //=======================> Price Range Slider <==================
+              Text('Age'.tr,
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.sp)),
+              _agePriceSlider(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _priceTag('Minimum', _minAge),
+                  _priceTag('Maximum', _maxAge),
+                ],
+              ),
+              SizedBox(height: 24.h),
+              //=======================> Match <==================
+              CustomText(
+                text: 'Match'.tr,
+                fontWeight: FontWeight.w700,
+                fontSize: 18.sp,
+                bottom: 8.h,
+              ),
+              //===============================> Dropdowns <======================
+              DropdownButtonFormField<String>(
+                dropdownColor: Colors.white,
+                icon: const Icon(
+                  Icons.arrow_drop_down,
+                  color: Colors.black,
+                ),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.r),
+                    borderSide: BorderSide(color: AppColors.primaryColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.r),
+                    borderSide:
+                    BorderSide(color: AppColors.primaryColor, width: 1.5),
+                  ),
+                ),
+                items: match
+                    .map(
+                      (e) => DropdownMenuItem(
+                    value: e,
+                    child: Text(
+                      e,
+                      style: const TextStyle(color: Colors.black),
+                    ),
+                  ),
+                )
+                    .toList(),
+                onChanged: (value) {},
+                hint: Text(
+                  'Matches..',
+                  style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),
+                ),
+              ),
+              SizedBox(height: 24.h),
+              //====================> Find Friends Button <=====================
+              CustomButton(
+                  onTap: () {
+                    Get.toNamed(AppRoutes.searchResultScreen);
+                  },
+                  text: 'Find Friends'),
+              SizedBox(height: 16.h),
+            ],
+          ),
         ),
       ),
     );
@@ -138,9 +226,9 @@ class _FilterScreenState extends State<FilterScreen> {
       activeColor: AppColors.primaryColor,
       inactiveColor: AppColors.greyColor,
       values: RangeValues(_minAge, _maxAge),
-      min: 0,
-      max: 60,
-      divisions: 60,
+      min: 18,
+      max: 80,
+      divisions: 80,
       labels:
           RangeLabels(_minAge.toStringAsFixed(0), _maxAge.toStringAsFixed(0)),
       onChanged: (values) {

@@ -310,7 +310,7 @@ class ProfileScreen extends StatelessWidget {
                       Get.back();
                       print('==============> Select French Language');
                     },
-                    text: "France",
+                    text: "French",
                     color: Colors.white,
                     textColor: AppColors.primaryColor,
                   ),

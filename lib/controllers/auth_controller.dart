@@ -12,7 +12,7 @@ import '../utils/app_constants.dart';
 
 class AuthController extends GetxController {
   //================================> Sign Up <=================================
-  final TextEditingController userNameCTR = TextEditingController();
+  final TextEditingController firstNameCTR = TextEditingController();
   final TextEditingController emailCTR = TextEditingController();
   final TextEditingController passCTR = TextEditingController();
   final TextEditingController birthDateCTRL = TextEditingController();

@@ -95,7 +95,7 @@ class ProfileDetailsScreen extends StatelessWidget {
               SizedBox(height: 16.h),
               //========================> About Container <==========================
               CustomText(
-                text: AppStrings.aboutUs.tr,
+                text: AppStrings.bio.tr,
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w700,
                 bottom: 4.h,
