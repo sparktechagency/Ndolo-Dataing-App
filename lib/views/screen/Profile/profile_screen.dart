@@ -113,15 +113,6 @@ class ProfileScreen extends StatelessWidget {
                   prefixIcon: SvgPicture.asset(AppIcons.account),
                   suffixIcon: SvgPicture.asset(AppIcons.rightArrow),
                 ),
-                //=====================> Language List Tile <===================
-                CustomListTile(
-                  onTap: () {
-                    _languageBottomSheet(context);
-                  },
-                  title: AppStrings.language.tr,
-                  prefixIcon: SvgPicture.asset(AppIcons.lan),
-                  suffixIcon: SvgPicture.asset(AppIcons.rightArrow),
-                ),
                 //=====================> Log Out List Tile <===================
                 CustomListTile(
                   onTap: () {
@@ -258,76 +249,4 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  //===============================> Language Bottom Sheet <===============================
-  _languageBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20.r),
-        ),
-      ),
-      builder: (BuildContext context) {
-        return Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20.r),
-              topRight: Radius.circular(20.r),
-            ),
-            color: AppColors.cardColor,
-          ),
-          height: 265,
-          padding: EdgeInsets.all(16.w),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomText(
-                text: AppStrings.language.tr,
-                fontWeight: FontWeight.bold,
-                fontSize: 24.sp,
-                color: AppColors.primaryColor,
-              ),
-              SizedBox(height: 20.h),
-              Divider(
-                thickness: 1,
-                color: AppColors.primaryColor,
-                indent: 15.w,
-              ),
-              SizedBox(height: 20.h),
-              CustomText(
-                text: AppStrings.chooseYourLanguage.tr,
-                maxLine: 2,
-                fontSize: 16.sp,
-              ),
-              SizedBox(height: 20.h),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CustomButton(
-                    width: 120.w,
-                    onTap: () {
-                      Get.back();
-                      print('==============> Select French Language');
-                    },
-                    text: "French",
-                    color: Colors.white,
-                    textColor: AppColors.primaryColor,
-                  ),
-                  SizedBox(width: 16.w),
-                  CustomButton(
-                      width: 120.w,
-                      onTap: () {
-                        Get.back();
-                        print('==============> Select English Language');
-                      },
-                      text: "English"),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
 }
