@@ -36,7 +36,7 @@ class _IdealMatchScreenState extends State<IdealMatchScreen> {
                 Image.asset(AppImages.appLogo, width: 121.w, height: 32.h),
                 SizedBox(height: 16.h),
                 CustomText(
-                  text: AppStrings.idealMatch.tr,
+                  text: AppStrings.finding.tr,
                   fontSize: 24.sp,
                   fontWeight: FontWeight.w700,
                   color: const Color(0xff430750),

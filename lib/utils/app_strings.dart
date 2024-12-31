@@ -48,6 +48,7 @@ class AppStrings {
   static String completeProfile = 'Complete Profile';
 //=============================> Home Section <=================================
   static String idealMatch = 'Ideal Match';
+  static String finding = 'Finding';
   static String love = 'Love';
   static String livenToHaveOne = 'Liven to have one another.';
   static String friends = 'Friends';
