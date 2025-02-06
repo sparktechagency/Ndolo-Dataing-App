@@ -21,14 +21,23 @@ class AccountInformationScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //======================> Name List Tile <========================
+              //======================> First Name List Tile <========================
               CustomText(
-                text: AppStrings.name.tr,
+                text: AppStrings.firstName.tr,
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
                 bottom: 8.h,
               ),
-              CustomListTile(title: 'Janet Doe'),
+              CustomListTile(title: 'Janet'),
+              SizedBox(height: 16.h),
+              //======================> Last Name List Tile <========================
+              CustomText(
+                text: AppStrings.lastName.tr,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
+                bottom: 8.h,
+              ),
+              CustomListTile(title: 'Janet'),
               SizedBox(height: 16.h),
               //======================> Email List Tile <========================
               CustomText(
@@ -39,18 +48,45 @@ class AccountInformationScreen extends StatelessWidget {
               ),
               CustomListTile(title: 'abc@gmail.com'),
               SizedBox(height: 16.h),
-              //======================> Date Of Birth List Tile <========================
+              //======================> Phone Number List Tile <========================
               CustomText(
-                text: AppStrings.dateOfBirth.tr,
+                text: AppStrings.phoneNumber.tr,
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
                 bottom: 8.h,
               ),
-              CustomListTile(title: '16 AUG 2000'),
+              CustomListTile(title: '+880158669575'),
               SizedBox(height: 16.h),
-              //======================> Location List Tile <========================
+              //======================> Country List Tile <========================
               CustomText(
-                text: AppStrings.location.tr,
+                text: AppStrings.country.tr,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
+                bottom: 8.h,
+              ),
+              CustomListTile(title: 'Bangladesh'),
+              SizedBox(height: 16.h),
+              //======================> State List Tile <========================
+              CustomText(
+                text: AppStrings.state.tr,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
+                bottom: 8.h,
+              ),
+              CustomListTile(title: 'BD'),
+              SizedBox(height: 16.h),
+              //======================> City List Tile <========================
+              CustomText(
+                text: AppStrings.city.tr,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
+                bottom: 8.h,
+              ),
+              CustomListTile(title: 'Dhaka'),
+              SizedBox(height: 16.h),
+              //======================> address List Tile <========================
+              CustomText(
+                text: AppStrings.address.tr,
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
                 bottom: 8.h,

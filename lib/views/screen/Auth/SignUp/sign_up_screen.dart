@@ -82,6 +82,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   },
                 ),
                 SizedBox(height: 16.h),
+                //=======================> Last Name Field <=====================
+                CustomText(
+                  text: 'Last Name'.tr,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16.sp,
+                  bottom: 8.h,
+                ),
+                CustomTextField(
+                  controller: _authController.lastNameCTR,
+                  hintText: 'Type last name'.tr,
+                  prefixIcon: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    child: SvgPicture.asset(AppIcons.user),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter your last name";
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 16.h),
                 //=======================> Email Text Field <=====================
                 CustomText(
                   text: AppStrings.email.tr,

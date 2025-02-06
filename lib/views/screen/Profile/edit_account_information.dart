@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:ndolo_dating/controllers/profile_controller.dart';
 import 'package:ndolo_dating/utils/app_icons.dart';
 import 'package:ndolo_dating/views/base/custom_text_field.dart';
+import '../../../utils/app_colors.dart';
 import '../../../utils/app_strings.dart';
 import '../../base/custom_app_bar.dart';
 import '../../base/custom_button.dart';
@@ -24,16 +26,62 @@ class EditAccountInformation extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //======================> Name Text Field <========================
+              //======================> First Name Text Field <========================
               CustomText(
-                text: AppStrings.name.tr,
+                text: AppStrings.firstName.tr,
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
                 bottom: 8.h,
               ),
               CustomTextField(
-                controller: _profileController.nameCTRL,
-                hintText: 'Janet Doe',
+                controller: _profileController.firstNameCTRL,
+                hintText: 'Janet',
+              ),
+              SizedBox(height: 16.h),
+              //======================> Last Name Text Field <========================
+              CustomText(
+                text: AppStrings.lastName.tr,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
+                bottom: 8.h,
+              ),
+              CustomTextField(
+                controller: _profileController.firstNameCTRL,
+                hintText: 'Doe',
+              ),
+              SizedBox(height: 16.h),
+              //======================> Phone Number Text Field <========================
+              CustomText(
+                text: AppStrings.phoneNumber.tr,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
+                bottom: 8.h,
+              ),
+              IntlPhoneField(
+                decoration: InputDecoration(
+                  hintText: "Phone number",
+                  contentPadding:EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(16.r)),
+                    borderSide: BorderSide(color: AppColors.primaryColor),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(16.r)),
+                    borderSide: BorderSide(color: AppColors.primaryColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(16.r)),
+                    borderSide: BorderSide(color: AppColors.primaryColor, width: 1.w),
+                  ),
+                ),
+                showCountryFlag: true,
+                initialCountryCode: 'US',
+                flagsButtonMargin: EdgeInsets.only(left: 10.w),
+                disableLengthCheck: true,
+                dropdownIconPosition: IconPosition.trailing,
+                onChanged: (phone) {
+                  print("Phone===============> ${phone.completeNumber}");
+                },
               ),
               SizedBox(height: 16.h),
               //======================> Date of Birth Text Field <========================
@@ -56,15 +104,51 @@ class EditAccountInformation extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 16.h),
-              //======================> Location Text Field <========================
+              //======================> Country Text Field <========================
               CustomText(
-                text: AppStrings.location.tr,
+                text: AppStrings.country.tr,
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
                 bottom: 8.h,
               ),
               CustomTextField(
-                controller: _profileController.locationCTRL,
+                controller: _profileController.countryCTRL,
+                hintText: 'Bangladesh',
+              ),
+              SizedBox(height: 16.h),
+              //======================> State Text Field <========================
+              CustomText(
+                text: AppStrings.state.tr,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
+                bottom: 8.h,
+              ),
+              CustomTextField(
+                controller: _profileController.stateCTRL,
+                hintText: 'BD',
+              ),
+              SizedBox(height: 16.h),
+              //======================> City Text Field <========================
+              CustomText(
+                text: AppStrings.city.tr,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
+                bottom: 8.h,
+              ),
+              CustomTextField(
+                controller: _profileController.cityCTRL,
+                hintText: 'Dhaka',
+              ),
+              SizedBox(height: 16.h),
+              //======================> Address Text Field <========================
+              CustomText(
+                text: AppStrings.address.tr,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
+                bottom: 8.h,
+              ),
+              CustomTextField(
+                controller: _profileController.addressCTRL,
                 hintText: '6391 Elgin St. Celina, Delaware 10299',
               ),
               SizedBox(height: 16.h),

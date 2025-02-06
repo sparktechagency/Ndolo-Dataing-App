@@ -24,9 +24,14 @@ class ProfileController extends GetxController {
   }
 
   //===============================> Edit Profile Screen <=============================
-  final TextEditingController nameCTRL = TextEditingController();
+  final TextEditingController firstNameCTRL = TextEditingController();
+  final TextEditingController lastNameCTRL = TextEditingController();
+  final TextEditingController phoneCTRL = TextEditingController();
   final TextEditingController dateBirthCTRL = TextEditingController();
-  final TextEditingController locationCTRL = TextEditingController();
+  final TextEditingController countryCTRL = TextEditingController();
+  final TextEditingController stateCTRL = TextEditingController();
+  final TextEditingController cityCTRL = TextEditingController();
+  final TextEditingController addressCTRL = TextEditingController();
   final TextEditingController bioCTRL = TextEditingController();
 
   //===============================> Image Picker <=============================
