@@ -7,10 +7,17 @@ class AppStrings {
   static String welcomeBack = 'Welcome Back! Please enter your details.';
   static String userEmail = 'User Email';
   static String email = 'Email';
+  static String state = 'State';
+  static String city = 'City';
+  static String phoneNumber = 'Phone Number';
   static String userPassword = 'User Password';
   static String password = 'Password';
+  static String firstName = 'First Name';
+  static String lastName = 'Last Name';
   static String rememberMe = 'Remember Me';
+  static String dateBirth = 'Date of Birth';
   static String forgot_Password = 'Forgot Password?';
+  static String country = 'Country';
   static String forgotPassword = 'Forgot Password';
   static String donotHaveAccount = 'Don’t have an account?';
   static String signUp = 'Sign Up';
@@ -27,6 +34,7 @@ class AppStrings {
   static String fillTheInformation = 'Fill the information to create a new account.';
   static String userName = 'User Name';
   static String agreeWith = 'Agree with';
+  static String address = 'Address';
   static String termsOfServices = 'Terms of Services';
   static String alreadyHaveAccount = 'Already have an account?';
   static String uploadPhotos = 'Upload Photos';
