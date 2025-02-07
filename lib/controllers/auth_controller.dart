@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import '../helpers/prefs_helpers.dart';
 import '../helpers/route.dart';
+import '../models/interests_model.dart';
 import '../service/api_checker.dart';
 import '../service/api_client.dart';
 import '../service/api_constants.dart';
@@ -11,49 +12,69 @@ import '../utils/app_colors.dart';
 import '../utils/app_constants.dart';
 
 class AuthController extends GetxController {
+
+  //==========================> Get All Interest Method <============================
+  RxList<InterestsModel> interestsModel = <InterestsModel>[].obs;
+  RxList selectedInterests = [].obs;
+  var interestsLoading = false.obs;
+  getAllInterest() async {
+    interestsLoading(true);
+    var response = await ApiClient.getData(ApiConstants.interestEndPoint);
+    if (response.statusCode == 200) {
+      interestsModel.value = List<InterestsModel>.from(response.body['data']['attributes']['results'].map((x) => InterestsModel.fromJson(x)));
+      interestsModel.refresh();
+      interestsLoading(false);
+      update();
+    } else {
+      ApiChecker.checkApi(response);
+      interestsLoading(false);
+      update();
+    }
+  }
+
+
   //================================> Sign Up <=================================
   final TextEditingController firstNameCTR = TextEditingController();
   final TextEditingController lastNameCTR = TextEditingController();
   final TextEditingController emailCTR = TextEditingController();
   final TextEditingController passCTR = TextEditingController();
   final TextEditingController birthDateCTRL = TextEditingController();
-  final TextEditingController locationCTRL = TextEditingController();
+  final TextEditingController addressCTRL = TextEditingController();
   final TextEditingController bioCTRL = TextEditingController();
-
-  // RxBool isSelectedRole = true.obs;
   var signUpLoading = false.obs;
   var token = "";
-/*
 
   handleSignUp() async {
     signUpLoading(true);
-    var userRole = await PrefsHelper.getString(AppConstants.userRole);
     Map<String, dynamic> body = {
-      "name": nameCtrl.text.trim(),
-      "email": emailCtrl.text.trim(),
-      "password": passwordCtrl.text,
-      "division": selectDivision.value,
-      "role": userRole,
+      "firstName": firstNameCTR.text.trim(),
+      "lastName": lastNameCTR.text.trim(),
+      "email": emailCTR.text.trim(),
+      "password": passCTR.text,
+      "dataOfBirth": birthDateCTRL.text,
+      "address": addressCTRL.text,
+      "bio": bioCTRL.text,
       "fcmToken": "fcmToken..",
 
     };
 
     var headers = {'Content-Type': 'application/json'};
-
     Response response = await ApiClient.postData(
         ApiConstants.signUpEndPoint, jsonEncode(body),
         headers: headers);
     if (response.statusCode == 201 || response.statusCode == 200) {
       Get.toNamed(AppRoutes.otpScreen, parameters: {
-        "email": emailCtrl.text.trim(),
+        "email": emailCTR.text.trim(),
         "screenType": "signup",
       });
-      nameCtrl.clear();
-      emailCtrl.clear();
-      passwordCtrl.clear();
-      confirmCtrl.clear();
+      firstNameCTR.clear();
+      lastNameCTR.clear();
+      emailCTR.clear();
+      passCTR.clear();
+      birthDateCTRL.clear();
+      addressCTRL.clear();
+      bioCTRL.clear();
       signUpLoading(false);
-      selectDivision.value ='';
       update();
     } else {
       ApiChecker.checkApi(response);
@@ -61,7 +82,6 @@ class AuthController extends GetxController {
       update();
     }
   }
-*/
 
   //==================================> Sign In <================================
   TextEditingController signInEmailCtrl = TextEditingController();
