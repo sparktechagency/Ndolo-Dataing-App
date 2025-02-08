@@ -14,4 +14,5 @@ class AppImages{
   static String woman2="$baseUrl/woman2.png";
   static String googleLogo="$baseUrl/googleLogo.png";
   static String facebookLogo="$baseUrl/facebookLogo.png";
+  static String map="$baseUrl/map.png";
 }

@@ -162,13 +162,15 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                   ),
                   //=========================> Complete Profile Button <================
                   SizedBox(height: 24.h),
-                  CustomButton(
-                      onTap: () {
-                        if (_formKey.currentState!.validate()) {
-                          Get.offAllNamed(AppRoutes.signInScreen);
-                        }
-                      },
-                      text: AppStrings.completeProfile.tr),
+                  Obx(()=> CustomButton(
+                      loading: _authController.signUpLoading.value,
+                        onTap: () {
+                          if (_formKey.currentState!.validate()) {
+                            _authController.handleSignUp();
+                          }
+                        },
+                        text: AppStrings.completeProfile.tr),
+                  ),
                   SizedBox(height: 24.h),
                 ],
               ),

@@ -54,7 +54,7 @@ class AuthController extends GetxController {
       "dataOfBirth": birthDateCTRL.text,
       "address": addressCTRL.text,
       "bio": bioCTRL.text,
-      "fcmToken": "fcmToken..",
+    //  "fcmToken": "fcmToken..",
 
     };
 
@@ -82,6 +82,61 @@ class AuthController extends GetxController {
       update();
     }
   }
+
+  //===================> Otp very <=======================
+  TextEditingController otpCtrl = TextEditingController();
+  var verifyLoading = false.obs;
+   handleOtpVery(
+      {required String email,
+      required String otp,
+      required String type}) async {
+    try {
+      var body = {'oneTimeCode': otpCtrl.text, 'email': email};
+      var headers = {'Content-Type': 'application/json'};
+      verifyLoading(true);
+      Response response = await ApiClient.postData(
+          ApiConstants.otpVerifyEndPoint, jsonEncode(body),
+          headers: headers);
+      print("============${response.body} and ${response.statusCode}");
+      if (response.statusCode == 200) {
+        print('token>>>>${response.body["data"]['attributes']['tokens']['access']['token']}');
+        await PrefsHelper.setString(AppConstants.bearerToken, response.body["data"]['attributes']['tokens']['access']['token']);
+        otpCtrl.clear();
+        if (type == "forgetPasswordScreen") {
+          Get.toNamed(AppRoutes.resetPasswordScreen, parameters: {"email": email});
+        } else {
+          Get.offAllNamed(AppRoutes.signInScreen, parameters: {"email": email});
+        }
+      } else {
+        ApiChecker.checkApi(response);
+      }
+    } catch (e, s) {
+      print("===> e : $e");
+      print("===> s : $s");
+    }
+    verifyLoading(false);
+  }
+//=================> Resend otp <=====================
+  var resendOtpLoading = false.obs;
+   resendOtp(String email) async {
+    resendOtpLoading(true);
+    var body = {"email": email};
+    Map<String, String> header = {'Content-Type': 'application/json'};
+    var response = await ApiClient.postData(
+        ApiConstants.otpVerifyEndPoint, json.encode(body),
+        headers: header);
+    print("===> ${response.body}");
+    if (response.statusCode == 200) {
+    } else {
+      Fluttertoast.showToast(
+          msg: response.statusText ?? "",
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          gravity: ToastGravity.CENTER);
+    }
+    resendOtpLoading(false);
+  }
+
 
   //==================================> Sign In <================================
   TextEditingController signInEmailCtrl = TextEditingController();
@@ -133,68 +188,6 @@ class AuthController extends GetxController {
     signInLoading(false);
   }
 */
-  //=================> Resend otp <=====================
-  var resendOtpLoading = false.obs;
-  /* resendOtp(String email) async {
-    resendOtpLoading(true);
-    var body = {"email": email};
-    Map<String, String> header = {'Content-Type': 'application/json'};
-    var response = await ApiClient.postData(
-        ApiConstants.forgotPassEndPoint, json.encode(body),
-        headers: header);
-    print("===> ${response.body}");
-    if (response.statusCode == 200) {
-    } else {
-      Fluttertoast.showToast(
-          msg: response.statusText ?? "",
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          gravity: ToastGravity.CENTER);
-    }
-    resendOtpLoading(false);
-  }
-*/
-  //===================> Otp very <=======================
-  TextEditingController otpCtrl = TextEditingController();
-  var verifyLoading = false.obs;
-  /* handleOtpVery(
-      {required String email,
-      required String otp,
-      required String type}) async {
-    try {
-      var body = {'oneTimeCode': otpCtrl.text, 'email': email};
-      var headers = {'Content-Type': 'application/json'};
-      verifyLoading(true);
-      Response response = await ApiClient.postData(
-          ApiConstants.otpVerifyEndPoint, jsonEncode(body),
-          headers: headers);
-      print("============${response.body} and ${response.statusCode}");
-      if (response.statusCode == 200) {
-        print(
-            'token>>>>${response.body["data"]['attributes']['tokens']['access']['token']}');
-        await PrefsHelper.setString(AppConstants.userRole,
-            response.body["data"]['attributes']['user']['role']);
-        await PrefsHelper.setString(AppConstants.bearerToken,
-            response.body["data"]['attributes']['tokens']['access']['token']);
-        var role = response.body["data"]['attributes']['user']['role'];
-        print("===> role : $role");
-        otpCtrl.clear();
-        if (type == "forgetPasswordScreen") {
-          Get.toNamed(AppRoutes.setNewPasswordScreen,
-              parameters: {"email": email});
-        } else {
-          Get.toNamed(AppRoutes.selectCountryScreen);
-        }
-      } else {
-        ApiChecker.checkApi(response);
-      }
-    } catch (e, s) {
-      print("===> e : $e");
-      print("===> s : $s");
-    }
-    verifyLoading(false);
-  }*/
-
   //====================> Forgot pass word <=====================
   TextEditingController forgetEmailTextCtrl = TextEditingController();
   var forgotLoading = false.obs;
@@ -248,7 +241,6 @@ class AuthController extends GetxController {
     changeLoading(false);
   }
 */
-
   //=============================> Set New password <===========================
   var resetPasswordLoading = false.obs;
 /*
