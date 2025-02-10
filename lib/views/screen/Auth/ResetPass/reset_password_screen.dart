@@ -21,7 +21,8 @@ class ResetPasswordScreen extends StatefulWidget {
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final AuthController _authController  = Get.put(AuthController());
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  final TextEditingController _passCTRL = TextEditingController();
+  final TextEditingController _confirmPassCTRL = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +66,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 ),
                 CustomTextField(
                   isPassword: true,
-                  controller: _authController.newPasswordCtrl,
+                  controller: _passCTRL,
                   hintText: AppStrings.password.tr,
                   prefixIcon: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -88,7 +89,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 ),
                 CustomTextField(
                   isPassword: true,
-                  controller: _authController.confirmPassController,
+                  controller: _confirmPassCTRL,
                   hintText: AppStrings.password.tr,
                   prefixIcon: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -103,13 +104,18 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 ),
                 SizedBox(height: 124.h),
                 //=======================> Get OTP Button <=====================
-                CustomButton(
-                    onTap: () {
-                      if (_formKey.currentState!.validate()) {
-                        //Get.offAllNamed(AppRoutes.otpScreen);
-                      }
-                    },
-                    text: AppStrings.resetPassword.tr),
+                Obx(()=> CustomButton(
+                      loading: _authController.resetPasswordLoading.value,
+                      onTap: () {
+                        if (_formKey.currentState!.validate()) {
+                          _authController.resetPassword(
+                              '${Get.parameters['email']}',
+                            _confirmPassCTRL.text
+                          );
+                        }
+                      },
+                      text: AppStrings.resetPassword.tr),
+                ),
                 SizedBox(height: 32.h),
               ],
             ),

@@ -18,6 +18,7 @@ class AppStrings {
   static String dateBirth = 'Date of Birth';
   static String forgot_Password = 'Forgot Password?';
   static String country = 'Country';
+  static String resendCode = 'Resend Code';
   static String forgotPassword = 'Forgot Password';
   static String donotHaveAccount = 'Don’t have an account?';
   static String signUp = 'Sign Up';

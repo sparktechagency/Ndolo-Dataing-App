@@ -1,4 +1,4 @@
-package com.example.ndolo_dating
+package com.ndolo.ndolo_dating
 
 import io.flutter.embedding.android.FlutterActivity
 

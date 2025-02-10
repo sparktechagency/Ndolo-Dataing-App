@@ -11,6 +11,8 @@ import '../views/screen/Auth/UploadPhotos/upload_photos_screen.dart';
 import '../views/screen/Filter/filter_screen.dart';
 import '../views/screen/Home/home_screen.dart';
 import '../views/screen/IdealMatch/ideal_match_screen.dart';
+import '../views/screen/Location/location_picker_screen.dart';
+import '../views/screen/Location/location_screen.dart';
 import '../views/screen/Matches/matches_screen.dart';
 import '../views/screen/Message/chat_screen.dart';
 import '../views/screen/Message/message_screen.dart';
@@ -53,6 +55,8 @@ class AppRoutes{
   static String notificationsScreen="/notifications_screen";
   static String filterScreen="/filter_screen";
   static String searchResultScreen="/search_result_screen";
+  static String locationPickerScreen="/location_picker_screen";
+  static String locationScreen="/location_screen";
 
  static List<GetPage> page=[
     GetPage(name:splashScreen, page: ()=>const SplashScreen()),
@@ -60,7 +64,7 @@ class AppRoutes{
    GetPage(name:signInScreen, page: ()=> const SignInScreen()),
    GetPage(name:signUpScreen, page: ()=> const SignUpScreen()),
    GetPage(name:forgotPasswordScreen, page: ()=> const ForgotPasswordScreen()),
-   GetPage(name:otpScreen, page: ()=> const OtpScreen()),
+   GetPage(name:otpScreen, page: ()=> OtpScreen()),
    GetPage(name:resetPasswordScreen, page: ()=> const ResetPasswordScreen()),
    GetPage(name:changePasswordScreen, page: ()=> const ChangePasswordScreen()),
    GetPage(name:uploadPhotosScreen, page: ()=> const UploadPhotosScreen()),
@@ -81,5 +85,7 @@ class AppRoutes{
     GetPage(name:notificationsScreen, page: ()=> const NotificationsScreen()),
     GetPage(name:filterScreen, page: ()=>  FilterScreen()),
     GetPage(name:searchResultScreen, page: ()=>  SearchResultScreen()),
+    GetPage(name:locationPickerScreen, page: ()=>  LocationPickerScreen()),
+    GetPage(name:locationScreen, page: ()=>  LocationScreen()),
   ];
 }

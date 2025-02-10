@@ -80,13 +80,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 ),
                 SizedBox(height: 150.h),
                 //=======================> Get OTP Button <=====================
-                CustomButton(
-                    onTap: () {
-                      if (_formKey.currentState!.validate()) {
-                        Get.offAllNamed(AppRoutes.otpScreen);
-                      }
-                    },
-                    text: AppStrings.getOTP.tr),
+                Obx(()=> CustomButton(
+                    loading: _authController.forgotLoading.value,
+                      onTap: () {
+                        if (_formKey.currentState!.validate()) {
+                          _authController.handleForget();
+                        }
+                      },
+                      text: AppStrings.getOTP.tr),
+                ),
                 SizedBox(height: 32.h),
               ],
             ),

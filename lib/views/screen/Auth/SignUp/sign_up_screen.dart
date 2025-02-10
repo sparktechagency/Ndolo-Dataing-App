@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:ndolo_dating/utils/app_images.dart';
 import '../../../../controllers/auth_controller.dart';
@@ -156,7 +157,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 CustomButton(
                     onTap: () {
                       if (_formKey.currentState!.validate()) {
-                        Get.toNamed(AppRoutes.completeProfileScreen);
+                        if (isChecked) {
+                          Get.toNamed(AppRoutes.completeProfileScreen);
+                        } else {
+                          Fluttertoast.showToast(
+                              msg: 'Please accept Terms & Conditions');
+                        }
                       }
                     },
                     text: AppStrings.signUp.tr),
