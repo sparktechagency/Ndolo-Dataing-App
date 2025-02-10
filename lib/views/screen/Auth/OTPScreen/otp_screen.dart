@@ -154,7 +154,7 @@ class _OtpScreenState extends State<OtpScreen> {
                       _authController.handleOtpVery(
                           email: "${parameters["email"]}",
                           otp: _authController.otpCtrl.text,
-                          type: "${parameters["screenType"]}");
+                          screenType: "${parameters["screenType"]}");
                     },
                     text: AppStrings.verify.tr),
               ),

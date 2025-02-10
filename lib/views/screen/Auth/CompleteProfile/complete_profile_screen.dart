@@ -25,15 +25,16 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? selectedGender;
 
-  @override
+/*  @override
   void initState() {
     _authController.getAllInterest();
     // TODO: implement initState
     super.initState();
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
+    _authController.getAllInterest();
     return Scaffold(
       appBar: CustomAppBar(title: ''),
       body: Obx(()=> SingleChildScrollView(
@@ -187,16 +188,16 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
       children: [
         InkWell(
           onTap: () => setState(() {
-            selectedGender = 'Male';
+            _authController.selectedGender = 'Male';
           }),
           child: Row(
             children: [
               Radio<String>(
                 value: 'male',
-                groupValue: selectedGender,
+                groupValue: _authController.selectedGender,
                 onChanged: (value) {
                   setState(() {
-                    selectedGender = value;
+                    _authController.selectedGender = value;
                   });
                 },
                 fillColor: MaterialStateProperty.resolveWith<Color>((states) {
@@ -215,16 +216,16 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
         ),
         InkWell(
           onTap: () => setState(() {
-            selectedGender = 'Female';
+            _authController.selectedGender = 'Female';
           }),
           child: Row(
             children: [
               Radio<String>(
                 value: 'female',
-                groupValue: selectedGender,
+                groupValue: _authController.selectedGender,
                 onChanged: (value) {
                   setState(() {
-                    selectedGender = value;
+                    _authController.selectedGender = value;
                   });
                 },
                 fillColor: MaterialStateProperty.resolveWith<Color>((states) {
@@ -256,10 +257,11 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
-          value: null,
+          value: _authController.selectedInterests.isEmpty
+              ? null
+              : _authController.selectedInterests.last, // Set value
           dropdownColor: AppColors.fillColor,
-          menuWidth: 265.w,
-          borderRadius: BorderRadius.circular(16.r),
+          isExpanded: true,
           hint: CustomText(
             text: AppStrings.selectInterest.tr,
             color: AppColors.greyColor,
@@ -269,36 +271,44 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
             AppIcons.downArrow,
             width: 24.w,
           ),
-          isExpanded: true,
           items: _authController.interestsModel.map((InterestsModel interest) {
             return DropdownMenuItem<String>(
               value: interest.name,
-              child: Row(
-                children: [
-                  Checkbox(
-                    activeColor: AppColors.primaryColor,
-                    focusColor: AppColors.primaryColor,
-                    checkColor: AppColors.whiteColor,
-                    side: BorderSide(color: AppColors.primaryColor),
-                    value: _authController.selectedInterests.contains(interest.name),
-                    onChanged: (bool? isSelected) {
-                      setState(() {
-                        if (isSelected != null && isSelected) {
-                          _authController.selectedInterests.add(interest.name!);
-                        } else {
-                          _authController.selectedInterests.remove(interest.name!);
-                        }
-                      });
-                    },
-                  ),
-                  Text(interest.name!, style: const TextStyle(color: Colors.black)),
-                ],
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  return Row(
+                    children: [
+                      Checkbox(
+                        activeColor: AppColors.primaryColor,
+                        checkColor: AppColors.whiteColor,
+                        side: BorderSide(color: AppColors.primaryColor),
+                        value: _authController.selectedInterests.contains(interest.name),
+                        onChanged: (bool? isSelected) {
+                          setState(() {
+                            if (isSelected == true) {
+                              if (!_authController.selectedInterests.contains(interest.name)) {
+                                _authController.selectedInterests.add(interest.name!);
+                              }
+                            } else {
+                              _authController.selectedInterests.remove(interest.name!);
+                            }
+                          });
+                        },
+                      ),
+                      Text(interest.name!, style: const TextStyle(color: Colors.black)),
+                    ],
+                  );
+                },
               ),
             );
           }).toList(),
           onChanged: (value) {
             setState(() {
-              _authController.selectedInterests.contains(value);
+              if (!_authController.selectedInterests.contains(value)) {
+                _authController.selectedInterests.add(value!);
+              } else {
+                _authController.selectedInterests.remove(value);
+              }
             });
           },
         ),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import '../helpers/prefs_helpers.dart';
@@ -10,6 +11,7 @@ import '../service/api_client.dart';
 import '../service/api_constants.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_constants.dart';
+import '../views/base/custom_text.dart';
 
 class AuthController extends GetxController {
 
@@ -41,6 +43,7 @@ class AuthController extends GetxController {
   final TextEditingController birthDateCTRL = TextEditingController();
   final TextEditingController addressCTRL = TextEditingController();
   final TextEditingController bioCTRL = TextEditingController();
+  String? selectedGender;
   var signUpLoading = false.obs;
   var token = "";
 
@@ -51,7 +54,8 @@ class AuthController extends GetxController {
       "lastName": lastNameCTR.text.trim(),
       "email": emailCTR.text.trim(),
       "password": passCTR.text,
-      "dataOfBirth": birthDateCTRL.text,
+      "dateOfBirth": birthDateCTRL.text,
+      "gender": selectedGender,
       "address": addressCTRL.text,
       "bio": bioCTRL.text,
     //  "fcmToken": "fcmToken..",
@@ -65,7 +69,7 @@ class AuthController extends GetxController {
     if (response.statusCode == 201 || response.statusCode == 200) {
       Get.toNamed(AppRoutes.otpScreen, parameters: {
         "email": emailCTR.text.trim(),
-        "screenType": "signup",
+        "screenType": "signUpScreen",
       });
       firstNameCTR.clear();
       lastNameCTR.clear();
@@ -74,6 +78,7 @@ class AuthController extends GetxController {
       birthDateCTRL.clear();
       addressCTRL.clear();
       bioCTRL.clear();
+      selectedGender='';
       signUpLoading(false);
       update();
     } else {
@@ -89,7 +94,7 @@ class AuthController extends GetxController {
    handleOtpVery(
       {required String email,
       required String otp,
-      required String type}) async {
+      required String screenType}) async {
     try {
       var body = {'oneTimeCode': otpCtrl.text, 'email': email};
       var headers = {'Content-Type': 'application/json'};
@@ -97,13 +102,13 @@ class AuthController extends GetxController {
       Response response = await ApiClient.postData(
           ApiConstants.otpVerifyEndPoint, jsonEncode(body),
           headers: headers);
-      print("============${response.body} and ${response.statusCode}");
+      print("============>${response.body} and ${response.statusCode}");
       if (response.statusCode == 200) {
-        print('token>>>>${response.body["data"]['attributes']['tokens']['access']['token']}');
+        print('Token=============>${response.body["data"]['attributes']['tokens']['access']['token']}');
         await PrefsHelper.setString(AppConstants.bearerToken, response.body["data"]['attributes']['tokens']['access']['token']);
         otpCtrl.clear();
-        if (type == "forgetPasswordScreen") {
-          Get.toNamed(AppRoutes.resetPasswordScreen, parameters: {"email": email});
+        if (screenType == "forgetPasswordScreen") {
+          Get.offAllNamed(AppRoutes.resetPasswordScreen, parameters: {"email": email});
         } else {
           Get.offAllNamed(AppRoutes.signInScreen, parameters: {"email": email});
         }
@@ -142,7 +147,6 @@ class AuthController extends GetxController {
   TextEditingController signInEmailCtrl = TextEditingController();
   TextEditingController signInPassCtrl = TextEditingController();
 
-  /*
   var signInLoading = false.obs;
   handleLogIn() async {
     signInLoading(true);
@@ -161,22 +165,9 @@ class AuthController extends GetxController {
           response.body['data']['attributes']['tokens']['access']['token']);
       await PrefsHelper.setString(
           AppConstants.id, response.body['data']['attributes']['user']['id']);
-      String userRole = response.body['data']['attributes']['user']['role'];
-      await PrefsHelper.setString(AppConstants.userRole, userRole);
       await PrefsHelper.setBool(AppConstants.isLogged, true);
-      if (userRole == UserRole.player.name) {
-        Get.offAllNamed(AppRoutes.playerHomeScreen);
-        await PrefsHelper.setBool(AppConstants.isLogged, true);
-      } else if (userRole == UserRole.trainer.name) {
-        Get.offAllNamed(AppRoutes.trainerHomeScreen);
-        await PrefsHelper.setBool(AppConstants.isLogged, true);
-      } else if (userRole == UserRole.agency.name) {
-        Get.offAllNamed(AppRoutes.agencyHomeScreen);
-        await PrefsHelper.setBool(AppConstants.isLogged, true);
-      } else if (userRole == UserRole.club.name) {
-        Get.offAllNamed(AppRoutes.clubHomeScreen);
-        await PrefsHelper.setBool(AppConstants.isLogged, true);
-      }
+      Get.offAllNamed(AppRoutes.homeScreen);
+      await PrefsHelper.setBool(AppConstants.isLogged, true);
       signInEmailCtrl.clear();
       signInPassCtrl.clear();
       signInLoading(false);
@@ -187,11 +178,11 @@ class AuthController extends GetxController {
     }
     signInLoading(false);
   }
-*/
+
+
   //====================> Forgot pass word <=====================
   TextEditingController forgetEmailTextCtrl = TextEditingController();
   var forgotLoading = false.obs;
-/*
 
   handleForget() async {
     forgotLoading(true);
@@ -213,37 +204,8 @@ class AuthController extends GetxController {
     }
     forgotLoading(false);
   }
-*/
-
-  //======================> Handle Change password <============================
-  var changeLoading = false.obs;
-  TextEditingController currentPasswordCtrl = TextEditingController();
-  TextEditingController newPasswordCtrl = TextEditingController();
-  TextEditingController confirmPassController = TextEditingController();
-/*
-  handleChangePassword(String oldPassword, String newPassword) async {
-    changeLoading(true);
-    var body = {"oldPassword": oldPassword, "newPassword": newPassword};
-    var response = await ApiClient.postData(ApiConstants.changePassEndPoint, body);
-    print("===============> ${response.body}");
-    if (response.statusCode == 200) {
-      Fluttertoast.showToast(
-          msg: response.body['message'],
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.CENTER,
-          backgroundColor: AppColors.cardLightColor,
-          textColor: Colors.white);
-      Get.back();
-      Get.back();
-    } else {
-      ApiChecker.checkApi(response);
-    }
-    changeLoading(false);
-  }
-*/
-  //=============================> Set New password <===========================
+//=============================> Set New password <===========================
   var resetPasswordLoading = false.obs;
-/*
   resetPassword(String email, String password) async {
     print("=======> $email, and $password");
     resetPasswordLoading(true);
@@ -257,15 +219,15 @@ class AuthController extends GetxController {
           context: Get.context!,
           barrierDismissible: false,
           builder: (_) => AlertDialog(
-                backgroundColor: AppColors.cardLightColor,
-                title: const Text("Password reset!"),
+                backgroundColor: AppColors.cardColor,
+                title:  CustomText(text: "Password Reset!", fontSize: 20.sp),
                 content:
-                    const Text("Your password has been reset successfully."),
+                     CustomText(text: "Your password has been reset successfully.",fontSize: 18.sp, maxLine: 3, textAlign: TextAlign.start,),
                 actions: [
                   TextButton(
-                      style: const ButtonStyle(
+                      style: ButtonStyle(
                           backgroundColor:
-                              WidgetStatePropertyAll(Colors.white)),
+                              WidgetStatePropertyAll(AppColors.primaryColor)),
                       onPressed: () {
                         Get.toNamed(AppRoutes.signInScreen);
                       },
@@ -280,5 +242,62 @@ class AuthController extends GetxController {
     }
     resetPasswordLoading(false);
   }
-*/
+
+  //======================> Handle Change password <============================
+  var changeLoading = false.obs;
+  TextEditingController currentPasswordCtrl = TextEditingController();
+  TextEditingController newPasswordCtrl = TextEditingController();
+  TextEditingController confirmPassController = TextEditingController();
+  handleChangePassword(String oldPassword, String newPassword) async {
+    changeLoading(true);
+    var body = {"oldPassword": oldPassword, "newPassword": newPassword};
+    var response = await ApiClient.postData(ApiConstants.changePassEndPoint, body);
+    print("===============> ${response.body}");
+    if (response.statusCode == 200) {
+      Fluttertoast.showToast(
+          msg: response.body['message'],
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          backgroundColor: AppColors.cardLightColor,
+          textColor: Colors.black);
+      Get.back();
+      Get.back();
+    } else {
+      ApiChecker.checkApi(response);
+    }
+    changeLoading(false);
+  }
+
+
+
+  //======================> Google login Info <============================
+ /* handleGoogleSingIn(String email,String userRole) async {
+    var fcmToken=await PrefsHelper.getString(AppConstants.fcmToken);
+    // var userRole=await PrefsHelper.getString(AppConstants.userRole);
+
+    Map<String, dynamic> body =
+    {
+      "email": email,
+      "fcmToken": fcmToken??"",
+      "role": userRole,
+      "loginType": 2
+    };
+
+    var headers = {'Content-Type': 'application/json'};
+    Response response = await ApiClient.postData(
+        ApiConstants.logInEndPoint, jsonEncode(body),
+        headers: headers);
+    if (response.statusCode == 200) {
+      await PrefsHelper.setString(AppConstants.bearerToken,
+          response.body['data']['attributes']['tokens']['access']['token']);
+      await PrefsHelper.setString(AppConstants.id, response.body['data']['attributes']['user']['id']);
+      await PrefsHelper.setBool(AppConstants.isLogged, true);
+      Get.offAllNamed(AppRoutes.homeScreen);
+        await PrefsHelper.setBool(AppConstants.isLogged, true);
+      update();
+    } else {
+      ApiChecker.checkApi(response);
+      update();
+    }
+  }*/
 }

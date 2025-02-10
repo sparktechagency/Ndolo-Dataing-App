@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:ndolo_dating/controllers/auth_controller.dart';
 import 'package:ndolo_dating/helpers/route.dart';
@@ -175,13 +176,20 @@ class _SignInScreenState extends State<SignInScreen> {
                 _checkboxSection(),
                 SizedBox(height: 32.h),
                 //=======================> Sign In Button <=====================
-                CustomButton(
-                    onTap: () {
-                      if (_formKey.currentState!.validate()) {
-                        Get.offAllNamed(AppRoutes.idealMatchScreen);
-                      }
-                    },
-                    text: AppStrings.signIn.tr),
+                Obx(()=> CustomButton(
+                    loading: _authController.signInLoading.value,
+                      onTap: () {
+                        if (_formKey.currentState!.validate()) {
+                          if(isChecked){
+                            _authController.handleLogIn();
+                          }else {
+                            Fluttertoast.showToast(
+                                msg: 'Please remember me');
+                          }
+                        }
+                      },
+                      text: AppStrings.signIn.tr),
+                ),
                 SizedBox(height: 16.h),
                 //=======================> Or  <=====================
                 Center(
