@@ -15,7 +15,7 @@ class ApiConstants {
   static const String idealMatchesEndPoint = "/matches/all";
   static const String userMatchingEndPoint = "/users/matching";
   static const String setLocationEndPoint = "/info/location";
-  static const String termsConditionEndPoint = "";
-  static const String privacyPolicyEndPoint = "";
-  static const String aboutUsEndPoint = "";
+  static const String termsConditionEndPoint = "/info/terms-services";
+  static const String privacyPolicyEndPoint = "/info/privacy-policy";
+  static const String aboutUsEndPoint = "/info/about-us";
 }

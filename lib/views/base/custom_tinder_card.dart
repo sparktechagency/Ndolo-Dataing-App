@@ -16,7 +16,6 @@ class CustomTinderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 465.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.r),
       ),
