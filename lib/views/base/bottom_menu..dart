@@ -12,7 +12,7 @@ class BottomMenu extends StatelessWidget {
   const BottomMenu(this.menuIndex, {super.key});
 
   Color colorByIndex(ThemeData theme, int index) {
-    return index == menuIndex ? Colors.white : theme.disabledColor;
+    return index == menuIndex ? AppColors.primaryColor : AppColors.primaryColor;
   }
 
   BottomNavigationBarItem getItem(
@@ -20,11 +20,11 @@ class BottomMenu extends StatelessWidget {
     return BottomNavigationBarItem(
         label: title,
         icon: Padding(
-          padding: const EdgeInsets.only(top:8),
+          padding: EdgeInsets.only(top:4.w),
           child: SvgPicture.asset(
             image,
-            height: 24.0,
-            width: 24.0,
+            height: 24.h,
+            width: 24.w,
             color: colorByIndex(theme, index),
           ),
         ));
@@ -40,41 +40,44 @@ class BottomMenu extends StatelessWidget {
       getItem(menuIndex == 3 ? AppIcons.profileOut: AppIcons.profile, 'Profile', theme, 3),
     ];
 
-    return Container(
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+      child: Container(
 
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-              topRight: Radius.circular(20.r),topLeft: Radius.circular(20.r)
-          ),
-          boxShadow: const [
-            BoxShadow(color:Colors.black38,spreadRadius:0,blurRadius: 10)
-          ]
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.only(
-            topRight: Radius.circular(20.r),topLeft: Radius.circular(20.r)
-
+        decoration: BoxDecoration(
+           // borderRadius: BorderRadius.only(topRight: Radius.circular(20.r),topLeft: Radius.circular(20.r)),
+          borderRadius: BorderRadius.circular(44.r),
+            border: Border.all(width: 1.w, color: AppColors.primaryColor),
+            color: Colors.white,
+            boxShadow: const [
+              BoxShadow(color:Colors.black38,spreadRadius:0,blurRadius: 10)
+            ]
         ),
-        child: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          currentIndex: menuIndex,
-          onTap: (value) {
-            switch (value) {
-              case 0:
-                Get.offAndToNamed(AppRoutes.homeScreen);
-                break;
-              case 1:
-                Get.offAndToNamed(AppRoutes.matchesScreen);
-                break;
-              case 2:
-                Get.offAndToNamed(AppRoutes.messageScreen);
-                break;
-                case 3:
-                Get.offAndToNamed(AppRoutes.profileScreen);
-                break;
-            }
-          },
-          items: menuItems,
+        child: ClipRRect(
+         // borderRadius: BorderRadius.only(topRight: Radius.circular(20.r),topLeft: Radius.circular(20.r)),
+          borderRadius: BorderRadius.circular(44.r),
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            selectedItemColor: AppColors.primaryColor,
+            currentIndex: menuIndex,
+            onTap: (value) {
+              switch (value) {
+                case 0:
+                  Get.offAndToNamed(AppRoutes.homeScreen);
+                  break;
+                  case 1:
+                  Get.offAndToNamed(AppRoutes.matchesScreen);
+                  break;
+                  case 2:
+                  Get.offAndToNamed(AppRoutes.messageScreen);
+                  break;
+                  case 3:
+                  Get.offAndToNamed(AppRoutes.profileScreen);
+                  break;
+              }
+            },
+            items: menuItems,
+          ),
         ),
       ),
     );
