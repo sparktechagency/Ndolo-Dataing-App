@@ -74,7 +74,7 @@ class AppRoutes{
    GetPage(name:profileDetailsScreen, page: ()=>const ProfileDetailsScreen()),
     GetPage(name:matchesScreen, page: ()=>const MatchesScreen(),transition:Transition.noTransition),
     GetPage(name:messageScreen, page: ()=>const MessageScreen(),transition:Transition.noTransition),
-    GetPage(name:profileScreen, page: ()=>const ProfileScreen(),transition: Transition.noTransition),
+    GetPage(name:profileScreen, page: ()=> ProfileScreen(),transition: Transition.noTransition),
     GetPage(name:chatScreen, page: ()=> ChatScreen()),
     GetPage(name:settingsScreen, page: ()=> SettingsScreen()),
     GetPage(name:accountInformationScreen, page: ()=> AccountInformationScreen()),

@@ -13,6 +13,8 @@ class AppStrings {
   static String userPassword = 'User Password';
   static String password = 'Password';
   static String firstName = 'First Name';
+  static String profileImage = 'Profile Image';
+  static String coverImage = 'Cover Image';
   static String lastName = 'Last Name';
   static String rememberMe = 'Remember Me';
   static String dateBirth = 'Date of Birth';

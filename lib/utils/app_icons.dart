@@ -7,6 +7,7 @@ class AppIcons {
   static String home = "$baseUrl/home.svg";
   static String categoriFill = "$baseUrl/categoriFill.svg";
   static String homeOut = "$baseUrl/homeOut.svg";
+  static String edit = "$baseUrl/edit.svg";
   static String categories = "$baseUrl/categories.svg";
   static String eyeIcon = "$baseUrl/eye.svg";
   static String eyeOffIcon = "$baseUrl/eye-off.svg";

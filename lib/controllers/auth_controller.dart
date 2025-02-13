@@ -14,7 +14,6 @@ import '../utils/app_constants.dart';
 import '../views/base/custom_text.dart';
 
 class AuthController extends GetxController {
-
   //==========================> Get All Interest Method <============================
   RxList<InterestsModel> interestsModel = <InterestsModel>[].obs;
   RxList selectedInterests = [].obs;
@@ -23,7 +22,9 @@ class AuthController extends GetxController {
     interestsLoading(true);
     var response = await ApiClient.getData(ApiConstants.interestEndPoint);
     if (response.statusCode == 200) {
-      interestsModel.value = List<InterestsModel>.from(response.body['data']['attributes']['results'].map((x) => InterestsModel.fromJson(x)));
+      interestsModel.value = List<InterestsModel>.from(response.body['data']
+              ['attributes']['results']
+          .map((x) => InterestsModel.fromJson(x)));
       interestsModel.refresh();
       interestsLoading(false);
       update();
@@ -33,7 +34,6 @@ class AuthController extends GetxController {
       update();
     }
   }
-
 
   //================================> Sign Up <=================================
   final TextEditingController firstNameCTR = TextEditingController();
@@ -58,8 +58,7 @@ class AuthController extends GetxController {
       "gender": selectedGender,
       "address": addressCTRL.text,
       "bio": bioCTRL.text,
-    //  "fcmToken": "fcmToken..",
-
+      //  "fcmToken": "fcmToken..",
     };
 
     var headers = {'Content-Type': 'application/json'};
@@ -78,7 +77,7 @@ class AuthController extends GetxController {
       birthDateCTRL.clear();
       addressCTRL.clear();
       bioCTRL.clear();
-      selectedGender='';
+      selectedGender = '';
       signUpLoading(false);
       update();
     } else {
@@ -91,7 +90,7 @@ class AuthController extends GetxController {
   //===================> Otp very <=======================
   TextEditingController otpCtrl = TextEditingController();
   var verifyLoading = false.obs;
-   handleOtpVery(
+  handleOtpVery(
       {required String email,
       required String otp,
       required String screenType}) async {
@@ -104,11 +103,14 @@ class AuthController extends GetxController {
           headers: headers);
       print("============>${response.body} and ${response.statusCode}");
       if (response.statusCode == 200) {
-        print('Token=============>${response.body["data"]['attributes']['tokens']['access']['token']}');
-        await PrefsHelper.setString(AppConstants.bearerToken, response.body["data"]['attributes']['tokens']['access']['token']);
+        print(
+            'Token=============>${response.body["data"]['attributes']['tokens']['access']['token']}');
+        await PrefsHelper.setString(AppConstants.bearerToken,
+            response.body["data"]['attributes']['tokens']['access']['token']);
         otpCtrl.clear();
         if (screenType == "forgetPasswordScreen") {
-          Get.offAllNamed(AppRoutes.resetPasswordScreen, parameters: {"email": email});
+          Get.offAllNamed(AppRoutes.resetPasswordScreen,
+              parameters: {"email": email});
         } else {
           Get.offAllNamed(AppRoutes.signInScreen, parameters: {"email": email});
         }
@@ -121,9 +123,10 @@ class AuthController extends GetxController {
     }
     verifyLoading(false);
   }
+
 //=================> Resend otp <=====================
   var resendOtpLoading = false.obs;
-   resendOtp(String email) async {
+  resendOtp(String email) async {
     resendOtpLoading(true);
     var body = {"email": email};
     Map<String, String> header = {'Content-Type': 'application/json'};
@@ -141,7 +144,6 @@ class AuthController extends GetxController {
     }
     resendOtpLoading(false);
   }
-
 
   //==================================> Sign In <================================
   TextEditingController signInEmailCtrl = TextEditingController();
@@ -179,7 +181,6 @@ class AuthController extends GetxController {
     signInLoading(false);
   }
 
-
   //====================> Forgot pass word <=====================
   TextEditingController forgetEmailTextCtrl = TextEditingController();
   var forgotLoading = false.obs;
@@ -204,6 +205,7 @@ class AuthController extends GetxController {
     }
     forgotLoading(false);
   }
+
 //=============================> Set New password <===========================
   var resetPasswordLoading = false.obs;
   resetPassword(String email, String password) async {
@@ -220,9 +222,13 @@ class AuthController extends GetxController {
           barrierDismissible: false,
           builder: (_) => AlertDialog(
                 backgroundColor: AppColors.cardColor,
-                title:  CustomText(text: "Password Reset!", fontSize: 20.sp),
-                content:
-                     CustomText(text: "Your password has been reset successfully.",fontSize: 18.sp, maxLine: 3, textAlign: TextAlign.start,),
+                title: CustomText(text: "Password Reset!", fontSize: 20.sp),
+                content: CustomText(
+                  text: "Your password has been reset successfully.",
+                  fontSize: 18.sp,
+                  maxLine: 3,
+                  textAlign: TextAlign.start,
+                ),
                 actions: [
                   TextButton(
                       style: ButtonStyle(
@@ -244,14 +250,15 @@ class AuthController extends GetxController {
   }
 
   //======================> Handle Change password <============================
-  var changeLoading = false.obs;
+  var changePassLoading = false.obs;
   TextEditingController currentPasswordCtrl = TextEditingController();
   TextEditingController newPasswordCtrl = TextEditingController();
   TextEditingController confirmPassController = TextEditingController();
-  handleChangePassword(String oldPassword, String newPassword) async {
-    changeLoading(true);
+  handleChangePassword(String oldPassword, newPassword) async {
+    changePassLoading(true);
     var body = {"oldPassword": oldPassword, "newPassword": newPassword};
-    var response = await ApiClient.postData(ApiConstants.changePassEndPoint, body);
+    var response =
+        await ApiClient.postData(ApiConstants.changePassEndPoint, body);
     print("===============> ${response.body}");
     if (response.statusCode == 200) {
       Fluttertoast.showToast(
@@ -265,13 +272,11 @@ class AuthController extends GetxController {
     } else {
       ApiChecker.checkApi(response);
     }
-    changeLoading(false);
+    changePassLoading(false);
   }
 
-
-
   //======================> Google login Info <============================
- /* handleGoogleSingIn(String email,String userRole) async {
+  /* handleGoogleSingIn(String email,String userRole) async {
     var fcmToken=await PrefsHelper.getString(AppConstants.fcmToken);
     // var userRole=await PrefsHelper.getString(AppConstants.userRole);
 
