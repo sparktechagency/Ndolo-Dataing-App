@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:ndolo_dating/controllers/profile_controller.dart';
+import 'package:ndolo_dating/service/api_constants.dart';
 import 'package:ndolo_dating/views/base/custom_list_tile.dart';
 import 'package:ndolo_dating/views/base/custom_network_image.dart';
+import 'package:ndolo_dating/views/base/custom_page_loading.dart';
 import '../../../helpers/route.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_icons.dart';
@@ -14,12 +17,14 @@ import '../../base/custom_button.dart';
 import '../../base/custom_text.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+   ProfileScreen({super.key});
+final ProfileController _profileController = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
+    _profileController.getProfileData();
     return Scaffold(
-      bottomNavigationBar: BottomMenu(3),
+      bottomNavigationBar: const BottomMenu(3),
       //=============================> AppBar Section <=============================
       appBar: AppBar(
         title: Row(
@@ -36,96 +41,112 @@ class ProfileScreen extends StatelessWidget {
         ),
       ),
       //=============================> Body Section <=============================
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-                color: AppColors.cardColor,
-                borderRadius: BorderRadius.circular(24.r)),
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 20.h),
-              child: Column(children: [
-                //=============================> Profile Picture <=============================
-                CustomNetworkImage(
-                  imageUrl:
-                      'https://s3-alpha-sig.figma.com/img/a1c9/575c/4f24b44129bd1c1832d68d397b792497?Expires=1735516800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=gApV0GgAScr~HmAV30lTtGq6BCRcp7zXc4yxQ3KC4wfdZsWZ3jW4~e9az0FVvntpJnwhLbDi3LuFjoaVruQH2hGvaRs2P7-nqKgswWdSvUlnZ9~HTp~6AN11Z8O4KaVY5NUnTrPEJ7Qj6ywAfkHO6aB6LLjlbfNG7RuYLIEGUEBJ5mHVNfVpa9xwonMeMCAWv2tCQLqqFhFn4YqZqe4eNphtaZGWV3GwTPHfIimceEhMzZYAYSUAYXmkjPQks2qH59XsQ-yn40ag40WRGMZpMP~hKWR1moDqleylqfTM7oAU0MoEqiQGtssCfJEgN8vw4DHlC-CNhbwm~QXu-fXxaA__',
-                  height: 136.h,
-                  width: 136.w,
-                  boxShape: BoxShape.circle,
-                  border: Border.all(width: 2.w, color: AppColors.primaryColor),
-                ),
-                SizedBox(height: 16.h),
-                //=============================> Update Pictures Button <=============================
-                GestureDetector(
-                  onTap: () {
-                    Get.toNamed(AppRoutes.uploadPhotosScreen);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: AppColors.primaryColor,
-                        borderRadius: BorderRadius.circular(4.r)),
-                    child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 8.w, vertical: 12.h),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SvgPicture.asset(AppIcons.pen),
-                          SizedBox(width: 8.w),
-                          CustomText(
-                            text: AppStrings.updatePictures.tr,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          )
-                        ],
+      body: Obx(()=> _profileController.profileLoading.value
+           ? const Center(child: CustomPageLoading())
+          : Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20.h),
+                  child: Column(children: [
+                    //=============================> Profile And Cover Picture <=============================
+                    Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        //=========================> Cover Picture <=======================
+                        CustomNetworkImage(
+                          imageUrl:
+                          '${ApiConstants.imageBaseUrl}${_profileController.profileModel.value.coverImage}',
+                          height: 135.h,
+                          width: 345.w,
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        Positioned(
+                          bottom: -70.h,
+                          left: 50.w,
+                          right: 50.w,
+                          //==========================> Profile Picture <=======================
+                          child: CustomNetworkImage(
+                          imageUrl:  '${ApiConstants.imageBaseUrl}${_profileController.profileModel.value.profileImage}',
+                          height: 144.h,
+                          width: 144.w,
+                          boxShape: BoxShape.circle,
+                          border: Border.all(width: 2.w, color: AppColors.primaryColor),
+                        ),)
+                      ],
+                    ),
+                    SizedBox(height: 98.h),
+                    //=============================> Update Pictures Button <=============================
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed(AppRoutes.uploadPhotosScreen);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: AppColors.primaryColor,
+                            borderRadius: BorderRadius.circular(4.r)),
+                        child: Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 8.w, vertical: 12.h),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SvgPicture.asset(AppIcons.pen),
+                              SizedBox(width: 8.w),
+                              CustomText(
+                                text: AppStrings.updatePictures.tr,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              )
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    SizedBox(height: 16.h),
+                    //=============================> Name Section <=============================
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: CustomText(
+                        text: '${_profileController.profileModel.value.fullName}',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 30.sp,
+                        maxLine: 5,
+                        color: const Color(0xff430750),
+                      ),
+                    ),
+                  ]),
                 ),
-                SizedBox(height: 16.h),
-                //=============================> Name Section <=============================
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: CustomText(
-                    text: 'Janet Doe',
-                    fontWeight: FontWeight.w700,
-                    fontSize: 30.sp,
-                    maxLine: 5,
-                    color: const Color(0xff430750),
+              ),
+              SizedBox(height: 24.h),
+              Column(
+                children: [
+                  //=====================> Account Information List Tile <===================
+                  CustomListTile(
+                    onTap: () {
+                      Get.toNamed(AppRoutes.accountInformationScreen);
+                    },
+                    title: AppStrings.accountInformation.tr,
+                    prefixIcon: SvgPicture.asset(AppIcons.account),
+                    suffixIcon: SvgPicture.asset(AppIcons.rightArrow),
                   ),
-                ),
-              ]),
-            ),
+                  //=====================> Log Out List Tile <===================
+                  CustomListTile(
+                    onTap: () {
+                      _showCustomBottomSheet(context);
+                    },
+                    title: AppStrings.logOut.tr,
+                    prefixIcon: SvgPicture.asset(AppIcons.logOut),
+                    suffixIcon: SvgPicture.asset(AppIcons.rightArrow),
+                  ),
+                ],
+              )
+            ],
           ),
-          SizedBox(height: 24.h),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.w),
-            child: Column(
-              children: [
-                //=====================> Account Information List Tile <===================
-                CustomListTile(
-                  onTap: () {
-                    Get.toNamed(AppRoutes.accountInformationScreen);
-                  },
-                  title: AppStrings.accountInformation.tr,
-                  prefixIcon: SvgPicture.asset(AppIcons.account),
-                  suffixIcon: SvgPicture.asset(AppIcons.rightArrow),
-                ),
-                //=====================> Log Out List Tile <===================
-                CustomListTile(
-                  onTap: () {
-                    _showCustomBottomSheet(context);
-                  },
-                  title: AppStrings.logOut.tr,
-                  prefixIcon: SvgPicture.asset(AppIcons.logOut),
-                  suffixIcon: SvgPicture.asset(AppIcons.rightArrow),
-                ),
-              ],
-            ),
-          )
-        ],
+        ),
       ),
     );
   }
@@ -148,7 +169,7 @@ class ProfileScreen extends StatelessWidget {
             ),
             color: AppColors.cardColor,
           ),
-          height: 265,
+          height: 265.h,
           padding: EdgeInsets.all(16.w),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
