@@ -142,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: TCard(
                         controller: _cardController,
                         size: const Size(double.infinity,
-                            double.infinity), // Constrained height
+                            double.infinity),
                         cards: _images.asMap().entries.map((entry) {
                           int index = entry.key;
                           return Stack(
