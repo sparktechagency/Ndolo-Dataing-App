@@ -27,6 +27,20 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
   final ProfileController _profileController = Get.put(ProfileController());
   var parameter = Get.parameters;
 
+  @override
+  void initState() {
+    super.initState();
+    _profileController.firstNameCTRL.text = Get.parameters['firstName'] ?? '';
+    _profileController.lastNameCTRL.text = Get.parameters['lastName'] ?? '';
+    _profileController.phoneNumberCTRL.text = Get.parameters['phoneNumber'] ?? '';
+    _profileController.dateBirthCTRL.text = Get.parameters['dateOfBirth'] ?? '';
+    _profileController.countryCTRL.text = Get.parameters['country'] ?? '';
+    _profileController.stateCTRL.text = Get.parameters['state'] ?? '';
+    _profileController.cityCTRL.text = Get.parameters['city'] ?? '';
+    _profileController.addressCTRL.text = Get.parameters['address'] ?? '';
+    _profileController.bioCTRL.text = Get.parameters['bio'] ?? '';
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +158,7 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                   bottom: 8.h,
                 ),
                 CustomTextField(
-                  controller: _profileController.firstNameCTRL,
+                  controller: _profileController.lastNameCTRL,
                   hintText: 'Doe',
                 ),
                 SizedBox(height: 16.h),
@@ -156,6 +170,7 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                   bottom: 8.h,
                 ),
                 IntlPhoneField(
+                  controller: _profileController.phoneNumberCTRL,
                   decoration: InputDecoration(
                     hintText: "Phone number",
                     contentPadding:EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
@@ -172,6 +187,7 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                       borderSide: BorderSide(color: AppColors.primaryColor, width: 1.w),
                     ),
                   ),
+
                   showCountryFlag: true,
                   initialCountryCode: 'US',
                   flagsButtonMargin: EdgeInsets.only(left: 10.w),
@@ -265,11 +281,13 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                 ),
                SizedBox(height: 32.h),
                 //======================> Update Button <========================
-                CustomButton(
-                    onTap: () {
-                      Get.back();
-                    },
-                    text: 'Update'.tr),
+                Obx(()=> CustomButton(
+                    loading: _profileController.updateProfileLoading.value,
+                      onTap: () {
+                       _profileController.updateProfile();
+                      },
+                      text: 'Update'.tr),
+                ),
                 SizedBox(height: 32.h),
               ],
             ),

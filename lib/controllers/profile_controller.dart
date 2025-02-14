@@ -130,24 +130,60 @@ class ProfileController extends GetxController {
     }
   }
 
-
-
-
-
-
-  //===============================> Profile Data <=============================
+  //===============================> Update Profile Data <=============================
   RxString profileImagePath = ''.obs;
   RxString coverImagePath = ''.obs;
-
-  // Text Controllers for Form Fields
   TextEditingController firstNameCTRL = TextEditingController();
   TextEditingController lastNameCTRL = TextEditingController();
+  TextEditingController phoneNumberCTRL = TextEditingController();
   TextEditingController dateBirthCTRL = TextEditingController();
   TextEditingController countryCTRL = TextEditingController();
   TextEditingController stateCTRL = TextEditingController();
   TextEditingController cityCTRL = TextEditingController();
   TextEditingController addressCTRL = TextEditingController();
   TextEditingController bioCTRL = TextEditingController();
+
+  var updateProfileLoading = false.obs;
+updateProfile() async {
+  updateProfileLoading(true);
+  Map<String, String> body ={
+    'firstName' : firstNameCTRL.text,
+    'lastName' : lastNameCTRL.text,
+    'phoneNumber' : phoneNumberCTRL.text,
+    'dataOfBirth' : dateBirthCTRL.text,
+    'country' : countryCTRL.text,
+    'state' : stateCTRL.text,
+    'city' : cityCTRL.text,
+    'address' : addressCTRL.text,
+    'bio' : bioCTRL.text,
+  };
+  List<MultipartBody> multipartBody=[
+    MultipartBody('profileImage',File(profileImagePath.value)),
+    MultipartBody('coverImage',File(coverImagePath.value)),
+  ];
+
+  var response = await ApiClient.postMultipartData(ApiConstants.updateProfileEndPoint, body, multipartBody: multipartBody);
+  if(response.statusCode == 200 || response.statusCode == 201){
+    firstNameCTRL.clear();
+    lastNameCTRL.clear();
+    phoneNumberCTRL.clear();
+    dateBirthCTRL.clear();
+    countryCTRL.clear();
+    stateCTRL.clear();
+    cityCTRL.clear();
+    addressCTRL.clear();
+    bioCTRL.clear();
+    profileImagePath = ''.obs;
+    coverImagePath = ''.obs;
+    getProfileData();
+    updateProfileLoading(false);
+    Get.back();
+  } else{
+    ApiChecker.checkApi(response);
+    updateProfileLoading(false);
+    update();
+  }
+}
 
   //===============================> Pick Image Function <=============================
   Future<void> pickImage(ImageSource source, bool isProfileImage) async {
