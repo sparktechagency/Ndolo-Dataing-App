@@ -23,6 +23,29 @@ class HomeController extends GetxController implements GetxService {
   }
 
   //=============================> Get Account Data <===============================
+
+  RxList<HomeUserModel> homeUserModel = <HomeUserModel>[].obs;
+  RxBool homeLoading = false.obs;
+  getUserData() async {
+    homeLoading(true);
+    var response = await ApiClient.getData(ApiConstants.getHomeAllUserEndPoint);
+    if (response.statusCode == 200) {
+      var responseData = response.body['data']['attributes'];
+      print("==========================> Raw User Data: $responseData");
+      if (responseData is List) {
+        homeUserModel.assignAll(responseData.map((e) => HomeUserModel.fromJson(e)).toList());
+      } else {
+        homeUserModel.assignAll([HomeUserModel.fromJson(responseData)]);
+      }
+    } else {
+      ApiChecker.checkApi(response);
+    }
+    homeLoading(false);
+    update();
+  }
+
+
+/*
   Rx<HomeUserModel> homeUserModel = HomeUserModel().obs;
   RxBool homeLoading = false.obs;
   getUserData() async {
@@ -37,5 +60,5 @@ class HomeController extends GetxController implements GetxService {
       homeLoading(false);
       update();
     }
-  }
+  }*/
 }
