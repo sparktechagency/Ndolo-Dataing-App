@@ -1,11 +1,12 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import '../helpers/prefs_helpers.dart';
 import '../service/api_checker.dart';
 import '../service/api_client.dart';
 import '../service/api_constants.dart';
+import '../utils/app_constants.dart';
 
 class CommonLocationController extends GetxController {
   var locationNameController = TextEditingController();
@@ -19,13 +20,13 @@ class CommonLocationController extends GetxController {
         "longitude": longitude,
         "locationName": locationNameController.text,
       };
-
+      String bearerToken = await PrefsHelper.getString(AppConstants.bearerToken);
       //TODO: use real token here ======================>>>
       var headers = {
         'Content-Type': 'application/json',
-        'Authorization':
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NzhmM2UyNDUyOWEyOTc2YjQ1MDgwMmIiLCJpYXQiOjE3Mzc0NTM1MzAsImV4cCI6MTc0MDk5MDk4MzU5NCwidHlwZSI6ImFjY2VzcyJ9.Zs9HkPtPPq8kBkteA1ZvIQfCvYX1PPNbihcSybPOa-o',
+        'Authorization': 'Bearer $bearerToken',
       };
+
       //TODO: use real token here <<<====================
 
       setLocationLoading(true);

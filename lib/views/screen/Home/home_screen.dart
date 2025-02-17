@@ -413,7 +413,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: const Color(0xff430750),
                     ),
                     Expanded(
-                      child: TCard(
+                      child:
+                      /*TCard(
                         controller: _cardController,
                         size: const Size(double.infinity, double.infinity),
                         cards: _homeController.homeUserModel
@@ -422,6 +423,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             .map((entry) {
                           int index = entry.key;
                           HomeUserModel user = entry.value;
+                          print('===========================================> ${ApiConstants.imageBaseUrl}${user.profileImage ?? ""}');
                           return Stack(
                             fit: StackFit.expand,
                             children: [
@@ -437,8 +439,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       MainAxisSize.min,
                                   children: [
                                     CustomText(
-                                      text:
-                                          '${user.firstName ?? "N/A"}, ${user.age ?? "N/A"}',
+                                      text: '${user.firstName ?? "N/A"}, ${user.age ?? "N/A"}',
                                       fontSize: 32.sp,
                                       fontWeight: FontWeight.w700,
                                       color: Colors.white,
@@ -493,8 +494,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Flexible(
                                           child: GestureDetector(
                                             onTap: () {
-                                              Get.toNamed(AppRoutes
-                                                  .profileDetailsScreen);
+                                              Get.toNamed(AppRoutes.profileDetailsScreen, parameters: {
+                                                '_id': '${user.id}',
+                                                'age': '${user.age}',
+
+                                              });
                                             },
                                             child: _slideButton(
                                                 SvgPicture.asset(AppIcons.info),
@@ -517,6 +521,120 @@ class _HomeScreenState extends State<HomeScreen> {
                             _allSwiped = true;
                           });
                         },
+                      ),*/
+                      TCard(
+                        controller: _cardController,
+                        size: const Size(double.infinity, double.infinity),
+                        cards: List.generate(_homeController.homeUserModel.length, (index) {
+                          final HomeUserModel user = _homeController.homeUserModel[index];
+                          final String imageUrl = '${ApiConstants.imageBaseUrl}${user.profileImage ?? ""}';
+                          print('===========================================>Img $imageUrl');
+                          return Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              CustomTinderCard(
+                                imageUrl: imageUrl,
+                                index: index,
+                              ),
+                              Positioned(
+                                bottom: 30.h,
+                                left: 50.w,
+                                right: 50.w,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    CustomText(
+                                      text: '${user.firstName ?? "N/A"}, ${user.age ?? "N/A"}',
+                                      fontSize: 32.sp,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(height: 6.h),
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(Icons.location_on, color: Colors.white, size: 20.h),
+                                        SizedBox(width: 4.w),
+                                        Flexible(
+                                          child: CustomText(
+                                            text: '${ user.address! ?? "N/A"}',
+                                            color: Colors.white,
+                                            maxLine: 2,
+                                            textAlign: TextAlign.start,
+                                            textOverflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 6.h),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Flexible(
+                                          child: GestureDetector(
+                                            onTap: () => _handleLikeDislike(false),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                border: Border.all(width: 1.w, color: Colors.red),
+                                                color: Colors.white,
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8.w),
+                                                child: SvgPicture.asset(AppIcons.dislike),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 12.w),
+                                        Flexible(
+                                          child: GestureDetector(
+                                            onTap: () => _handleLikeDislike(true),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                border: Border.all(width: 1.w, color: const Color(0xffFF9D33)),
+                                                color: Colors.white,
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8.w),
+                                                child: SvgPicture.asset(AppIcons.like),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 12.w),
+                                        Flexible(
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              Get.toNamed(AppRoutes.profileDetailsScreen, parameters: {
+                                                '_id': user.id ?? '',
+                                                'age': '${user.age ?? ''}',
+                                              });
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                border: Border.all(width: 1.w, color: Colors.blue),
+                                                color: Colors.white,
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8.w),
+                                                child: SvgPicture.asset(AppIcons.info),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
+                        onForward: (index, info) => _onSwipe(info.direction, index),
+                        onEnd: () => setState(() => _allSwiped = true),
                       ),
                     ),
                   ],

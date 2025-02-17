@@ -162,7 +162,7 @@ updateProfile() async {
     MultipartBody('coverImage',File(coverImagePath.value)),
   ];
 
-  var response = await ApiClient.postMultipartData(ApiConstants.updateProfileEndPoint, body, multipartBody: multipartBody);
+  var response = await ApiClient.patchMultipartData(ApiConstants.updateProfileEndPoint, body, multipartBody: multipartBody);
   if(response.statusCode == 200 || response.statusCode == 201){
     firstNameCTRL.clear();
     lastNameCTRL.clear();
