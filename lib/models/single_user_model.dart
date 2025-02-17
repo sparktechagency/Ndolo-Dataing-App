@@ -1,5 +1,5 @@
-class HomeUserModel {
-  final String? id;
+class SingleUserModel {
+  final Location? location;
   final String? firstName;
   final String? lastName;
   final String? fullName;
@@ -7,35 +7,29 @@ class HomeUserModel {
   final String? profileImage;
   final String? coverImage;
   final List<dynamic>? gallery;
-  final String? gender;
   final String? role;
+  final int? phoneNumber;
   final DateTime? dateOfBirth;
-  final dynamic country;
-  final dynamic state;
-  final dynamic city;
-  final List<String>? interests;
-  final dynamic idealMatch;
+  final String? country;
+  final String? state;
+  final String? city;
+  final List<dynamic>? interests;
+  final IdealMatch? idealMatch;
   final List<dynamic>? language;
-  final String? address;
-  final Location? location;
   final String? bio;
-  final String? oneTimeCode;
-  final bool? isEmailVerified;
-  final bool? isResetPassword;
   final int? credits;
   final bool? isProfileCompleted;
-  final dynamic fcmToken;
+  final String? fcmToken;
   final bool? isDeleted;
   final DateTime? createdAt;
-  final DateTime? updatedAt;
-  final int? v;
+  final String? address;
+  final String? callingCode;
   final bool? isBlocked;
   final List<dynamic>? lickList;
-  final int? distance;
-  final int? age;
+  final String? id;
 
-  HomeUserModel({
-    this.id,
+  SingleUserModel({
+    this.location,
     this.firstName,
     this.lastName,
     this.fullName,
@@ -43,8 +37,8 @@ class HomeUserModel {
     this.profileImage,
     this.coverImage,
     this.gallery,
-    this.gender,
     this.role,
+    this.phoneNumber,
     this.dateOfBirth,
     this.country,
     this.state,
@@ -52,27 +46,21 @@ class HomeUserModel {
     this.interests,
     this.idealMatch,
     this.language,
-    this.address,
-    this.location,
     this.bio,
-    this.oneTimeCode,
-    this.isEmailVerified,
-    this.isResetPassword,
     this.credits,
     this.isProfileCompleted,
     this.fcmToken,
     this.isDeleted,
     this.createdAt,
-    this.updatedAt,
-    this.v,
+    this.address,
+    this.callingCode,
     this.isBlocked,
     this.lickList,
-    this.distance,
-    this.age,
+    this.id,
   });
 
-  factory HomeUserModel.fromJson(Map<String, dynamic> json) => HomeUserModel(
-    id: json["_id"],
+  factory SingleUserModel.fromJson(Map<String, dynamic> json) => SingleUserModel(
+    location: json["location"] == null ? null : Location.fromJson(json["location"]),
     firstName: json["firstName"],
     lastName: json["lastName"],
     fullName: json["fullName"],
@@ -80,36 +68,30 @@ class HomeUserModel {
     profileImage: json["profileImage"],
     coverImage: json["coverImage"],
     gallery: json["gallery"] == null ? [] : List<dynamic>.from(json["gallery"]!.map((x) => x)),
-    gender: json["gender"],
     role: json["role"],
+    phoneNumber: json["phoneNumber"],
     dateOfBirth: json["dateOfBirth"] == null ? null : DateTime.parse(json["dateOfBirth"]),
     country: json["country"],
     state: json["state"],
     city: json["city"],
-    interests: json["interests"] == null ? [] : List<String>.from(json["interests"]!.map((x) => x)),
-    idealMatch: json["idealMatch"],
+    interests: json["interests"] == null ? [] : List<dynamic>.from(json["interests"]!.map((x) => x)),
+    idealMatch: json["idealMatch"] == null ? null : IdealMatch.fromJson(json["idealMatch"]),
     language: json["language"] == null ? [] : List<dynamic>.from(json["language"]!.map((x) => x)),
-    address: json["address"],
-    location: json["location"] == null ? null : Location.fromJson(json["location"]),
     bio: json["bio"],
-    oneTimeCode: json["oneTimeCode"],
-    isEmailVerified: json["isEmailVerified"],
-    isResetPassword: json["isResetPassword"],
     credits: json["credits"],
     isProfileCompleted: json["isProfileCompleted"],
     fcmToken: json["fcmToken"],
     isDeleted: json["isDeleted"],
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-    updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
-    v: json["__v"],
+    address: json["address"],
+    callingCode: json["callingCode"],
     isBlocked: json["isBlocked"],
     lickList: json["lickList"] == null ? [] : List<dynamic>.from(json["lickList"]!.map((x) => x)),
-    distance: json["distance"],
-    age: json["age"],
+    id: json["id"],
   );
 
   Map<String, dynamic> toJson() => {
-    "_id": id,
+    "location": location?.toJson(),
     "firstName": firstName,
     "lastName": lastName,
     "fullName": fullName,
@@ -117,38 +99,68 @@ class HomeUserModel {
     "profileImage": profileImage,
     "coverImage": coverImage,
     "gallery": gallery == null ? [] : List<dynamic>.from(gallery!.map((x) => x)),
-    "gender": gender,
     "role": role,
+    "phoneNumber": phoneNumber,
     "dateOfBirth": dateOfBirth?.toIso8601String(),
     "country": country,
     "state": state,
     "city": city,
     "interests": interests == null ? [] : List<dynamic>.from(interests!.map((x) => x)),
-    "idealMatch": idealMatch,
+    "idealMatch": idealMatch?.toJson(),
     "language": language == null ? [] : List<dynamic>.from(language!.map((x) => x)),
-    "address": address,
-    "location": location?.toJson(),
     "bio": bio,
-    "oneTimeCode": oneTimeCode,
-    "isEmailVerified": isEmailVerified,
-    "isResetPassword": isResetPassword,
     "credits": credits,
     "isProfileCompleted": isProfileCompleted,
     "fcmToken": fcmToken,
     "isDeleted": isDeleted,
     "createdAt": createdAt?.toIso8601String(),
-    "updatedAt": updatedAt?.toIso8601String(),
-    "__v": v,
+    "address": address,
+    "callingCode": callingCode,
     "isBlocked": isBlocked,
     "lickList": lickList == null ? [] : List<dynamic>.from(lickList!.map((x) => x)),
-    "distance": distance,
-    "age": age,
+    "id": id,
+  };
+}
+
+class IdealMatch {
+  final String? title;
+  final String? subTitle;
+  final String? icon;
+  final bool? isDeleted;
+  final DateTime? createdAt;
+  final String? id;
+
+  IdealMatch({
+    this.title,
+    this.subTitle,
+    this.icon,
+    this.isDeleted,
+    this.createdAt,
+    this.id,
+  });
+
+  factory IdealMatch.fromJson(Map<String, dynamic> json) => IdealMatch(
+    title: json["title"],
+    subTitle: json["subTitle"],
+    icon: json["icon"],
+    isDeleted: json["isDeleted"],
+    createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
+    id: json["id"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "title": title,
+    "subTitle": subTitle,
+    "icon": icon,
+    "isDeleted": isDeleted,
+    "createdAt": createdAt?.toIso8601String(),
+    "id": id,
   };
 }
 
 class Location {
   final String? type;
-  final List<int>? coordinates;
+  final List<double>? coordinates;
   final String? locationName;
 
   Location({
@@ -159,7 +171,7 @@ class Location {
 
   factory Location.fromJson(Map<String, dynamic> json) => Location(
     type: json["type"],
-    coordinates: json["coordinates"] == null ? [] : List<int>.from(json["coordinates"]!.map((x) => x)),
+    coordinates: json["coordinates"] == null ? [] : List<double>.from(json["coordinates"]!.map((x) => x?.toDouble())),
     locationName: json["locationName"],
   );
 

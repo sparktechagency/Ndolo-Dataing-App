@@ -165,10 +165,14 @@ class AuthController extends GetxController {
     if (response.statusCode == 200) {
       await PrefsHelper.setString(AppConstants.bearerToken,
           response.body['data']['attributes']['tokens']['access']['token']);
-      await PrefsHelper.setString(
-          AppConstants.id, response.body['data']['attributes']['user']['id']);
+      await PrefsHelper.setString(AppConstants.id, response.body['data']['attributes']['user']['id']);
       await PrefsHelper.setBool(AppConstants.isLogged, true);
-      Get.offAllNamed(AppRoutes.homeScreen);
+      var condition = response.body['data']['attributes']['user']['gallery'];
+      if( condition.isEmpty){
+        Get.offAllNamed(AppRoutes.uploadPhotosScreen);
+      } else {
+        Get.offAllNamed(AppRoutes.homeScreen);
+      }
       await PrefsHelper.setBool(AppConstants.isLogged, true);
       signInEmailCtrl.clear();
       signInPassCtrl.clear();

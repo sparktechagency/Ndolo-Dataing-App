@@ -22,7 +22,7 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-  CommonLocationController _commonLocationController =
+  final CommonLocationController _commonLocationController =
       Get.put(CommonLocationController());
   var currentLat = 0.0;
   var currentLong = 0.0;

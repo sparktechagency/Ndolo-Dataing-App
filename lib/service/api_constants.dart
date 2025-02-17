@@ -10,9 +10,9 @@ class ApiConstants {
   static const String updateLocationEndPoint = "/info/location";
   static const String getProfileEndPoint = "/users/self/in";
   static const String updateProfileEndPoint = "/users/self/update";
-  static const String updateGalleryEndPoint = "users/self/gallery";
+  static const String updateGalleryEndPoint = "/users/self/gallery";
   static const String getHomeAllUserEndPoint = "/users/all/profiles";
-  static String getHomeSingleUserEndPoint(String userID) => "/users/profile/$userID";
+  static String getSingleUserEndPoint(String userID) => "/users/profile/$userID";
   static const String interestEndPoint = "/interests/all";
   static const String idealMatchesEndPoint = "/matches/all";
   static const String userMatchingEndPoint = "/users/matching";

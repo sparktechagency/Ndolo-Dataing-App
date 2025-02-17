@@ -71,7 +71,7 @@ class AppRoutes{
    GetPage(name:completeProfileScreen, page: ()=> const CompleteProfileScreen()),
    GetPage(name:idealMatchScreen, page: ()=> const IdealMatchScreen()),
    GetPage(name:homeScreen, page: ()=>const HomeScreen(),transition:Transition.noTransition),
-   GetPage(name:profileDetailsScreen, page: ()=>const ProfileDetailsScreen()),
+   GetPage(name:profileDetailsScreen, page: ()=> ProfileDetailsScreen()),
     GetPage(name:matchesScreen, page: ()=>const MatchesScreen(),transition:Transition.noTransition),
     GetPage(name:messageScreen, page: ()=>const MessageScreen(),transition:Transition.noTransition),
     GetPage(name:profileScreen, page: ()=> ProfileScreen(),transition: Transition.noTransition),
