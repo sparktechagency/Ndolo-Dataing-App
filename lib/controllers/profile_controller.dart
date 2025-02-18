@@ -110,6 +110,7 @@ import '../models/profile_model.dart';
 import '../service/api_checker.dart';
 import '../service/api_client.dart';
 import '../service/api_constants.dart';
+import '../utils/app_colors.dart';
 
 class ProfileController extends GetxController {
 
@@ -206,10 +207,22 @@ updateProfile() async {
       initialDate: DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            dialogBackgroundColor: Colors.white,
+            colorScheme: ColorScheme.light(
+              primary: AppColors.primaryColor,
+              onSurface: Colors.black, // Text color
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (pickedDate != null) {
-      dateBirthCTRL.text = "${pickedDate.day} ${_getMonthName(pickedDate.month)} ${pickedDate.year}";
+      dateBirthCTRL.text = "${_getMonthName(pickedDate.month)} ${pickedDate.day}, ${pickedDate.year}";
       update();
     }
   }

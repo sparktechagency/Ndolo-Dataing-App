@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:ndolo_dating/helpers/route.dart';
 import '../helpers/prefs_helpers.dart';
 import '../service/api_checker.dart';
 import '../service/api_client.dart';
@@ -35,10 +36,10 @@ class CommonLocationController extends GetxController {
           headers: headers);
       print("============> ${response.body} and ${response.statusCode}");
       if (response.statusCode == 200 || response.statusCode == 201) {
-        print("Hurray! Your Location is set");
-
+        print("Your Location is set");
+        Get.offAllNamed(AppRoutes.homeScreen);
         Fluttertoast.showToast(
-            msg: "Hurray!🥳 \n Your Location is set successfully");
+            msg: "Your Location is set successfully");
         setLocationLoading(false);
       } else {
         ApiChecker.checkApi(response);

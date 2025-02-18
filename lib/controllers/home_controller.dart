@@ -30,12 +30,14 @@ class HomeController extends GetxController implements GetxService {
     homeLoading(true);
     var response = await ApiClient.getData(ApiConstants.getHomeAllUserEndPoint);
     if (response.statusCode == 200) {
+      homeLoading(false);
       var responseData = response.body['data']['attributes'];
       print("==========================> Raw User Data: $responseData");
       if (responseData is List) {
         homeUserModel.assignAll(responseData.map((e) => HomeUserModel.fromJson(e)).toList());
       } else {
         homeUserModel.assignAll([HomeUserModel.fromJson(responseData)]);
+        homeLoading(false);
       }
     } else {
       ApiChecker.checkApi(response);
@@ -44,34 +46,14 @@ class HomeController extends GetxController implements GetxService {
     update();
   }
 
-
-/*
-  Rx<HomeUserModel> homeUserModel = HomeUserModel().obs;
-  RxBool homeLoading = false.obs;
-  getUserData() async {
-    homeLoading(true);
-    var response = await ApiClient.getData(ApiConstants.getHomeAllUserEndPoint);
-    if (response.statusCode == 200) {
-      homeUserModel.value = HomeUserModel.fromJson(response.body['data']['attributes']);
-      homeLoading(false);
-      update();
-    } else {
-      ApiChecker.checkApi(response);
-      homeLoading(false);
-      update();
-    }
-  }*/
-
 //=============================> Get Account Data <===============================
   Rx<SingleUserModel> singleUserModel = SingleUserModel().obs;
   RxBool singleLoading = false.obs;
   getSingleUserData(String userID) async {
-    homeLoading(true);
-    var response = await ApiClient.getData(
-        ApiConstants.getSingleUserEndPoint(userID));
+    singleLoading(true);
+    var response = await ApiClient.getData(ApiConstants.getSingleUserEndPoint(userID));
     if (response.statusCode == 200) {
-      singleUserModel.value =
-          SingleUserModel.fromJson(response.body['data']['attributes']);
+      singleUserModel.value = SingleUserModel.fromJson(response.body['data']['attributes']);
       singleLoading(false);
       update();
     } else {
@@ -81,5 +63,42 @@ class HomeController extends GetxController implements GetxService {
     }
   }
 
+
+//=============================> Post Like User <===============================
+  /*RxBool postLoading = false.obs;
+  RxBool postSuccess = false.obs;
+  postUserData(String userID) async {
+    postLoading(true);
+    var body = {
+      "profileId": forgetEmailTextCtrl.text.trim(),
+    };
+    var response = await ApiClient.postData(ApiConstants.likeUserEndPoint(userID), body);
+    request.body = json.encode(postData); // Passing dynamic data in the body
+    request.headers.addAll(headers);
+
+    try {
+      http.StreamedResponse response = await request.send();
+
+      if (response.statusCode == 200) {
+        // Success, mark postSuccess as true
+        postSuccess(true);
+        var responseString = await response.stream.bytesToString();
+        print('Response: $responseString'); // You can handle the response here as needed
+      } else {
+        // Handle error responses
+        ApiChecker.checkApi(response);
+        postSuccess(false);
+      }
+    } catch (e) {
+      // Handle any exceptions
+      print('Error: $e');
+      postSuccess(false);
+    } finally {
+      postLoading(false); // Hide loading state
+      update(); // Update the state in the controller
+    }
+  }
+  */
+  
 
 }

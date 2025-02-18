@@ -312,11 +312,11 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _allSwiped = false;
   int _currentIndex = 0;
 
-  @override
+ /* @override
   void initState() {
     super.initState();
     _homeController.getUserData();
-  }
+  }*/
 
   void _onSwipe(SwipDirection direction, int index) {
     if (index >= 0 && index < _homeController.homeUserModel.length) {
@@ -363,6 +363,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _homeController.getUserData();
     return Scaffold(
       bottomNavigationBar: const BottomMenu(0),
       body: SafeArea(
@@ -399,8 +400,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (_homeController.homeLoading.value) {
                   return const Center(child: CircularProgressIndicator());
                 }
-
-                if (_homeController.homeUserModel.isEmpty) {
+                final userList = _homeController.homeUserModel.value;
+                if (userList.isEmpty) {
                   return Center(child: CustomText(text: "No Users Available"));
                 }
 
@@ -413,122 +414,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: const Color(0xff430750),
                     ),
                     Expanded(
-                      child:
-                      /*TCard(
+                      child: TCard(
                         controller: _cardController,
                         size: const Size(double.infinity, double.infinity),
-                        cards: _homeController.homeUserModel
-                            .asMap()
-                            .entries
-                            .map((entry) {
-                          int index = entry.key;
-                          HomeUserModel user = entry.value;
-                          print('===========================================> ${ApiConstants.imageBaseUrl}${user.profileImage ?? ""}');
-                          return Stack(
-                            fit: StackFit.expand,
-                            children: [
-                              CustomTinderCard(
-                                  imageUrl: '${ApiConstants.imageBaseUrl}${user.profileImage ?? ""}',
-                                  index: index),
-                              Positioned(
-                                bottom: 30.h,
-                                left: 50.w,
-                                right: 50.w,
-                                child: Column(
-                                  mainAxisSize:
-                                      MainAxisSize.min,
-                                  children: [
-                                    CustomText(
-                                      text: '${user.firstName ?? "N/A"}, ${user.age ?? "N/A"}',
-                                      fontSize: 32.sp,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.white,
-                                    ),
-                                    SizedBox(height: 6.h),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(Icons.location_on,
-                                            color: Colors.white, size: 20.h),
-                                        SizedBox(width: 4.w),
-                                        Flexible(
-                                          child: CustomText(
-                                            text: '${user.address ?? "N/A"}',
-                                            color: Colors.white,
-                                            maxLine: 2,
-                                            textAlign: TextAlign.start,
-                                            textOverflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 6.h),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Flexible(
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              _handleLikeDislike(
-                                                  false); // Dislike
-                                            },
-                                            child: _slideButton(
-                                                SvgPicture.asset(
-                                                    AppIcons.dislike),
-                                                Colors.red),
-                                          ),
-                                        ),
-                                        SizedBox(width: 12.w),
-                                        Flexible(
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              _handleLikeDislike(true); // Like
-                                            },
-                                            child: _slideButton(
-                                                SvgPicture.asset(AppIcons.like),
-                                                const Color(0xffFF9D33)),
-                                          ),
-                                        ),
-                                        SizedBox(width: 12.w),
-                                        Flexible(
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              Get.toNamed(AppRoutes.profileDetailsScreen, parameters: {
-                                                '_id': '${user.id}',
-                                                'age': '${user.age}',
-
-                                              });
-                                            },
-                                            child: _slideButton(
-                                                SvgPicture.asset(AppIcons.info),
-                                                Colors.blue),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          );
-                        }).toList(),
-                        onForward: (index, info) {
-                          _onSwipe(info.direction, index);
-                        },
-                        onEnd: () {
-                          setState(() {
-                            _allSwiped = true;
-                          });
-                        },
-                      ),*/
-                      TCard(
-                        controller: _cardController,
-                        size: const Size(double.infinity, double.infinity),
-                        cards: List.generate(_homeController.homeUserModel.length, (index) {
-                          final HomeUserModel user = _homeController.homeUserModel[index];
-                          final String imageUrl = '${ApiConstants.imageBaseUrl}${user.profileImage ?? ""}';
-                          print('===========================================>Img $imageUrl');
+                        cards: List.generate(userList.length, (index) {
+                          final HomeUserModel user = userList[index];
+                          final String imageUrl = '${ApiConstants.imageBaseUrl}${user.gallery![0] ?? ""}';
                           return Stack(
                             fit: StackFit.expand,
                             children: [
@@ -557,7 +448,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         SizedBox(width: 4.w),
                                         Flexible(
                                           child: CustomText(
-                                            text: '${ user.address! ?? "N/A"}',
+                                            text: user.address ?? "N/A",
                                             color: Colors.white,
                                             maxLine: 2,
                                             textAlign: TextAlign.start,
@@ -573,34 +464,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Flexible(
                                           child: GestureDetector(
                                             onTap: () => _handleLikeDislike(false),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                border: Border.all(width: 1.w, color: Colors.red),
-                                                color: Colors.white,
-                                              ),
-                                              child: Padding(
-                                                padding: EdgeInsets.all(8.w),
-                                                child: SvgPicture.asset(AppIcons.dislike),
-                                              ),
-                                            ),
+                                            child: _slideButton(SvgPicture.asset(AppIcons.dislike), Colors.red),
                                           ),
                                         ),
                                         SizedBox(width: 12.w),
                                         Flexible(
                                           child: GestureDetector(
                                             onTap: () => _handleLikeDislike(true),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                border: Border.all(width: 1.w, color: const Color(0xffFF9D33)),
-                                                color: Colors.white,
-                                              ),
-                                              child: Padding(
-                                                padding: EdgeInsets.all(8.w),
-                                                child: SvgPicture.asset(AppIcons.like),
-                                              ),
-                                            ),
+                                            child: _slideButton(SvgPicture.asset(AppIcons.like), const Color(0xffFF9D33)),
                                           ),
                                         ),
                                         SizedBox(width: 12.w),
@@ -612,17 +483,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 'age': '${user.age ?? ''}',
                                               });
                                             },
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                border: Border.all(width: 1.w, color: Colors.blue),
-                                                color: Colors.white,
-                                              ),
-                                              child: Padding(
-                                                padding: EdgeInsets.all(8.w),
-                                                child: SvgPicture.asset(AppIcons.info),
-                                              ),
-                                            ),
+                                            child: _slideButton(SvgPicture.asset(AppIcons.info), Colors.blue),
                                           ),
                                         ),
                                       ],
