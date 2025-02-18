@@ -6,26 +6,25 @@ class SingleUserModel {
   final String? email;
   final String? profileImage;
   final String? coverImage;
-  final List<dynamic>? gallery;
+  final List<String>? gallery;
+  final String? gender;
   final String? role;
-  final int? phoneNumber;
   final DateTime? dateOfBirth;
-  final String? country;
-  final String? state;
-  final String? city;
-  final List<dynamic>? interests;
-  final IdealMatch? idealMatch;
+  final dynamic country;
+  final dynamic state;
+  final dynamic city;
+  final List<Interest>? interests;
+  final List<dynamic>? lickList;
+  final dynamic idealMatch;
   final List<dynamic>? language;
+  final String? address;
   final String? bio;
   final int? credits;
   final bool? isProfileCompleted;
   final String? fcmToken;
+  final bool? isBlocked;
   final bool? isDeleted;
   final DateTime? createdAt;
-  final String? address;
-  final String? callingCode;
-  final bool? isBlocked;
-  final List<dynamic>? lickList;
   final String? id;
 
   SingleUserModel({
@@ -37,25 +36,24 @@ class SingleUserModel {
     this.profileImage,
     this.coverImage,
     this.gallery,
+    this.gender,
     this.role,
-    this.phoneNumber,
     this.dateOfBirth,
     this.country,
     this.state,
     this.city,
     this.interests,
+    this.lickList,
     this.idealMatch,
     this.language,
+    this.address,
     this.bio,
     this.credits,
     this.isProfileCompleted,
     this.fcmToken,
+    this.isBlocked,
     this.isDeleted,
     this.createdAt,
-    this.address,
-    this.callingCode,
-    this.isBlocked,
-    this.lickList,
     this.id,
   });
 
@@ -67,26 +65,25 @@ class SingleUserModel {
     email: json["email"],
     profileImage: json["profileImage"],
     coverImage: json["coverImage"],
-    gallery: json["gallery"] == null ? [] : List<dynamic>.from(json["gallery"]!.map((x) => x)),
+    gallery: json["gallery"] == null ? [] : List<String>.from(json["gallery"]!.map((x) => x)),
+    gender: json["gender"],
     role: json["role"],
-    phoneNumber: json["phoneNumber"],
     dateOfBirth: json["dateOfBirth"] == null ? null : DateTime.parse(json["dateOfBirth"]),
     country: json["country"],
     state: json["state"],
     city: json["city"],
-    interests: json["interests"] == null ? [] : List<dynamic>.from(json["interests"]!.map((x) => x)),
-    idealMatch: json["idealMatch"] == null ? null : IdealMatch.fromJson(json["idealMatch"]),
+    interests: json["interests"] == null ? [] : List<Interest>.from(json["interests"]!.map((x) => Interest.fromJson(x))),
+    lickList: json["lickList"] == null ? [] : List<dynamic>.from(json["lickList"]!.map((x) => x)),
+    idealMatch: json["idealMatch"],
     language: json["language"] == null ? [] : List<dynamic>.from(json["language"]!.map((x) => x)),
+    address: json["address"],
     bio: json["bio"],
     credits: json["credits"],
     isProfileCompleted: json["isProfileCompleted"],
     fcmToken: json["fcmToken"],
+    isBlocked: json["isBlocked"],
     isDeleted: json["isDeleted"],
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-    address: json["address"],
-    callingCode: json["callingCode"],
-    isBlocked: json["isBlocked"],
-    lickList: json["lickList"] == null ? [] : List<dynamic>.from(json["lickList"]!.map((x) => x)),
     id: json["id"],
   );
 
@@ -99,49 +96,45 @@ class SingleUserModel {
     "profileImage": profileImage,
     "coverImage": coverImage,
     "gallery": gallery == null ? [] : List<dynamic>.from(gallery!.map((x) => x)),
+    "gender": gender,
     "role": role,
-    "phoneNumber": phoneNumber,
     "dateOfBirth": dateOfBirth?.toIso8601String(),
     "country": country,
     "state": state,
     "city": city,
-    "interests": interests == null ? [] : List<dynamic>.from(interests!.map((x) => x)),
-    "idealMatch": idealMatch?.toJson(),
+    "interests": interests == null ? [] : List<dynamic>.from(interests!.map((x) => x.toJson())),
+    "lickList": lickList == null ? [] : List<dynamic>.from(lickList!.map((x) => x)),
+    "idealMatch": idealMatch,
     "language": language == null ? [] : List<dynamic>.from(language!.map((x) => x)),
+    "address": address,
     "bio": bio,
     "credits": credits,
     "isProfileCompleted": isProfileCompleted,
     "fcmToken": fcmToken,
+    "isBlocked": isBlocked,
     "isDeleted": isDeleted,
     "createdAt": createdAt?.toIso8601String(),
-    "address": address,
-    "callingCode": callingCode,
-    "isBlocked": isBlocked,
-    "lickList": lickList == null ? [] : List<dynamic>.from(lickList!.map((x) => x)),
     "id": id,
   };
 }
 
-class IdealMatch {
-  final String? title;
-  final String? subTitle;
+class Interest {
+  final String? name;
   final String? icon;
   final bool? isDeleted;
   final DateTime? createdAt;
   final String? id;
 
-  IdealMatch({
-    this.title,
-    this.subTitle,
+  Interest({
+    this.name,
     this.icon,
     this.isDeleted,
     this.createdAt,
     this.id,
   });
 
-  factory IdealMatch.fromJson(Map<String, dynamic> json) => IdealMatch(
-    title: json["title"],
-    subTitle: json["subTitle"],
+  factory Interest.fromJson(Map<String, dynamic> json) => Interest(
+    name: json["name"],
     icon: json["icon"],
     isDeleted: json["isDeleted"],
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
@@ -149,8 +142,7 @@ class IdealMatch {
   );
 
   Map<String, dynamic> toJson() => {
-    "title": title,
-    "subTitle": subTitle,
+    "name": name,
     "icon": icon,
     "isDeleted": isDeleted,
     "createdAt": createdAt?.toIso8601String(),

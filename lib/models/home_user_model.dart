@@ -6,7 +6,7 @@ class HomeUserModel {
   final String? email;
   final String? profileImage;
   final String? coverImage;
-  final List<dynamic>? gallery;
+  final List<String>? gallery;
   final String? gender;
   final String? role;
   final DateTime? dateOfBirth;
@@ -14,24 +14,24 @@ class HomeUserModel {
   final dynamic state;
   final dynamic city;
   final List<String>? interests;
+  final List<dynamic>? lickList;
   final dynamic idealMatch;
   final List<dynamic>? language;
   final String? address;
   final Location? location;
   final String? bio;
-  final String? oneTimeCode;
+  final dynamic oneTimeCode;
   final bool? isEmailVerified;
   final bool? isResetPassword;
   final int? credits;
   final bool? isProfileCompleted;
-  final dynamic fcmToken;
+  final String? fcmToken;
+  final bool? isBlocked;
   final bool? isDeleted;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final int? v;
-  final bool? isBlocked;
-  final List<dynamic>? lickList;
-  final int? distance;
+  final double? distance;
   final int? age;
 
   HomeUserModel({
@@ -50,6 +50,7 @@ class HomeUserModel {
     this.state,
     this.city,
     this.interests,
+    this.lickList,
     this.idealMatch,
     this.language,
     this.address,
@@ -61,12 +62,11 @@ class HomeUserModel {
     this.credits,
     this.isProfileCompleted,
     this.fcmToken,
+    this.isBlocked,
     this.isDeleted,
     this.createdAt,
     this.updatedAt,
     this.v,
-    this.isBlocked,
-    this.lickList,
     this.distance,
     this.age,
   });
@@ -79,7 +79,7 @@ class HomeUserModel {
     email: json["email"],
     profileImage: json["profileImage"],
     coverImage: json["coverImage"],
-    gallery: json["gallery"] == null ? [] : List<dynamic>.from(json["gallery"]!.map((x) => x)),
+    gallery: json["gallery"] == null ? [] : List<String>.from(json["gallery"]!.map((x) => x)),
     gender: json["gender"],
     role: json["role"],
     dateOfBirth: json["dateOfBirth"] == null ? null : DateTime.parse(json["dateOfBirth"]),
@@ -87,6 +87,7 @@ class HomeUserModel {
     state: json["state"],
     city: json["city"],
     interests: json["interests"] == null ? [] : List<String>.from(json["interests"]!.map((x) => x)),
+    lickList: json["lickList"] == null ? [] : List<dynamic>.from(json["lickList"]!.map((x) => x)),
     idealMatch: json["idealMatch"],
     language: json["language"] == null ? [] : List<dynamic>.from(json["language"]!.map((x) => x)),
     address: json["address"],
@@ -98,13 +99,12 @@ class HomeUserModel {
     credits: json["credits"],
     isProfileCompleted: json["isProfileCompleted"],
     fcmToken: json["fcmToken"],
+    isBlocked: json["isBlocked"],
     isDeleted: json["isDeleted"],
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
     updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
     v: json["__v"],
-    isBlocked: json["isBlocked"],
-    lickList: json["lickList"] == null ? [] : List<dynamic>.from(json["lickList"]!.map((x) => x)),
-    distance: json["distance"],
+    distance: json["distance"]?.toDouble(),
     age: json["age"],
   );
 
@@ -124,6 +124,7 @@ class HomeUserModel {
     "state": state,
     "city": city,
     "interests": interests == null ? [] : List<dynamic>.from(interests!.map((x) => x)),
+    "lickList": lickList == null ? [] : List<dynamic>.from(lickList!.map((x) => x)),
     "idealMatch": idealMatch,
     "language": language == null ? [] : List<dynamic>.from(language!.map((x) => x)),
     "address": address,
@@ -135,12 +136,11 @@ class HomeUserModel {
     "credits": credits,
     "isProfileCompleted": isProfileCompleted,
     "fcmToken": fcmToken,
+    "isBlocked": isBlocked,
     "isDeleted": isDeleted,
     "createdAt": createdAt?.toIso8601String(),
     "updatedAt": updatedAt?.toIso8601String(),
     "__v": v,
-    "isBlocked": isBlocked,
-    "lickList": lickList == null ? [] : List<dynamic>.from(lickList!.map((x) => x)),
     "distance": distance,
     "age": age,
   };
@@ -148,7 +148,7 @@ class HomeUserModel {
 
 class Location {
   final String? type;
-  final List<int>? coordinates;
+  final List<double>? coordinates;
   final String? locationName;
 
   Location({
@@ -159,7 +159,7 @@ class Location {
 
   factory Location.fromJson(Map<String, dynamic> json) => Location(
     type: json["type"],
-    coordinates: json["coordinates"] == null ? [] : List<int>.from(json["coordinates"]!.map((x) => x)),
+    coordinates: json["coordinates"] == null ? [] : List<double>.from(json["coordinates"]!.map((x) => x?.toDouble())),
     locationName: json["locationName"],
   );
 

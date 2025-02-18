@@ -317,11 +317,11 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
   }
   //==========================> Show Calender Function <=======================
   Future<void> _pickBirthDate(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
+    DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(1900),
-      lastDate: DateTime(3050),
+      lastDate: DateTime.now(),
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
@@ -335,11 +335,18 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
         );
       },
     );
+
     if (pickedDate != null) {
       setState(() {
-        _authController.birthDateCTRL.text =
-        "${pickedDate.month}-${pickedDate.day}-${pickedDate.year}";
+        _authController.birthDateCTRL.text = "${_getMonthName(pickedDate.month)} ${pickedDate.day}, ${pickedDate.year}";
       });
     }
+  }
+  // Helper function to convert month number to name
+  String _getMonthName(int month) {
+    const List<String> months = [
+      "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+    return months[month - 1];
   }
 }

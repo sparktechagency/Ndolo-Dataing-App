@@ -1,4 +1,4 @@
-class ProfileModel {
+class MatchModel {
   final Location? location;
   final String? firstName;
   final String? lastName;
@@ -28,7 +28,7 @@ class ProfileModel {
   final String? callingCode;
   final String? id;
 
-  ProfileModel({
+  MatchModel({
     this.location,
     this.firstName,
     this.lastName,
@@ -59,7 +59,7 @@ class ProfileModel {
     this.id,
   });
 
-  factory ProfileModel.fromJson(Map<String, dynamic> json) => ProfileModel(
+  factory MatchModel.fromJson(Map<String, dynamic> json) => MatchModel(
     location: json["location"] == null ? null : Location.fromJson(json["location"]),
     firstName: json["firstName"],
     lastName: json["lastName"],

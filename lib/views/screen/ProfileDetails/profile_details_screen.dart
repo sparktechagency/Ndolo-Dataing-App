@@ -13,20 +13,37 @@ import 'package:ndolo_dating/views/base/custom_network_image.dart';
 import 'package:ndolo_dating/views/base/custom_page_loading.dart';
 import 'package:ndolo_dating/views/base/custom_text.dart';
 
-class ProfileDetailsScreen extends StatelessWidget {
-  ProfileDetailsScreen({super.key});
+class ProfileDetailsScreen extends StatefulWidget {
+  const ProfileDetailsScreen({super.key});
+
+  @override
+  State<ProfileDetailsScreen> createState() => _ProfileDetailsScreenState();
+}
+
+class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
   final HomeController _homeController = Get.put(HomeController());
   var parameter = Get.parameters;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (parameter['_id'] != null) {
+        _homeController.getSingleUserData(parameter['_id']!);
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    _homeController.getSingleUserData(parameter['_id']!);
     return Scaffold(
       appBar: CustomAppBar(title: AppStrings.profileDetails),
-      body: Obx(
-        () => _homeController.homeLoading.value
-          ? const Center(child: CustomPageLoading(),)
-        : SingleChildScrollView(
+      body: Obx(() {
+        if (_homeController.singleLoading.value) {
+          return const Center(child: CustomPageLoading());
+        }
+        final user = _homeController.singleUserModel.value;
+        return SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 24.w),
             child: Column(
@@ -35,32 +52,33 @@ class ProfileDetailsScreen extends StatelessWidget {
                 //========================> Image Container <==========================
                 CustomNetworkImage(
                   imageUrl:
-                      '${ApiConstants.imageBaseUrl}${_homeController.singleUserModel.value.profileImage}',
+                      '${ApiConstants.imageBaseUrl}${user.gallery?[0] ?? ""}',
                   height: 400.h,
                   width: double.infinity,
                   borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(8.r),
-                      topRight: Radius.circular(8.r)),
+                    topLeft: Radius.circular(8.r),
+                    topRight: Radius.circular(8.r),
+                  ),
                 ),
                 //========================> Name and Location Container <==========================
                 Container(
                   decoration: BoxDecoration(
                     color: AppColors.cardLightColor,
                     borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(8.r),
-                        bottomRight: Radius.circular(8.r)),
+                      bottomLeft: Radius.circular(8.r),
+                      bottomRight: Radius.circular(8.r),
+                    ),
                   ),
                   child: Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                     child: Column(
                       children: [
-                        //==================> Name Row <==================
                         Row(
                           children: [
                             Flexible(
                               child: CustomText(
-                                text: '${_homeController.singleUserModel.value.fullName}',
+                                text: user.fullName ?? "N/A",
                                 fontSize: 30.sp,
                                 maxLine: 3,
                                 textAlign: TextAlign.start,
@@ -70,24 +88,24 @@ class ProfileDetailsScreen extends StatelessWidget {
                             ),
                             SizedBox(width: 8.w),
                             CustomText(
-                              text: '${Get.parameters['age']}',
+                              text: parameter['age'] ?? "N/A",
                               fontSize: 24.sp,
                               fontWeight: FontWeight.w500,
                               color: const Color(0xff430750),
                             ),
                             const Spacer(),
                             InkWell(
-                                onTap: () {
-                                  Get.toNamed(AppRoutes.chatScreen);
-                                },
-                                child: SvgPicture.asset(
-                                  AppIcons.messageOut,
-                                  color: const Color(0xff430750),
-                                ))
+                              onTap: () {
+                                Get.toNamed(AppRoutes.chatScreen);
+                              },
+                              child: SvgPicture.asset(
+                                AppIcons.messageOut,
+                                color: const Color(0xff430750),
+                              ),
+                            ),
                           ],
                         ),
                         SizedBox(height: 8.h),
-                        //==================> Location Row <==================
                         Row(
                           children: [
                             SvgPicture.asset(
@@ -96,18 +114,16 @@ class ProfileDetailsScreen extends StatelessWidget {
                             ),
                             SizedBox(width: 8.w),
                             CustomText(
-                              text:
-                                  '${_homeController.singleUserModel.value.country}',
+                              text: user.address ?? "N/A",
                               fontSize: 18.sp,
                             ),
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ),
                 ),
                 SizedBox(height: 16.h),
-                //========================> About Container <==========================
                 CustomText(
                   text: AppStrings.bio.tr,
                   fontSize: 16.sp,
@@ -117,21 +133,16 @@ class ProfileDetailsScreen extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                     color: AppColors.cardLightColor,
-                    borderRadius: BorderRadius.circular((8.r)),
+                    borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
-                    child: Column(
-                      children: [
-                        //==================> Name Row <==================
-                        CustomText(
-                          text: '${_homeController.singleUserModel.value.bio}',
-                          fontSize: 14.sp,
-                          maxLine: 15,
-                          textAlign: TextAlign.start,
-                        ),
-                      ],
+                    child: CustomText(
+                      text: user.bio ?? "No bio available",
+                      fontSize: 14.sp,
+                      maxLine: 15,
+                      textAlign: TextAlign.start,
                     ),
                   ),
                 ),
@@ -143,16 +154,25 @@ class ProfileDetailsScreen extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                 ),
                 SizedBox(height: 16.h),
-               /* Wrap(
+                Wrap(
                   spacing: 8.0,
                   runSpacing: 8.0,
-                  children: List.generate(_homeController.singleUserModel.value.interests!.length, (index) {
-                    return _interestChip(
-                      SvgPicture.asset(_homeController.singleUserModel.value.interests?.length['icon']),
-                      _homeController.singleUserModel.value.interests?.length[index]['label'],
-                    );
-                  }),
-                ),*/
+                  children: List.generate(
+                    user.interests?.length ?? 0,
+                    (index) {
+                      final interest = user.interests![index];
+                      return _interestChip(
+                        CustomNetworkImage(
+                            imageUrl: '${ApiConstants.imageBaseUrl}${interest.icon ?? ""}',
+                            height: 24.h,
+                            width: 24.w,
+                        boxShape: BoxShape.circle
+                        ),
+                        interest.name?.capitalize ?? "N/A", // Null check for label
+                      );
+                    },
+                  ),
+                ),
                 SizedBox(height: 16.h),
                 //========================> Gallery Section <==========================
                 CustomText(
@@ -161,35 +181,41 @@ class ProfileDetailsScreen extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                 ),
                 SizedBox(height: 8.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List.generate(
-                      _homeController.singleUserModel.value.gallery!.length,
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: List.generate(
+                      user.gallery?.length ?? 0,
                       (index) {
-                    return CustomNetworkImage(
-                      imageUrl:
-                          '${_homeController.singleUserModel.value.gallery}',
-                      height: 75.h,
-                      width: 70.w,
-                      borderRadius: BorderRadius.circular(4.r),
-                    );
-                  }),
+                        return Padding(
+                          padding: EdgeInsets.only(right: 8.w),
+                          child: CustomNetworkImage(
+                            imageUrl:
+                                '${ApiConstants.imageBaseUrl}${user.gallery![index] ?? ""}',
+                            height: 75.h,
+                            width: 70.w,
+                            borderRadius: BorderRadius.circular(4.r),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ),
                 SizedBox(height: 24.h),
               ],
             ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 
-//======================================> Interest Chip <========================
+  //======================================> Interest Chip <========================
   _interestChip(Widget icon, String label) {
     return Chip(
       side: BorderSide(width: 1.w, color: const Color(0xff430750)),
       label: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+        padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 2.h),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
