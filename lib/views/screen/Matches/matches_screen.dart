@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:ndolo_dating/controllers/match_controller.dart';
@@ -17,7 +17,7 @@ import '../../base/custom_button.dart';
 import '../../base/custom_network_image.dart';
 
 class MatchesScreen extends StatefulWidget {
-   MatchesScreen({super.key});
+  MatchesScreen({super.key});
 
   @override
   State<MatchesScreen> createState() => _MatchesScreenState();
@@ -26,8 +26,7 @@ class MatchesScreen extends StatefulWidget {
 class _MatchesScreenState extends State<MatchesScreen> {
   final MatchController _matchController = Get.put(MatchController());
 
-
-//==============================> Method to calculate age <=============================
+  //======================> Method to calculate age from the date of birth <========================
   int calculateAge(MatchModel user) {
     final dateOfBirth = user.dateOfBirth;
     if (dateOfBirth == null) {
@@ -36,19 +35,16 @@ class _MatchesScreenState extends State<MatchesScreen> {
     DateTime dob = dateOfBirth;
     DateTime today = DateTime.now();
     int age = today.year - dob.year;
-    if (today.month < dob.month ||
-        (today.month == dob.month && today.day < dob.day)) {
+    if (today.month < dob.month || (today.month == dob.month && today.day < dob.day)) {
       age--;
     }
     return age;
   }
 
-
   @override
   void initState() {
-    _matchController.getMatchData();
-    // TODO: implement initState
     super.initState();
+    _matchController.getMatchData();
   }
 
   @override
@@ -62,11 +58,15 @@ class _MatchesScreenState extends State<MatchesScreen> {
           fontSize: 18.sp,
         ),
       ),
-      body: Obx(()=> _matchController.matchLoading.value
-          ? const Center(child: CustomPageLoading())
-          : _matchController.matchModel.isEmpty
-          ? Center( child: CustomText(text: 'No Matches Found',),)
-          : Padding(
+      body: Obx(() {
+        //===================> Check if loading data or matchModel is empty <===========================
+        if (_matchController.matchLoading.value) {
+          return const Center(child: CustomPageLoading());
+        } else if (_matchController.matchModel.isEmpty) {
+          return Center(child: CustomText(text: 'No Matches Found'));
+        }
+
+        return Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: ListView.builder(
             itemCount: _matchController.matchModel.length,
@@ -85,20 +85,21 @@ class _MatchesScreenState extends State<MatchesScreen> {
                           ),
                           child: Row(
                             children: [
-                              //====================> Image <==========================
+                              //========================> Image display <==================
                               CustomNetworkImage(
                                 imageUrl: '${ApiConstants.imageBaseUrl}${user.gallery![0] ?? ""}',
                                 height: 145.h,
                                 width: 112.w,
                                 borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(8.r),
-                                    bottomLeft: Radius.circular(8.r)),
+                                  topLeft: Radius.circular(8.r),
+                                  bottomLeft: Radius.circular(8.r),
+                                ),
                               ),
                               SizedBox(width: 16.w),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  //====================> Name and Year <==========================
+                                  //========================> Name and age <===========================
                                   CustomText(
                                     text: user.fullName ?? "",
                                     fontSize: 16.sp,
@@ -106,14 +107,11 @@ class _MatchesScreenState extends State<MatchesScreen> {
                                     color: const Color(0xff430750),
                                   ),
                                   CustomText(text: '${calculateAge(user)}'),
-                                  //====================> Location Row <===========================
+                                  //==========================> Location <===============================
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      SvgPicture.asset(AppIcons.location,
-                                          color: AppColors.primaryColor,
-                                          width: 12.w,
-                                          height: 12.h),
+                                      SvgPicture.asset(AppIcons.location, color: AppColors.primaryColor, width: 12.w, height: 12.h),
                                       SizedBox(width: 4.w),
                                       CustomText(
                                         text: user.location!.locationName ?? "",
@@ -122,26 +120,26 @@ class _MatchesScreenState extends State<MatchesScreen> {
                                       ),
                                     ],
                                   ),
-                                  //====================> Send Message Button <===========================
                                   SizedBox(height: 16.h),
                                   CustomButton(
-                                      width: 116.w,
-                                      height: 32.h,
-                                      onTap: () {
-                                        Get.toNamed(AppRoutes.profileDetailsScreen, parameters: {
-                                          '_id' : '${user.id}',
-                                          'age' : '${calculateAge(user)}'
-                                        });
-                                      },
-                                      fontSize: 14.sp,
-                                      text: AppStrings.sendMessage.tr),
+                                    width: 116.w,
+                                    height: 32.h,
+                                    onTap: () {
+                                      Get.toNamed(AppRoutes.profileDetailsScreen, parameters: {
+                                        '_id': '${user.id}',
+                                        'age': '${calculateAge(user)}',
+                                      });
+                                    },
+                                    fontSize: 14.sp,
+                                    text: AppStrings.sendMessage.tr,
+                                  ),
                                   SizedBox(height: 8.h),
                                 ],
-                              )
+                              ),
                             ],
                           ),
                         ),
-                        //====================> Love Button <===========================
+                        // Love button
                         Positioned(
                           right: 10.w,
                           top: 5.h,
@@ -151,16 +149,16 @@ class _MatchesScreenState extends State<MatchesScreen> {
                             width: 28.w,
                             height: 28.h,
                           ),
-                        )
+                        ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               );
             },
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }

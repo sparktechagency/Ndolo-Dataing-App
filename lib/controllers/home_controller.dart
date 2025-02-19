@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:ndolo_dating/helpers/prefs_helpers.dart';
+import 'package:ndolo_dating/utils/app_constants.dart';
 
 import '../models/home_user_model.dart';
 import '../models/single_user_model.dart';
@@ -34,13 +39,15 @@ class HomeController extends GetxController implements GetxService {
       var responseData = response.body['data']['attributes'];
       print("==========================> Raw User Data: $responseData");
       if (responseData is List) {
-        homeUserModel.assignAll(responseData.map((e) => HomeUserModel.fromJson(e)).toList());
+        homeUserModel.assignAll(
+            responseData.map((e) => HomeUserModel.fromJson(e)).toList());
       } else {
         homeUserModel.assignAll([HomeUserModel.fromJson(responseData)]);
         homeLoading(false);
       }
     } else {
       ApiChecker.checkApi(response);
+      Fluttertoast.showToast(msg: response.statusText ?? "");
     }
     homeLoading(false);
     update();
@@ -51,54 +58,43 @@ class HomeController extends GetxController implements GetxService {
   RxBool singleLoading = false.obs;
   getSingleUserData(String userID) async {
     singleLoading(true);
-    var response = await ApiClient.getData(ApiConstants.getSingleUserEndPoint(userID));
+    var response =
+        await ApiClient.getData(ApiConstants.getSingleUserEndPoint(userID));
     if (response.statusCode == 200) {
-      singleUserModel.value = SingleUserModel.fromJson(response.body['data']['attributes']);
+      singleUserModel.value =
+          SingleUserModel.fromJson(response.body['data']['attributes']);
       singleLoading(false);
       update();
     } else {
       ApiChecker.checkApi(response);
+      Fluttertoast.showToast(msg: response.statusText ?? "");
       singleLoading(false);
       update();
     }
   }
 
-
 //=============================> Post Like User <===============================
-  /*RxBool postLoading = false.obs;
-  RxBool postSuccess = false.obs;
+  RxBool postLoading = false.obs;
   postUserData(String userID) async {
+    var bearerToken = await PrefsHelper.getString(AppConstants.bearerToken);
     postLoading(true);
     var body = {
-      "profileId": forgetEmailTextCtrl.text.trim(),
+      "profileId": userID,
     };
-    var response = await ApiClient.postData(ApiConstants.likeUserEndPoint(userID), body);
-    request.body = json.encode(postData); // Passing dynamic data in the body
-    request.headers.addAll(headers);
-
-    try {
-      http.StreamedResponse response = await request.send();
-
-      if (response.statusCode == 200) {
-        // Success, mark postSuccess as true
-        postSuccess(true);
-        var responseString = await response.stream.bytesToString();
-        print('Response: $responseString'); // You can handle the response here as needed
-      } else {
-        // Handle error responses
-        ApiChecker.checkApi(response);
-        postSuccess(false);
-      }
-    } catch (e) {
-      // Handle any exceptions
-      print('Error: $e');
-      postSuccess(false);
-    } finally {
-      postLoading(false); // Hide loading state
-      update(); // Update the state in the controller
+    Map<String, String> header = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $bearerToken'
+    };
+    var response = await ApiClient.postData(ApiConstants.likeUserEndPoint, json.encode(body),
+        headers: header);
+    if (response.statusCode == 200) {
+      postLoading(false);
+      print('Response:================> ${response.body}');
+    } else {
+      ApiChecker.checkApi(response);
+      Fluttertoast.showToast(msg: response.statusText ?? "Unknown error");
     }
+    postLoading(false);
+    update();
   }
-  */
-  
-
 }

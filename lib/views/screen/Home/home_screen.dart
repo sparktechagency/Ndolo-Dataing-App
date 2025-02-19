@@ -289,12 +289,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:ndolo_dating/service/api_constants.dart';
+import 'package:ndolo_dating/controllers/home_controller.dart';
+import 'package:ndolo_dating/models/home_user_model.dart';
+import 'package:ndolo_dating/utils/app_icons.dart';
+import 'package:ndolo_dating/utils/app_images.dart';
 import 'package:tcard/tcard.dart';
-import '../../../controllers/home_controller.dart';
 import '../../../helpers/route.dart';
-import '../../../models/home_user_model.dart';
-import '../../../utils/app_icons.dart';
-import '../../../utils/app_images.dart';
 import '../../base/bottom_menu..dart';
 import '../../base/custom_text.dart';
 import '../../base/custom_tinder_card.dart';
@@ -312,11 +312,11 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _allSwiped = false;
   int _currentIndex = 0;
 
- /* @override
+  @override
   void initState() {
     super.initState();
     _homeController.getUserData();
-  }*/
+  }
 
   void _onSwipe(SwipDirection direction, int index) {
     if (index >= 0 && index < _homeController.homeUserModel.length) {
@@ -328,14 +328,18 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  //==========================> Handle "Like" action (Right swipe) <====================
   void _handleLike(int index) {
     print('Liked image ${index + 1}');
+    _homeController.postUserData(_homeController.homeUserModel.value[index].id ?? '');
   }
 
+  //==========================> Handle "Dislike" action (Left swipe) <==========================
   void _handleDislike(int index) {
     print('Disliked image ${index + 1}');
   }
 
+  //==========================> Handle Like or Dislike when button is pressed <=============================
   void _handleLikeDislike(bool isLiked) {
     if (_currentIndex >= 0 && _currentIndex < _homeController.homeUserModel.length) {
       if (isLiked) {
@@ -346,8 +350,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _moveToNextCard();
     }
   }
-
-//==================> Move to the next card <=====================
+  //===========================> Move to the next card after like/dislike <=============================
   void _moveToNextCard() {
     if (_currentIndex < _homeController.homeUserModel.length - 1) {
       setState(() {
@@ -363,7 +366,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _homeController.getUserData();
     return Scaffold(
       bottomNavigationBar: const BottomMenu(0),
       body: SafeArea(
@@ -380,16 +382,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () {
                       Get.toNamed(AppRoutes.filterScreen);
                     },
-                    child: SvgPicture.asset(AppIcons.filter,
-                        width: 24.w, height: 24.h),
+                    child: SvgPicture.asset(AppIcons.filter, width: 24.w, height: 24.h),
                   ),
                   SizedBox(width: 12.w),
                   InkWell(
                     onTap: () {
                       Get.toNamed(AppRoutes.notificationsScreen);
                     },
-                    child: SvgPicture.asset(AppIcons.notification,
-                        width: 32.w, height: 32.h),
+                    child: SvgPicture.asset(AppIcons.notification, width: 32.w, height: 32.h),
                   ),
                 ],
               ),
@@ -470,7 +470,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                         SizedBox(width: 12.w),
                                         Flexible(
                                           child: GestureDetector(
-                                            onTap: () => _handleLikeDislike(true),
+                                            onTap: () {
+                                              _handleLikeDislike(true);
+                                              _homeController.postUserData('$user.id');
+                                            },
                                             child: _slideButton(SvgPicture.asset(AppIcons.like), const Color(0xffFF9D33)),
                                           ),
                                         ),
@@ -479,7 +482,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           child: GestureDetector(
                                             onTap: () {
                                               Get.toNamed(AppRoutes.profileDetailsScreen, parameters: {
-                                                '_id': user.id ?? '',
+                                                'profileId': user.id ?? '',
                                                 'age': '${user.age ?? ''}',
                                               });
                                             },

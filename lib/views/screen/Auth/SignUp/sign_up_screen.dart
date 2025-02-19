@@ -166,19 +166,44 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       }
                     },
                     text: AppStrings.signUp.tr),
-                SizedBox(height: 16.h),
-
+                SizedBox(height: 8.h),
                 //=======================> Or  <=====================
                 Center(
                   child: CustomText(
                     text: 'Or'.tr,
                     fontWeight: FontWeight.w700,
                     fontSize: 18.sp,
-                    bottom: 16.h,
+                    bottom: 8.h,
                   ),
                 ),
                 //=======================> Google and Facebook Button <=====================
-                Row(
+                Center(
+                  child: GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.r),
+                            border: Border.all(
+                                width: 1.w, color: AppColors.primaryColor)),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal:  12.w, vertical: 4.h),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(AppImages.googleLogo,
+                                  width: 32.w, height: 32.h),
+                              SizedBox( width: 12.w),
+                              CustomText(
+                                text: 'Sign in With Google'.tr,
+                                fontSize: 18.sp,
+                              ),
+                            ],
+                          ),
+                        )),
+                  ),
+                ),
+              /*  Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
@@ -210,7 +235,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     // Image.asset(AppImages.facebookLogo, width: 32.w, height: 32.h)
                   ],
-                ),
+                ),*/
                 SizedBox(height: 16.h),
                 //=======================> Already have an account <=====================
                 Row(
@@ -242,93 +267,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
-
-  /* //==========================> Checkbox Section Widget <=======================
-  _checkboxSection() {
-    return Row(
-      children: [
-        Checkbox(
-          checkColor: Colors.white,
-          activeColor: AppColors.primaryColor,
-          focusColor: AppColors.greyColor,
-          value: isChecked,
-          onChanged: (bool? value) {
-            setState(() {
-              isChecked = value ?? false;
-            });
-          },
-          side: BorderSide(
-            color: isChecked ? AppColors.primaryColor : AppColors.primaryColor,
-            width: 1.w,
-          ),
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                CustomText(
-                  text: AppStrings.agreeWith.tr,
-                  fontSize: 14.sp,
-                ),
-                SizedBox(width: 4.w),
-                InkWell(
-                  onTap: () {
-                    Get.toNamed(AppRoutes.termsServicesScreen);
-                  },
-                  child: CustomText(
-                    text: AppStrings.termsOfServices.tr,
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primaryColor,
-                  ),
-                ),
-                SizedBox(width: 4.w),
-                CustomText(
-                  text: 'and'.tr,
-                  fontSize: 14.sp,
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                InkWell(
-                  onTap: () {
-                    Get.toNamed(AppRoutes.privacyPolicyScreen);
-                  },
-                  child: CustomText(
-                    text: AppStrings.privacyPolicy.tr,
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primaryColor,
-                  ),
-                ),
-                SizedBox(width: 4.w),
-                CustomText(
-                  text: 'to read our'.tr,
-                  fontSize: 14.sp,
-                ),
-                SizedBox(width: 4.w),
-
-                InkWell(
-                  onTap: () {
-                    Get.toNamed(AppRoutes.aboutUsScreen);
-                  },
-                  child: CustomText(
-                    text: AppStrings.aboutUs.tr,
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primaryColor,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-*/
 
   //==========================> Checkbox Section Widget <=======================
   _checkboxSection() {

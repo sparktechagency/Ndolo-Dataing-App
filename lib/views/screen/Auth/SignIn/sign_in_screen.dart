@@ -39,7 +39,7 @@ class _SignInScreenState extends State<SignInScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 40.h),
+                SizedBox(height: 56.h),
                 //===========================> Language Dropdown Button <===================================
                 Align(
                   alignment: Alignment.topRight,
@@ -106,11 +106,9 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   //_popupMenuButton(),
                 ),
-                SizedBox(height: 16.h),
                 Center(
                   child: SvgPicture.asset(AppIcons.appLogo),
                 ),
-                SizedBox(height: 32.h),
                 Center(
                   child: CustomText(
                     text: AppStrings.signIn.tr,
@@ -124,10 +122,9 @@ class _SignInScreenState extends State<SignInScreen> {
                     text: AppStrings.welcomeBack.tr,
                     fontSize: 16.sp,
                     maxLine: 2,
-                    bottom: 8.h,
                   ),
                 ),
-                SizedBox(height: 32.h),
+                SizedBox(height: 16.h),
                 //=======================> Email Text Field <=====================
                 CustomText(
                   text: AppStrings.email.tr,
@@ -174,7 +171,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
                 //=======================> Remember Me <=====================
                 _checkboxSection(),
-                SizedBox(height: 32.h),
+                SizedBox(height: 16.h),
                 //=======================> Sign In Button <=====================
                 Obx(()=> CustomButton(
                     loading: _authController.signInLoading.value,
@@ -190,18 +187,45 @@ class _SignInScreenState extends State<SignInScreen> {
                       },
                       text: AppStrings.signIn.tr),
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 8.h),
                 //=======================> Or  <=====================
                 Center(
                   child: CustomText(
                     text: 'Or'.tr,
                     fontWeight: FontWeight.w700,
                     fontSize: 18.sp,
-                    bottom: 16.h,
+                    bottom: 8.h,
                   ),
                 ),
                 //=======================> Google and Facebook Button <=====================
-                Row(
+                Center(
+                  child: GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.r),
+                            border: Border.all(
+                                width: 1.w, color: AppColors.primaryColor)),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal:  12.w, vertical: 4.h),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(AppImages.googleLogo,
+                                  width: 32.w, height: 32.h),
+                              SizedBox( width: 12.w),
+                              CustomText(
+                                text: 'Sign in With Google'.tr,
+                                fontSize: 18.sp,
+                              ),
+                            ],
+                          ),
+                        )),
+                  ),
+                ),
+
+                /*Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
@@ -232,7 +256,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           )),
                     ),
                   ],
-                ),
+                ),*/
                 SizedBox(height: 16.h),
                 //=======================> Don’t have an account <=====================
                 Row(
