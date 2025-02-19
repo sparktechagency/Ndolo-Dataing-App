@@ -16,6 +16,7 @@ import '../../../utils/app_images.dart';
 import '../../../utils/app_strings.dart';
 import '../../base/bottom_menu..dart';
 import '../../base/custom_button.dart';
+import '../../base/custom_profile_image.dart';
 import '../../base/custom_text.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -72,7 +73,7 @@ class ProfileScreen extends StatelessWidget {
                                 left: 50.w,
                                 right: 50.w,
                                 //==========================> Profile Picture <=======================
-                                child: CustomNetworkImage(
+                                child: CustomProfileImage(
                                   imageUrl:
                                       '${ApiConstants.imageBaseUrl}${_profileController.profileModel.value.profileImage}',
                                   height: 144.h,

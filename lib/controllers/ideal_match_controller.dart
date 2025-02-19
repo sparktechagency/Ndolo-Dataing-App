@@ -20,8 +20,7 @@ class IdealMatchController extends GetxController {
     idealMatchLoading(true);
     var response = await ApiClient.getData(ApiConstants.idealMatchesEndPoint);
     if (response.statusCode == 200) {
-      idealMatchModel.value = List<IdealMatchModel>.from(response.body['data']
-              ['attributes']['results']
+      idealMatchModel.value = List<IdealMatchModel>.from(response.body['data']['attributes']['results']
           .map((x) => IdealMatchModel.fromJson(x)));
       idealMatchModel.refresh();
       idealMatchLoading(false);
@@ -35,17 +34,15 @@ class IdealMatchController extends GetxController {
 
 //==========================> Post Ideal Match Method <============================
   var postMatchLoading = false.obs;
-  postIdealMatch() async {
-    String bearerToken = await PrefsHelper.getString(AppConstants.bearerToken);
-    var headers = {
-      'Content-Type': 'application/json',
-      'Authorization': '$bearerToken'
-    };
+  postIdealMatch(String idealMatch) async {
     postMatchLoading(true);
-    Map<String, String> body = {"idealMatch": jsonEncode(selectedOption.value)};
+    var selectedRole = idealMatchModel.firstWhere((role) => role.title == selectedOption.value,
+        orElse: () => IdealMatchModel());
+    Map<String, String> body = {
+      "idealMatch": selectedRole.id ?? "",
+    };
     Response response =
-        await ApiClient.postData(ApiConstants.userMatchingEndPoint, body);
-    print("==============================> ${response.body}");
+    await ApiClient.postData(ApiConstants.userMatchingEndPoint, body);
     if (response.statusCode == 200) {
       Get.offAllNamed(AppRoutes.homeScreen);
       postMatchLoading(false);

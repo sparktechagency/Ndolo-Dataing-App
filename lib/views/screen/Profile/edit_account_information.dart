@@ -32,13 +32,14 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
     super.initState();
     _profileController.firstNameCTRL.text = Get.parameters['firstName'] ?? '';
     _profileController.lastNameCTRL.text = Get.parameters['lastName'] ?? '';
-    _profileController.phoneNumberCTRL.text = Get.parameters['phoneNumber'] ?? '';
-    _profileController.dateBirthCTRL.text = Get.parameters['dateOfBirth'] ?? '';
     _profileController.countryCTRL.text = Get.parameters['country'] ?? '';
     _profileController.stateCTRL.text = Get.parameters['state'] ?? '';
     _profileController.cityCTRL.text = Get.parameters['city'] ?? '';
     _profileController.addressCTRL.text = Get.parameters['address'] ?? '';
     _profileController.bioCTRL.text = Get.parameters['bio'] ?? '';
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _profileController.getProfileData();
+    });
   }
 
 
@@ -118,7 +119,7 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                                 fit: BoxFit.cover)),
                       )
                           : CustomNetworkImage(
-                        imageUrl: '${ApiConstants.imageBaseUrl}${Get.parameters['image']}',
+                        imageUrl: '${ApiConstants.imageBaseUrl}${Get.parameters['coverImage']}',
                         width: 345.w,
                         height: 134.h,
                         borderRadius: BorderRadius.circular(8.r),

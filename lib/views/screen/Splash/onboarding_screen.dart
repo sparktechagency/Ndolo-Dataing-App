@@ -18,6 +18,7 @@ class OnboardingScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SizedBox(height: 132.h),
             //==================> Connect Image <=====================
             Center(child: Image.asset(AppImages.onbording)),
             SizedBox(height: 16.h),
@@ -29,12 +30,13 @@ class OnboardingScreen extends StatelessWidget {
               maxLine: 2,
             ),
             //==================> Get Started Button <=====================
-            SizedBox(height: 48.h),
+            const Spacer(),
             CustomButton(
                 onTap: () {
                   Get.toNamed(AppRoutes.signInScreen);
                 },
-                text: AppStrings.getStarted.tr)
+                text: AppStrings.getStarted.tr),
+            SizedBox(height: 68.h),
           ],
         ),
       ),

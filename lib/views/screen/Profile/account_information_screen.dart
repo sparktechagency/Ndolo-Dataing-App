@@ -61,8 +61,6 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                   Get.toNamed(AppRoutes.editAccountInformation, parameters: {
                     'firstName': data.firstName ?? '',
                     'lastName': data.lastName ?? '',
-                    'phoneNumber': '${data.phoneNumber}' ?? '',
-                    'dateOfBirth': '${data.dateOfBirth}' ?? '',
                     'country': data.country ?? '',
                     'state': data.state ?? '',
                     'city': data.city ?? '',

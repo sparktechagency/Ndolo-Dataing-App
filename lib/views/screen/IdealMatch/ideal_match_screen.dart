@@ -23,38 +23,6 @@ class IdealMatchScreen extends StatefulWidget {
 class _IdealMatchScreenState extends State<IdealMatchScreen> {
   final IdealMatchController _idealMatchController = Get.put(IdealMatchController());
   String selectedOption = ''.tr;
-  final List<Map<String, dynamic>> roleOptions = [
-    {
-      'title': AppStrings.love.tr,
-      'description': AppStrings.livenToHaveOne.tr,
-      'icon': AppIcons.love,
-      'option': 'Love',
-    },
-    {
-      'title': AppStrings.comeWeStay.tr,
-      'description': AppStrings.livenToHelp.tr,
-      'icon': AppIcons.come,
-      'option': 'Come-We-Stay',
-    },
-    {
-      'title': AppStrings.imFreeToday.tr,
-      'description': AppStrings.casualOrReady.tr,
-      'icon': AppIcons.today,
-      'option': 'I\'m Free Today',
-    },
-    {
-      'title': AppStrings.friends.tr,
-      'description': AppStrings.iWantToMeet.tr,
-      'icon': AppIcons.friends,
-      'option': 'Friends',
-    },
-    {
-      'title': AppStrings.business.tr,
-      'description': AppStrings.meetBusinessOriented.tr,
-      'icon': AppIcons.business,
-      'option': 'Business',
-    },
-  ];
 
   @override
   void initState() {
@@ -170,7 +138,7 @@ class _IdealMatchScreenState extends State<IdealMatchScreen> {
                 Obx(()=> CustomButton(
                     loading: _idealMatchController.postMatchLoading.value,
                     onTap: () {
-                      _idealMatchController.postIdealMatch();
+                      _idealMatchController.postIdealMatch(_idealMatchController.selectedOption.value,);
                     },
                     text: 'Continue',
                   ),

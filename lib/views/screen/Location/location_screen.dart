@@ -3,10 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:ndolo_dating/utils/app_colors.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-import '../../../controllers/common_location_controller.dart';
+import '../../../controllers/location_controller.dart';
 import '../../../helpers/route.dart';
 import '../../../utils/app_images.dart';
 import '../../../utils/app_strings.dart';
@@ -22,15 +21,14 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-  final CommonLocationController _commonLocationController =
-      Get.put(CommonLocationController());
+  final LocationController _commonLocationController =
+      Get.put(LocationController());
   var currentLat = 0.0;
   var currentLong = 0.0;
 
   @override
   void initState() {
     _getCurrentLocation();
-
     // TODO: implement initState
     super.initState();
   }
@@ -53,7 +51,7 @@ class _LocationScreenState extends State<LocationScreen> {
             //==========================> Location Image <=========================
             Center(
                 child: Image.asset(AppImages.map, width: 165.w, height: 165.h)),
-            SizedBox(height: 154.h),
+            const Spacer(),
             //==========================> User Current Location Button <=========================
             CustomButton(
                 loading: _commonLocationController.setLocationLoading.value,
@@ -66,11 +64,14 @@ class _LocationScreenState extends State<LocationScreen> {
             SizedBox(height: 16.h),
             //==========================> Set From Map Button <=========================
             CustomButton(
-                onTap: () {
-                  Get.toNamed(AppRoutes.locationPickerScreen);
-                },
-                color: Colors.transparent,
-                text: 'Set From Map'.tr),
+              onTap: () {
+                Get.toNamed(AppRoutes.locationPickerScreen);
+              },
+              color: Colors.transparent,
+              text: 'Set From Map'.tr,
+              textColor: AppColors.primaryColor,
+            ),
+            SizedBox(height: 32.h),
           ],
         ),
       ),
@@ -78,15 +79,12 @@ class _LocationScreenState extends State<LocationScreen> {
   }
 
   Future<void> _getCurrentLocation() async {
-    // Request location permission
     final status = await Permission.location.request();
 
     if (status.isGranted) {
       try {
-        // Check if location services are enabled
         bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
         if (!serviceEnabled) {
-          // Show dialog to enable location services
           if (mounted) {
             showDialog(
               context: context,

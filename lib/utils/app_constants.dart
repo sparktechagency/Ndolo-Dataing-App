@@ -9,6 +9,7 @@ class AppConstants{
   static const String bearerToken = "BearerToken";
   static const String phoneNumber = "PhoneNumber";
   static String isLogged = "IsLogged";
+  static String isFirstTimeUpdateGallery  = "isFirstTimeUpdateGallery";
   static String id = "id";
 
   // share preference Key

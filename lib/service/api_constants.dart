@@ -14,7 +14,7 @@ class ApiConstants {
   static const String getHomeAllUserEndPoint = "/users/all/profiles";
   static String getSingleUserEndPoint(String userID) => "/users/profile/$userID";
   static const String getMatchListEndPoint = "/users/all/lick-list";
-  static  String likeUserEndPoint(String userID) => "/users/lick";
+  static const String likeUserEndPoint = "/users/lick";
   static const String interestEndPoint = "/interests/all";
   static const String idealMatchesEndPoint = "/matches/all";
   static const String userMatchingEndPoint = "/users/matching";
