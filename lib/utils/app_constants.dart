@@ -4,13 +4,15 @@ class AppConstants{
 
   static String APP_NAME = "Ndolo Dating";
   static String fcmToken = "fcmToken";
+  static String receiverId = "receiverId";
+  static String conversationID = "conversationID";
 
 
   static const String bearerToken = "BearerToken";
   static const String phoneNumber = "PhoneNumber";
   static String isLogged = "IsLogged";
-  static String isFirstTimeUpdateGallery  = "isFirstTimeUpdateGallery";
-  static String id = "id";
+  static String hasUpdateGallery  = "hasUpdateGallery";
+  static String userId = "id";
 
   // share preference Key
   static String THEME ="theme";

@@ -222,8 +222,9 @@ class ProfileScreen extends StatelessWidget {
                       child: CustomButton(
                           onTap: () async {
                             await PrefsHelper.remove(AppConstants.isLogged);
-                            await PrefsHelper.remove(AppConstants.id);
+                            await PrefsHelper.remove(AppConstants.userId);
                             await PrefsHelper.remove(AppConstants.bearerToken);
+                            await PrefsHelper.remove(AppConstants.hasUpdateGallery);
                             Get.offAllNamed(AppRoutes.signInScreen);
                           },
                           text: "Yes")),

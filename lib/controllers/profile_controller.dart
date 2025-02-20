@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import '../helpers/toast_message_helper.dart';
 import '../models/profile_model.dart';
 import '../service/api_checker.dart';
 import '../service/api_client.dart';
@@ -142,5 +144,50 @@ updateProfile() async {
     addressCTRL.dispose();
     bioCTRL.dispose();
     super.onClose();
+  }
+
+
+
+  //============================================> Block controller <====================================
+  RxBool blockLoading = false.obs;
+  block({String? id}) async {
+    blockLoading(true);
+    var params =  {
+      "id": "$id",
+    };
+    var response = await ApiClient.postData(ApiConstants.blockConversationEndPoint(id!), jsonEncode(params));
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      ToastMessageHelper.showToastMessage("${response.body["message"]}");
+      blockLoading(false);
+    } else if(response.statusCode == 1){
+      blockLoading(false);
+      ToastMessageHelper.showToastMessage("Server error! \n Please try later");
+    } else {
+      ToastMessageHelper.showToastMessage("${response.body["message"]}");
+      blockLoading(false);
+    }
+  }
+
+  //======================================> Report <========================================
+  RxBool reportLoading = false.obs;
+  report({String? userID, String? title,String? description}) async {
+    reportLoading(true);
+    var body = {
+      "userID": "$userID",
+      "title": "$title",
+      "description": "$description",
+    };
+    var response = await ApiClient.postData(
+        ApiConstants.reportEndPoint,
+        jsonEncode(body)
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      ToastMessageHelper.showToastMessage("Report submitted successfully!");
+      Get.back();
+    } else if (response.statusCode == 1) {
+      ToastMessageHelper.showToastMessage("Server error! \nPlease try later");
+    } else {
+      ToastMessageHelper.showToastMessage(response.body["message"]);
+    }
   }
 }

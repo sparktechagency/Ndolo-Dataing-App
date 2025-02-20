@@ -30,7 +30,7 @@ class LocationController extends GetxController {
           headers: headers);
       print("============> ${response.body} and ${response.statusCode}");
       if (response.statusCode == 200 || response.statusCode == 201) {
-        await PrefsHelper.setBool(AppConstants.isFirstTimeUpdateGallery, false);
+        await PrefsHelper.setBool(AppConstants.hasUpdateGallery, true);
         print("Your Location is set");
         Get.offAllNamed(AppRoutes.idealMatchScreen);
         Fluttertoast.showToast(msg: "Your Location is set successfully");
