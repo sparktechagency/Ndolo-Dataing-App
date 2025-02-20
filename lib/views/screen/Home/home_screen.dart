@@ -404,7 +404,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (userList.isEmpty) {
                   return Center(child: CustomText(text: "No Users Available"));
                 }
-
                 return Column(
                   children: [
                     CustomText(
@@ -419,7 +418,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         size: const Size(double.infinity, double.infinity),
                         cards: List.generate(userList.length, (index) {
                           final HomeUserModel user = userList[index];
-                          final String imageUrl = '${ApiConstants.imageBaseUrl}${user.gallery![0] ?? ""}';
+                          final String imageUrl = '${ApiConstants.imageBaseUrl}${user.profileImage ?? ""}';
                           return Stack(
                             fit: StackFit.expand,
                             children: [

@@ -87,7 +87,7 @@ class _MatchesScreenState extends State<MatchesScreen> {
                             children: [
                               //========================> Image display <==================
                               CustomNetworkImage(
-                                imageUrl: '${ApiConstants.imageBaseUrl}${user.gallery![0] ?? ""}',
+                                imageUrl: '${ApiConstants.imageBaseUrl}${user.profileImage ?? ""}',
                                 height: 145.h,
                                 width: 112.w,
                                 borderRadius: BorderRadius.only(

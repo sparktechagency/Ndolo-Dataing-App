@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -101,3 +102,127 @@ class MessageScreen extends StatelessWidget {
     );
   }
 }
+*/
+
+
+
+
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:ndolo_dating/helpers/route.dart';
+import 'package:ndolo_dating/service/api_constants.dart';
+import 'package:ndolo_dating/utils/app_constants.dart';
+import 'package:ndolo_dating/views/base/custom_network_image.dart';
+import 'package:ndolo_dating/views/base/custom_page_loading.dart';
+import '../../../controllers/messages/message_controller.dart';
+import '../../../utils/app_colors.dart';
+import '../../../utils/app_strings.dart';
+import '../../base/bottom_menu..dart';
+import '../../base/custom_text.dart';
+
+class MessageScreen extends StatelessWidget {
+  MessageScreen({super.key});
+  final MessageController controller = Get.put(MessageController());
+
+  @override
+  Widget build(BuildContext context) {
+    controller.getConversation();
+    return Scaffold(
+      bottomNavigationBar: const BottomMenu(2),
+      appBar: AppBar(
+        title: CustomText(
+          text: AppStrings.message.tr,
+          fontWeight: FontWeight.w600,
+          fontSize: 18.sp,
+        ),
+      ),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24.w),
+        child: Obx(() {
+          if (controller.conversationLoading.value) {
+            return const Center(child: CustomPageLoading());
+          }
+          if (controller.conversationModel.isEmpty) {
+            return Center(child: CustomText(text: 'No conversations available.'));
+          }
+          return ListView.builder(
+            itemCount: controller.conversationModel.length,
+            itemBuilder: (context, index) {
+              final conversation = controller.conversationModel[index];
+              return Padding(
+                padding: EdgeInsets.only(bottom: 16.h),
+                child: GestureDetector(
+                  onTap: () {
+                    Get.toNamed(AppRoutes.chatScreen);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.cardColor,
+                      borderRadius: BorderRadius.circular(8.r),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.h),
+                      child: Row(
+                        children: [
+                          Stack(
+                            children: [
+                              //=====================> Image <=======================
+                              CustomNetworkImage(
+                                imageUrl: conversation.receiver?.id?.isNotEmpty == true
+                                    ? '${ApiConstants.imageBaseUrl}${conversation.receiver?.profileImage}'
+                                    : 'https://placehold.it/45x45', // Placeholder image if no URL
+                                height: 45.h,
+                                width: 45.w,
+                                boxShape: BoxShape.circle,
+                              ),
+                              //=====================> Active Green Icon <=======================
+                              Positioned(
+                                right: 0.w,
+                                bottom: 4.h,
+                                child: Icon(
+                                  Icons.circle,
+                                  color: conversation.lastMessage?.seen == true ? Colors.green : Colors.grey,
+                                  size: 10.w,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: 12.w),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                //=====================> Name <=======================
+                                CustomText(
+                                  text: '${conversation.receiver?.fullName}',
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w700,
+                                  bottom: 6.h,
+                                  maxLine: 2,
+                                  textAlign: TextAlign.start,
+                                ),
+                                //=====================> Last Message <=======================
+                                CustomText(
+                                  text: conversation.lastMessage?.text ?? 'No message available',
+                                  fontWeight: FontWeight.w500,
+                                  maxLine: 2,
+                                  textAlign: TextAlign.start,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        }),
+      ),
+    );
+  }
+}
+
