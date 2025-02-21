@@ -319,42 +319,52 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onSwipe(SwipDirection direction, int index) {
-    if (index >= 0 && index < _homeController.homeUserModel.length) {
-      if (direction == SwipDirection.Left) {
-        _handleDislike(index);
-      } else if (direction == SwipDirection.Right) {
-        _handleLike(index);
-      }
+    if (index < 0 || index >= _homeController.homeUserModel.length) return;
+
+    if (direction == SwipDirection.Left) {
+      _handleDislike(index);
+    } else if (direction == SwipDirection.Right) {
+      _handleLike(index);
     }
+
+    _moveToNextCard();
   }
 
-  //==========================> Handle "Like" action (Right swipe) <====================
+//==========================> Handle "Like" action (Right swipe) <====================
   void _handleLike(int index) {
-    print('Liked image ${index + 1}');
-    _homeController.postUserData(_homeController.homeUserModel.value[index].id ?? '');
-  }
-
-  //==========================> Handle "Dislike" action (Left swipe) <==========================
-  void _handleDislike(int index) {
-    print('Disliked image ${index + 1}');
-  }
-
-  //==========================> Handle Like or Dislike when button is pressed <=============================
-  void _handleLikeDislike(bool isLiked) {
-    if (_currentIndex >= 0 && _currentIndex < _homeController.homeUserModel.length) {
-      if (isLiked) {
-        _handleLike(_currentIndex);
-      } else {
-        _handleDislike(_currentIndex);
-      }
-      _moveToNextCard();
+    final user = _homeController.homeUserModel.value[index];
+    if (user.id != null) {
+      print('Liked: ${user.firstName} (${user.id})');
+      _homeController.postUserData(user.id!);
     }
   }
-  //===========================> Move to the next card after like/dislike <=============================
+
+//==========================> Handle "Dislike" action (Left swipe) <==========================
+  void _handleDislike(int index) {
+    final user = _homeController.homeUserModel.value[index];
+    print('Disliked: ${user.firstName} (${user.id})');
+  }
+
+//==========================> Handle Like or Dislike when button is pressed <=============================
+  void _handleLikeDislike(bool isLiked) {
+    if (_currentIndex >= _homeController.homeUserModel.length) return;
+
+    if (isLiked) {
+      _handleLike(_currentIndex);
+      _cardController.forward(direction: SwipDirection.Right); // Simulate right swipe
+    } else {
+      _handleDislike(_currentIndex);
+      _cardController.forward(direction: SwipDirection.Left); // Simulate left swipe
+    }
+    _moveToNextCard();
+  }
+//===========================> Move to the next card smoothly <=============================
   void _moveToNextCard() {
     if (_currentIndex < _homeController.homeUserModel.length - 1) {
       setState(() {
         _currentIndex++;
+      });
+      Future.delayed(const Duration(milliseconds: 300), () {
         _cardController.forward();
       });
     } else {
@@ -363,7 +373,6 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

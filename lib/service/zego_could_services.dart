@@ -35,10 +35,9 @@ class CallInvitation extends StatelessWidget {
           var receiverID = await PrefsHelper.getString(AppConstants.receiverId);
           var conversationID =
           await PrefsHelper.getString(AppConstants.conversationID);
-          messageController.sendMessage(
+          messageController.sentMessage(
               "Miss Call-Code : ******#####%%%%^^^^^&&&&*****",
-              receiverID,
-              conversationID);
+              receiverID);
           //  Add your custom logic here.
         },
         onIncomingMissedCallClicked: (
@@ -65,10 +64,9 @@ class CallInvitation extends StatelessWidget {
           var receiverID = await PrefsHelper.getString(AppConstants.receiverId);
           var conversationID =
           await PrefsHelper.getString(AppConstants.conversationID);
-          messageController.sendMessage(
+          messageController.sentMessage(
               "Miss Call-Code : ******#####%%%%^^^^^&&&&*****",
-              receiverID,
-              conversationID);
+              receiverID);
 
           print("============================> On Call Canceled busy");
         },

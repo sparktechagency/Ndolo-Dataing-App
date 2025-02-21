@@ -24,14 +24,16 @@ class ApiConstants {
   static const String privacyPolicyEndPoint = "/info/privacy-policy";
   static const String aboutUsEndPoint = "/info/about-us";
 
-  static  String getAllSingleMessageEndPoint (String id) =>  "/conversation/get-messages?conversationId=$id";
-  static const String getAllMessageUserEndPoint = "/conversation/conversation-list";
- // static  String getAllMessageUserEndPoint (String page, String limit ) => "/conversation/conversation-list";
+  static  String getAllSingleMessageEndPoint (String conversationId) =>  "/conversation/get-messages?conversationId=$conversationId";
+  static const String getAllConversationEndPoint = "/conversation/conversation-list";
+  static const String sentMessageEndPoint = "/conversation/send-message";
+  static  String createConversationEndPoint(String receiverId) =>  "/conversation/create";
+  static  String sendMessageEndPoint(String conversationId) =>  "/conversation/send-message";
+  // static  String getAllMessageUserEndPoint (String page, String limit ) => "/conversation/conversation-list";
   //static  String getMessageEndPoint (String page, String limit, String id ) => "/message/$id?page=$page&limit=$limit";
   static  String conversationMediaEndPoint (String page, String limit, String id ) => "/conversation/media/$id?page=$page&limit=$limit";
   static  String messageEndPoint =  "/message";
   static  String messageLocationEndPoint =  "/message/location";
-  static  String createMatchEndPoint(String userID) =>  "/match?userID=$userID";
   static  String blockConversationEndPoint(String id) =>  "/conversation/block/$id";
   static  String getUserByIdEndPoint (String id) =>  "/users/$id";
   static  String deleteConversationEndPoint (String id) =>  "/conversation/$id";

@@ -92,7 +92,7 @@ class HomeController extends GetxController implements GetxService {
       print('Response:================> ${response.body}');
     } else {
       ApiChecker.checkApi(response);
-      Fluttertoast.showToast(msg: response.statusText ?? "Unknown error");
+     // Fluttertoast.showToast(msg: response.statusText ?? "");
     }
     postLoading(false);
     update();
