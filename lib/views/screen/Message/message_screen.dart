@@ -105,8 +105,6 @@ class MessageScreen extends StatelessWidget {
 */
 
 
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -121,9 +119,16 @@ import '../../../utils/app_strings.dart';
 import '../../base/bottom_menu..dart';
 import '../../base/custom_text.dart';
 
-class MessageScreen extends StatelessWidget {
+class MessageScreen extends StatefulWidget {
   MessageScreen({super.key});
+
+  @override
+  State<MessageScreen> createState() => _MessageScreenState();
+}
+
+class _MessageScreenState extends State<MessageScreen> {
   final MessageController controller = Get.put(MessageController());
+  var currentUserId='';
 
   @override
   Widget build(BuildContext context) {
@@ -150,11 +155,29 @@ class MessageScreen extends StatelessWidget {
             itemCount: controller.conversationModel.length,
             itemBuilder: (context, index) {
               final conversation = controller.conversationModel[index];
+              bool isCurrentUserSender = conversation.sender!.id == currentUserId;
+              String displayName = isCurrentUserSender
+                  ? conversation.receiver!.fullName!
+                  : conversation.sender!.fullName!;
+              String displayImage = isCurrentUserSender
+                  ? conversation.receiver!.profileImage!
+                  : conversation.sender!.profileImage!;
+              String conversationId = conversation.id!;
+              String receiverId = isCurrentUserSender
+                  ? conversation.receiver!.id!
+                  : conversation.sender!.id!;
               return Padding(
                 padding: EdgeInsets.only(bottom: 16.h),
                 child: GestureDetector(
                   onTap: () {
-                    Get.toNamed(AppRoutes.chatScreen);
+                    Get.toNamed(AppRoutes.chatScreen, arguments: {
+                      'conversationId': conversation.id ?? '',
+                      'currentUserId': currentUserId ?? '',
+                      'receiverId': receiverId ?? '',
+                      'currentUserImage': isCurrentUserSender ? conversation.sender!.profileImage! : conversation.receiver!.profileImage!,
+                      'receiverImage': displayImage ?? '',
+                      'receiverName': displayName ?? '',
+                    });
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -169,9 +192,7 @@ class MessageScreen extends StatelessWidget {
                             children: [
                               //=====================> Image <=======================
                               CustomNetworkImage(
-                                imageUrl: conversation.receiver?.id?.isNotEmpty == true
-                                    ? '${ApiConstants.imageBaseUrl}${conversation.receiver?.profileImage}'
-                                    : 'https://placehold.it/45x45', // Placeholder image if no URL
+                                imageUrl: '${ApiConstants.imageBaseUrl}$displayImage',
                                 height: 45.h,
                                 width: 45.w,
                                 boxShape: BoxShape.circle,
@@ -182,7 +203,7 @@ class MessageScreen extends StatelessWidget {
                                 bottom: 4.h,
                                 child: Icon(
                                   Icons.circle,
-                                  color: conversation.lastMessage?.seen == true ? Colors.green : Colors.grey,
+                                  color: Colors.green,
                                   size: 10.w,
                                 ),
                               ),
@@ -195,7 +216,7 @@ class MessageScreen extends StatelessWidget {
                               children: [
                                 //=====================> Name <=======================
                                 CustomText(
-                                  text: '${conversation.receiver?.fullName}',
+                                  text: displayName,
                                   fontSize: 16.sp,
                                   fontWeight: FontWeight.w700,
                                   bottom: 6.h,

@@ -25,19 +25,21 @@ class MessageModel {
     this.id,
   });
 
-  factory MessageModel.fromJson(Map<String, dynamic> json) => MessageModel(
-    conversationId: json["conversationId"],
-    text: json["text"],
-    imageUrl: json["imageUrl"],
-    videoUrl: json["videoUrl"],
-    fileUrl: json["fileUrl"],
-    type: json["type"],
-    seen: json["seen"],
-    msgByUserId: json["msgByUserId"] == null ? null : MsgByUserId.fromJson(json["msgByUserId"]),
-    createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-    updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
-    id: json["id"],
-  );
+  factory MessageModel.fromJson(Map<String, dynamic> json) {
+    return MessageModel(
+      conversationId: json["conversationId"],
+      text: json["text"],
+      imageUrl: json["imageUrl"],
+      videoUrl: json["videoUrl"],
+      fileUrl: json["fileUrl"],
+      type: json["type"],
+      seen: json["seen"] ?? false,
+      msgByUserId: json["msgByUserId"] == null ? null : MsgByUserId.fromJson(json["msgByUserId"]),
+      createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
+      updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
+      id: json["id"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     "conversationId": conversationId,

@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../helpers/prefs_helpers.dart';
 import '../../helpers/route.dart';
 import '../../helpers/toast_message_helper.dart';
@@ -14,18 +16,23 @@ import '../../service/api_client.dart';
 import '../../service/api_constants.dart';
 import '../../service/socket_services.dart';
 import '../../utils/app_constants.dart';
+import '../../utils/logger.dart';
 
 class MessageController extends GetxController {
+  final ScrollController scrollController = ScrollController();
+  var page = 1;
   RxBool isActive = false.obs;
   RxBool seenMessage = false.obs;
-  RxInt page = 1.obs;
-  //============================================> Get All Conversation List =========================================>
+  File? selectedImage;
+  RxString imagesPath=''.obs;
+
+  //============================================> Get All Conversation List <========================================
   RxBool conversationLoading = false.obs;
   RxList<ConversationModel> conversationModel = <ConversationModel>[].obs;
   getConversation() async {
     conversationLoading(true);
     var response = await ApiClient.getData(
-      ApiConstants.getAllMessageUserEndPoint,
+      ApiConstants.getAllConversationEndPoint,
     );
     if (response.statusCode == 200) {
       var data = response.body["data"]['attributes'];
@@ -40,30 +47,84 @@ class MessageController extends GetxController {
       update();
     }
   }
+  //============================================> Create Conversation  <=========================================
+  var isCreatingConversation = false.obs;
+  createConversation(String receiverId) async {
+    isCreatingConversation(true);
+    var response = await ApiClient.postData(
+      ApiConstants.createConversationEndPoint(receiverId),
+      {"receiver": receiverId},
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      var currentUserID = await PrefsHelper.getString(AppConstants.userId);
+      var data = response.body['data']['attributes'];
+      isCreatingConversation(false);
+      showInfo("Conversation created successfully.");
+      Get.toNamed(AppRoutes.messageScreen, parameters: {
+        'conversationId': data['id'],
+        'currentUserId': currentUserID,
+        'currentUserImage': currentUserID == data['sender']['id'] ? data['sender']['profileImage'] : data['receiver']['profileImage'],
+        "receiverImage": currentUserID == data['sender']['id'] ? data['receiver']['profileImage'] : data['sender']['profileImage'],
+        "receiverName": currentUserID == data['sender']['id'] ? data['receiver']['fullName'] : data['sender']['fullName'],
+        "receiverId": currentUserID == data['sender']['id'] ? data['receiver']['id'] : data['sender']['id'],
+      });
+    } else {
+      ApiChecker.checkApi(response);
+      isCreatingConversation(false);
+    }
+  }
 
 
   //======================================> Get All Message <==================================
-  RxInt pages = 1.obs;
-  RxBool messageLoading = false.obs;
-  RxList<MessageModel> messageModel = <MessageModel>[].obs;
-  getMessage(String id) async {
-    messageLoading(true);
-    var response = await ApiClient.getData(
-      ApiConstants.getAllSingleMessageEndPoint(id),
-    );
-    if (response.statusCode == 200) {
-      var data = response.body["data"]['attributes']['data'];
-      messageModel.value = List<MessageModel>.from(
-          data.map((x) => MessageModel.fromJson(x)));
-      if (messageModel.last.seen! == 2) {
-        seenMessage.value = true;
-      } else {
-        seenMessage.value = true;
+  RxList<MessageModel> messageModel=<MessageModel>[].obs;
+  var inboxpage = 1;
+  var inboxfirstLoading=false.obs;
+  var inboxloadMoreLoading=false.obs;
+  var inboxtotalPage = 0;
+  var inboxcurrentPage = 0;
+
+  listenMessage(String conversationId) async {
+    SocketServices().socket.on("new-message::$conversationId", (data) {
+      debugPrint("=========> Response Message $data");
+      MessageModel demoData = MessageModel.fromJson(data);
+      messageModel.add(demoData);
+      messageModel.refresh();
+      update();
+    });
+  }
+
+  socketOffListen(String conversationId)async{
+    SocketServices().socket.off("new-message::$conversationId");
+    debugPrint("Socket off New message");
+  }
+
+
+
+  //========================> All Inbox Message <=================================
+
+  Future inboxFirstLoad(String conversationId)async{
+    inboxpage=1;
+    inboxfirstLoading(true);
+    var response=await ApiClient.getData(ApiConstants.getAllSingleMessageEndPoint(conversationId));
+    if(response.statusCode==200){
+      messageModel.value= List<MessageModel>.from(response.body['data']['attributes']['data'].map((x) => MessageModel.fromJson(x)));
+      inboxcurrentPage=response.body['data']['attributes']['page'];
+      inboxtotalPage=response.body['data']['attributes']['totalPages'];
+      debugPrint("Current Check>>${inboxcurrentPage}");
+      debugPrint("Total Check>>${inboxtotalPage}");
+      // rxRequestStatus(Status.completed);
+      inboxfirstLoading(false);
+      update();
+    } else{
+      if (ApiClient.noInternetMessage == response.statusText) {
+        // setRxRequestStatus(Status.internetError);
+      } else
+      {
+        //setRxRequestStatus(Status.error);
       }
-      messageLoading(false);
-    } else {
-      messageLoading(false);
       ApiChecker.checkApi(response);
+      inboxfirstLoading.value=false;
+      update();
     }
   }
 
@@ -101,16 +162,6 @@ class MessageController extends GetxController {
     }
   }
 
-//================================> SendMessage Function <=============================
-  void sendMessage(String content, String receiverID, String conversationID) {
-    final messagePayload = {
-      "conversationID": conversationID,
-      "receiverID": receiverID,
-      "content": content,
-    };
-    SocketServices().emit('send-message', messagePayload);
-  }
-
   //================================> Send Seen Emit Function <=============================
   void sendSeenEmit({required String conversationId}) {
     final messagePayload = {
@@ -119,188 +170,64 @@ class MessageController extends GetxController {
     SocketServices().emit('seen', messagePayload);
   }
 
-  //================================> Listen Message Function <=============================
-  void listenMessage(String coversationId) async {
-    try {
-      // Listen for text messages
-      SocketServices().socket.on("conversation-$coversationId", (data) {
-        if (data != null) {
-          final newMessage = MessageModel.fromJson(data);
-          messageModel.insert(0, newMessage);
-          seenMessage.value = false;
-          print("=============================> $data");
-          update();
-        }
-      });
-      SocketServices().socket.on("seen-$coversationId", (data) {
-        if (data != null) {
-          if (data["seenBy"] == Get.arguments['receiverID']) {
-            seenMessage.value = true;
-          }
-          print(Get.arguments['receiverID']);
-          print("===========================> $data");
-          update();
-        }
-      });
-      print("Listening for messages and images...");
-    } catch (e, s) {
-      print("Error in listenMessage: $e");
-      print("StackTrace: $s");
-    }
-  }
-
-  //================================> Send Message With Image <=============================
-  sendMessageWithImage(
-    String conversationID,
-    String receiverID,
-    File? files,
-  ) async {
-    List<MultipartBody> multipartBody =
-        files == null ? [] : [MultipartBody("files", files)];
-    var body = {
-      "conversationID": conversationID,
-      "receiverID": receiverID,
-      "files": '$files',
-    };
-    var response = await ApiClient.postMultipartData(
-      ApiConstants.messageEndPoint,
-      body,
-      multipartBody: multipartBody,
-    );
-  }
-
-  //================================> Message Location <=============================
-  /*RxBool locationLoading = false.obs;
-  messageLocation(
-      {String? receiverID,
-      String? conversationID,
-      String? latitude,
-      String? longitude}) async {
-    locationLoading(true);
-    Map<String, String> body = {
-      "receiverID": "$receiverID",
-      "conversationID": "$conversationID",
-      "latitude": "$latitude",
-      "longitude": "$longitude",
-    };
-    var response = await ApiClient.postData(
-        ApiConstants.messageLocationEndPoint, jsonEncode(body));
-
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      locationLoading(false);
-    } else if (response.statusCode == 1) {
-      locationLoading(false);
-      ToastMessageHelper.showToastMessage("Server error! \n Please try later");
-    } else {
-      locationLoading(false);
-      ToastMessageHelper.showToastMessage(response.body["message"]);
-    }
-  }*/
-
-  //================================> Get Conversation Media <=============================
-  /*RxInt conversationPage = 1.obs;
-  RxBool conversationMediaLoading = false.obs;
-  RxList<ConversationMediaModel> conversationMediaModel =
-      <ConversationMediaModel>[].obs;
-  getConversationMedia(String id) async {
-    conversationMediaLoading(true);
-    var response = await ApiClient.getData(
-      ApiConstants.conversationMediaEndPoint(
-          conversationPage.value.toString(), "16", id),
-    );
-    if (response.statusCode == 200) {
-      var data = response.body["data"];
-      conversationMediaModel.value = List<ConversationMediaModel>.from(
-          data.map((x) => ConversationMediaModel.fromJson(x)));
-      conversationMediaLoading(false);
-    } else {
-      conversationMediaLoading(false);
-      ApiChecker.checkApi(response);
-    }
-  }*/
-
-  List icebreakerList = [
-    "If money wasn’t an issue, what would you spend your life doing?",
-    "What’s a book, movie, or podcast that made you see the world differently?",
-    "What’s one quote or saying that really resonates with you, and why?"
-  ];
-
-  //=============================> Message Participant <=============================
-  RxBool conversationParticipant = false.obs;
-  messageParticipant({required String id}) async {
-    conversationParticipant(true);
-    var params = {
-      "participant": id,
-    };
-    try {
+    //========================> Sent Message <==================================
+    final TextEditingController sentMsgCtrl = TextEditingController();
+    var sentMessageLoading = false.obs;
+    sentMessage(String conversationId, String type) async {
+      sentMessageLoading(true);
+      Map<String, dynamic> body = {
+        "conversationId": conversationId,
+        "type": type,
+        "text": sentMsgCtrl.text
+      };
       var response = await ApiClient.postData(
-        ApiConstants.getAllSingleMessageEndPoint(id),
-        jsonEncode(params),
-      );
+        ApiConstants.sentMessageEndPoint, body,);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        var createdConversationID = response.body["data"]["attributes"]['id'];
-        try {
-          messageLoading(true);
-          var response = await ApiClient.getData(
-            ApiConstants.getAllMessageUserEndPoint,
-          );
-          if (response.statusCode == 200) {
-            messageModel.value = List<MessageModel>.from(
-              response.body["data"].map((x) => MessageModel.fromJson(x)),
-            );
-            var message = messageModel.value.firstWhere(
-              (conv) => conv.id == createdConversationID,
-            );
-            if (message != null) {
-              print("✅ Conversation Found: ${message.msgByUserId!.fullName}");
-
-              Get.toNamed(AppRoutes.chatScreen, arguments: {
-                "id": message.id,
-                "name": message.msgByUserId!.fullName,
-                "image": '${ApiConstants.imageBaseUrl}/${message.msgByUserId!.image}',
-                "receiverID":message.msgByUserId!.id,
-                "conversationID": message.id,
-                "email": message.msgByUserId!.email
-              });
-            } else {
-              print("❌ Message Not Found");
-            }
-            print("MY Response ${response.body['data']}");
-            messageLoading(false);
-          } else {
-            messageLoading(false);
-            ApiChecker.checkApi(response);
-          }
-        } catch (e) {
-          messageLoading(false);
-        }
-        // Get.offNamed(AppRoutes.messageScreen);
-        ToastMessageHelper.showToastMessage("${response.body["message"]}");
-      } else {
-        ToastMessageHelper.showToastMessage(
-            response.body["message"] ?? "Something went wrong");
+        sentMsgCtrl.clear();
+        sentMessageLoading(false);
+        update();
       }
-    } catch (e) {
-      ToastMessageHelper.showToastMessage("Server error! \n Please try later");
-    } finally {
-      conversationParticipant(false);
+      else {
+        sentMessageLoading(false);
+        update();
+      }
+    }
+    //========================> Sent Image <==================================
+    sentImage(String conversationId, String type) async {
+      sentMessageLoading(true);
+      Map<String, String> body = {
+        "conversationId": conversationId,
+        "type": type,
+      };
+      List<MultipartBody> multipartList = [
+        MultipartBody(
+            "image", File(imagesPath.value)
+        )
+      ];
+      var response = await ApiClient.postMultipartData(
+          ApiConstants.sentMessageEndPoint, body, multipartBody: multipartList);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        imagesPath.value = '';
+        sentMessageLoading(false);
+        update();
+      }
+      else {
+        sentMessageLoading(false);
+        update();
+      }
+    }
+
+
+    //========================> PickImages <==================================
+    Future pickImages(ImageSource source) async {
+      final returnImage = await ImagePicker().pickImage(source: source);
+      if (returnImage == null) return;
+      selectedImage = File(returnImage.path);
+      imagesPath.value = selectedImage!.path;
+      //  image = File(returnImage.path).readAsBytesSync();
+      update();
+      print('ImagesPath===========================>:${imagesPath.value}');
+      // Get.back(); //
     }
   }
 
-  //========================> profile name new <==================================
-  RxBool getUserLoading = false.obs;
-  Rx<GetUserByIdModel> getUserId = GetUserByIdModel().obs;
-  getUserById(String id) async {
-    getUserLoading(true);
-    var response =
-        await ApiClient.getData(ApiConstants.getUserByIdEndPoint(id));
-    print(response.body);
-    if (response.statusCode == 200) {
-      getUserId.value = GetUserByIdModel.fromJson(response.body['data']);
-      getUserLoading(false);
-    } else {
-      getUserLoading(false);
-      ApiChecker.checkApi(response);
-    }
-  }
-}

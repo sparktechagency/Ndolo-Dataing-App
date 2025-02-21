@@ -13,6 +13,8 @@ import 'package:ndolo_dating/views/base/custom_network_image.dart';
 import 'package:ndolo_dating/views/base/custom_page_loading.dart';
 import 'package:ndolo_dating/views/base/custom_text.dart';
 
+import '../../../controllers/messages/message_controller.dart';
+
 class ProfileDetailsScreen extends StatefulWidget {
   const ProfileDetailsScreen({super.key});
 
@@ -22,14 +24,15 @@ class ProfileDetailsScreen extends StatefulWidget {
 
 class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
   final HomeController _homeController = Get.put(HomeController());
+  final MessageController controller = Get.put(MessageController());
   var parameter = Get.parameters;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (parameter['_id'] != null) {
-        _homeController.getSingleUserData(parameter['_id']!);
+      if (parameter['profileId'] != null) {
+        _homeController.getSingleUserData(parameter['profileId']!);
       }
     });
   }
@@ -93,16 +96,16 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
                               fontWeight: FontWeight.w500,
                               color: const Color(0xff430750),
                             ),
-                            const Spacer(),
+                      /*      const Spacer(),
                             InkWell(
                               onTap: () {
-                                Get.toNamed(AppRoutes.chatScreen);
+                                controller.createConversation(parameter['_id']!);
                               },
                               child: SvgPicture.asset(
                                 AppIcons.messageOut,
                                 color: const Color(0xff430750),
                               ),
-                            ),
+                            ),*/
                           ],
                         ),
                         SizedBox(height: 8.h),

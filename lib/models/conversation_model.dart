@@ -44,28 +44,28 @@ class ConversationModel {
 
 class Receiver {
   final String? fullName;
+  final String? profileImage;
   final String? role;
   final String? id;
-  final String? profileImage;
 
   Receiver({
     this.fullName,
+    this.profileImage,
     this.role,
     this.id,
-    this.profileImage,
   });
 
   factory Receiver.fromJson(Map<String, dynamic> json) => Receiver(
     fullName: json["fullName"],
+    profileImage: json["profileImage"],
     role: json["role"],
     id: json["id"],
-    profileImage: json["profileImage"],
   );
 
   Map<String, dynamic> toJson() => {
     "fullName": fullName,
+    "profileImage": profileImage,
     "role": role,
     "id": id,
-    "profileImage": profileImage,
   };
 }

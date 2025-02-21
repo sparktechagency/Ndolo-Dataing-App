@@ -7,6 +7,7 @@ import 'package:ndolo_dating/controllers/match_controller.dart';
 import 'package:ndolo_dating/utils/app_strings.dart';
 import 'package:ndolo_dating/views/base/custom_page_loading.dart';
 import 'package:ndolo_dating/views/base/custom_text.dart';
+import '../../../controllers/messages/message_controller.dart';
 import '../../../helpers/route.dart';
 import '../../../models/match_model.dart';
 import '../../../service/api_constants.dart';
@@ -25,6 +26,7 @@ class MatchesScreen extends StatefulWidget {
 
 class _MatchesScreenState extends State<MatchesScreen> {
   final MatchController _matchController = Get.put(MatchController());
+  final MessageController controller = Get.put(MessageController());
 
   //======================> Method to calculate age from the date of birth <========================
   int calculateAge(MatchModel user) {
@@ -78,65 +80,79 @@ class _MatchesScreenState extends State<MatchesScreen> {
                   children: [
                     Stack(
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: AppColors.cardColor,
-                            borderRadius: BorderRadius.circular(8.r),
-                          ),
-                          child: Row(
-                            children: [
-                              //========================> Image display <==================
-                              CustomNetworkImage(
-                                imageUrl: '${ApiConstants.imageBaseUrl}${user.profileImage ?? ""}',
-                                height: 145.h,
-                                width: 112.w,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(8.r),
-                                  bottomLeft: Radius.circular(8.r),
-                                ),
-                              ),
-                              SizedBox(width: 16.w),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  //========================> Name and age <===========================
-                                  CustomText(
-                                    text: user.fullName ?? "",
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w700,
-                                    color: const Color(0xff430750),
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(AppRoutes.profileDetailsScreen, parameters: {
+                              'profileId': '${user.id}',
+                              'age': '${calculateAge(user)}',
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppColors.cardColor,
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                            child: Row(
+                              children: [
+                                //========================> Image display <==================
+                                CustomNetworkImage(
+                                  imageUrl: '${ApiConstants.imageBaseUrl}${user.profileImage ?? ""}',
+                                  height: 145.h,
+                                  width: 112.w,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(8.r),
+                                    bottomLeft: Radius.circular(8.r),
                                   ),
-                                  CustomText(text: '${calculateAge(user)}'),
-                                  //==========================> Location <===============================
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                ),
+                                SizedBox(width: 16.w),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      SvgPicture.asset(AppIcons.location, color: AppColors.primaryColor, width: 12.w, height: 12.h),
-                                      SizedBox(width: 4.w),
+                                      //========================> Name and age <===========================
                                       CustomText(
-                                        text: user.location!.locationName ?? "",
+                                        text: user.fullName ?? "",
+                                        fontSize: 16.sp,
+                                        maxLine: 3,
+                                        textAlign: TextAlign.start,
                                         fontWeight: FontWeight.w700,
                                         color: const Color(0xff430750),
                                       ),
+                                      CustomText(text: '${calculateAge(user)}'),
+                                      //==========================> Location <===============================
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SvgPicture.asset(AppIcons.location, color: AppColors.primaryColor, width: 12.w, height: 12.h),
+                                          SizedBox(width: 4.w),
+                                          Flexible(
+                                            child: CustomText(
+                                              text: user.location!.locationName ?? "",
+                                              fontWeight: FontWeight.w700,
+                                              maxLine: 3,
+                                              textAlign: TextAlign.start,
+                                              textOverflow: TextOverflow.ellipsis,
+                                              color: const Color(0xff430750),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 16.h),
+                                      CustomButton(
+                                        width: 116.w,
+                                        height: 32.h,
+                                        onTap: () {
+                                          controller.createConversation(user.id!);
+                                        },
+                                        fontSize: 14.sp,
+                                        text: AppStrings.sendMessage.tr,
+                                      ),
+                                      SizedBox(height: 8.h),
                                     ],
                                   ),
-                                  SizedBox(height: 16.h),
-                                  CustomButton(
-                                    width: 116.w,
-                                    height: 32.h,
-                                    onTap: () {
-                                      Get.toNamed(AppRoutes.profileDetailsScreen, parameters: {
-                                        '_id': '${user.id}',
-                                        'age': '${calculateAge(user)}',
-                                      });
-                                    },
-                                    fontSize: 14.sp,
-                                    text: AppStrings.sendMessage.tr,
-                                  ),
-                                  SizedBox(height: 8.h),
-                                ],
-                              ),
-                            ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         // Love button
