@@ -8,8 +8,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:grouped_list/grouped_list.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ndolo_dating/service/api_constants.dart';
+import 'package:ndolo_dating/views/base/custom_page_loading.dart';
 import '../../../../../utils/app_colors.dart';
 import '../../../../../utils/app_icons.dart';
 import '../../../../../utils/app_images.dart';
@@ -18,7 +20,6 @@ import '../../../helpers/time_formate.dart';
 import '../../../models/message_model.dart';
 import '../../base/custom_loading.dart';
 import '../../base/custom_network_image.dart';
-import '../../base/custom_page_loading.dart';
 import '../../base/custom_text.dart';
 import '../../base/custom_text_field.dart';
 
@@ -31,37 +32,29 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final MessageController _controller = Get.put(MessageController());
-  final StreamController _streamController = StreamController();
+  TextEditingController messageController = TextEditingController();
   var conversationId = "";
   var currentUserId = "";
   var currentUserImage = "";
   var receiverImage = "";
   var receiverName = "";
   var receiverId = "";
-
   Uint8List? _image;
   File? selectedIMage;
-
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _controller.scrollController
-          .jumpTo(_controller.scrollController.position.maxScrollExtent);
-      // _controller.createConversation(Get.arguments['conversationID']);
-      conversationId = Get.parameters['conversationId'] ?? '';
-      currentUserId = Get.parameters['currentUserId'] ?? '';
-      currentUserImage = Get.parameters['currentUserImage'] ?? '';
-      receiverImage = Get.parameters['receiverImage'] ?? '';
-      receiverName = Get.parameters['receiverName'] ?? '';
-      receiverId = Get.parameters['receiverId'] ?? '';
-      if (conversationId.isNotEmpty) {
-        _controller.listenMessage(conversationId);
-        _controller.inboxFirstLoad(conversationId);
-      } else {
-        debugPrint("Error: conversationId is null or empty");
-      }
+      conversationId = Get.parameters['conversationId'] ?? "";
+      currentUserId = Get.parameters['currentUserId'] ?? "";
+      currentUserImage = Get.parameters['currentUserImage'] ?? "";
+      receiverImage = Get.parameters['receiverImage'] ?? "";
+      receiverName = Get.parameters['receiverName'] ?? "";
+      receiverId = Get.parameters['receiverId'] ?? "";
+      _controller.listenMessage(conversationId);
+      _controller.inboxFirstLoad(conversationId);
+      _controller.getConversation();
     });
   }
 
@@ -80,47 +73,23 @@ class _ChatScreenState extends State<ChatScreen> {
               Icons.arrow_back_ios,
               color: Colors.white,
             )),
+        titleSpacing: 0.w,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Stack(
-              children: [
-                //=====================> Image <=======================
-                CustomNetworkImage(
-                  imageUrl: '${ApiConstants.imageBaseUrl}$receiverImage',
-                  height: 45.h,
-                  width: 45.w,
-                  boxShape: BoxShape.circle,
-                ),
-                //=====================> Active Green Icon <=======================
-                Positioned(
-                  right: 0.w,
-                  bottom: 4.h,
-                  child: Icon(
-                    Icons.circle,
-                    color: Colors.green,
-                    size: 10.w,
-                  ),
-                ),
-              ],
+            CustomNetworkImage(
+              imageUrl:
+                  "${ApiConstants.imageBaseUrl}${Get.parameters["receiverImage"]}",
+              height: 45.h,
+              width: 45.w,
+              boxShape: BoxShape.circle,
             ),
             SizedBox(width: 12.w),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomText(
-                    text: receiverName,
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                  ),
-                  CustomText(
-                    text: 'Active 30 minutes ago',
-                    color: Colors.white,
-                  ),
-                ],
-              ),
+            CustomText(
+              text: "${Get.parameters["receiverName"]}",
+              fontSize: 18.sp,
+              fontWeight: FontWeight.w700,
+              color: Colors.white,
             ),
           ],
         ),
@@ -136,98 +105,98 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       //========================================> Body Section <=======================================
       body: Obx(() {
-        if (_controller.inboxfirstLoading.value) {
+        if (_controller.inboxFirstLoading.value) {
           return const Center(child: CustomPageLoading());
         }
-        return SafeArea(
-          child: Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(24.r),
-                    topRight: Radius.circular(24.r))),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        StreamBuilder(
-                          stream: _streamController.stream,
-                          builder: (context, snapshot) {
-                            if (true) {
-                              return ListView.builder(
-                                  controller: _controller.scrollController,
-                                  dragStartBehavior: DragStartBehavior.down,
-                                  itemCount:
-                                      _controller.messageModel.length,
-                                  itemBuilder: (context, index) {
-                                    var message = _controller
-                                        .messageModel[index];
-                                    if (message.msgByUserId!.id ==
-                                        currentUserId) {
-                                      return senderBubble(context, message);
-                                    } else if (message.msgByUserId!.id !=
-                                        currentUserId) {
-                                      return receiverBubble(context, message);
-                                    } else {
-                                      return SizedBox();
-                                    }
-                                    /*  return message['status'] == "sender"
-                                        ? senderBubble(context, message)
-                                        : receiverBubble(context, message);*/
-                                  });
-                            } else {
-                              return const CustomLoading();
-                            }
-                          },
-                        ),
-                        //========================================> Show Select Image <============================
-                        Positioned(
-                            bottom: 0.h,
-                            left: 0.w,
-                            child: Column(
+        return Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(24.r),
+                  topRight: Radius.circular(24.r))),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Stack(
+                    children: [
+                      GroupedListView<MessageModel, DateTime>(
+                        elements: _controller.messageModel.value,
+                        controller: _controller.scrollController,
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        order: GroupedListOrder.DESC,
+                        itemComparator: (item1, item2) =>
+                            item1.createdAt!.compareTo(item2.createdAt!),
+                        groupBy: (MessageModel message) => DateTime(
+                            message.createdAt!.year,
+                            message.createdAt!.month,
+                            message.createdAt!.day),
+                        reverse: true,
+                        shrinkWrap: true,
+                        groupSeparatorBuilder: (DateTime date) {
+                          return const SizedBox();
+                        },
+                        itemBuilder: (context, MessageModel message) {
+                          print(
+                              'Sent Id==========================> ${message.msgByUserId!.id}');
+                          print(
+                              'Save Sent Id=====================> {currentUserId}');
+
+                          if (message.msgByUserId!.id == currentUserId) {
+                            return senderBubble(context, message);
+                          } else if (message.msgByUserId!.id != currentUserId) {
+                            return receiverBubble(context, message);
+                          } else {
+                            return const SizedBox();
+                          }
+                        },
+                      ),
+                      //========================================> Show Select Image <============================
+                      Positioned(
+                        bottom: 0.h,
+                        left: 0.w,
+                        child: Obx(() {
+                          if (_controller.imagesPath.value.isNotEmpty) {
+                            return Stack(
                               children: [
-                                if (_image != null)
-                                  Stack(
-                                    children: [
-                                      Container(
-                                        height: 120.h,
-                                        width: 120.w,
-                                        margin: EdgeInsets.only(bottom: 10.h),
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            image: MemoryImage(_image!),
-                                            fit: BoxFit.cover,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(12.r),
-                                          //border: Border.all(color: AppColors.primaryColor),
-                                        ),
-                                      ),
-                                      //========================================> Cancel Icon <============================
-                                      Positioned(
-                                          top: 0.h,
-                                          left: 0.w,
-                                          child: GestureDetector(
-                                              onTap: () {
-                                                Get.back();
-                                              },
-                                              child: const Icon(
-                                                  Icons.cancel_outlined)))
-                                    ],
+                                Container(
+                                  height: 120.h,
+                                  width: 120.w,
+                                  margin: EdgeInsets.only(bottom: 10.h),
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: FileImage(
+                                          File(_controller.imagesPath.value)),
+                                      fit: BoxFit.cover,
+                                    ),
+                                    borderRadius: BorderRadius.circular(12.r),
                                   ),
+                                ),
+                                Positioned(
+                                  top: 0.h,
+                                  left: 0.w,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _controller.imagesPath.value = "";
+                                      _controller.update();
+                                    },
+                                    child: const Icon(Icons.cancel_outlined),
+                                  ),
+                                )
                               ],
-                            ))
-                      ],
-                    ),
+                            );
+                          }
+                          return const SizedBox();
+                        }),
+                      ),
+                    ],
                   ),
-                  //===============================================> Write Sms Section <=============================
-                  SizedBox(height: 80.h),
-                ],
-              ),
+                ),
+                //===============================================> Write Sms Section <=============================
+                SizedBox(height: 80.h),
+              ],
             ),
           ),
         );
@@ -244,14 +213,14 @@ class _ChatScreenState extends State<ChatScreen> {
               SizedBox(
                 width: 295.w,
                 child: CustomTextField(
-                  controller: _controller.sentMsgCtrl,
+                  controller: messageController,
                   hintText: "Type something…",
                   suffixIcons: Padding(
                     padding:
                         EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
                     child: GestureDetector(
                         onTap: () {
-                          _controller.pickImages(ImageSource.gallery);
+                          openGallery();
                         },
                         child: SvgPicture.asset(AppIcons.attach,
                             color: AppColors.greyColor)),
@@ -260,28 +229,30 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
               GestureDetector(
                 onTap: () {
-                  if (_controller.sentMsgCtrl.text.isNotEmpty) {
-                    _controller.sentMessage(conversationId, 'text');
-                  }
-                  else if (  _controller.imagesPath.value.isNotEmpty){
+                  if (messageController.text.isNotEmpty) {
+                    _controller.sentMessage(
+                        conversationId, 'text', messageController.text);
+                    messageController.clear();
+                  } else if (_controller.imagesPath.value.isNotEmpty) {
                     _controller.sentImage(conversationId, 'image');
+                  } else {
+                    Fluttertoast.showToast(msg: 'Please write a message');
                   }
-                  else{
-                    Fluttertoast.showToast(msg: 'Please Write message');
-                  }
-                  setState(() {});
                 },
                 child: Container(
-                    decoration: BoxDecoration(
-                        color: AppColors.primaryColor, shape: BoxShape.circle),
-                    child: Padding(
-                      padding: EdgeInsets.all(12.w),
-                      child: SvgPicture.asset(
-                        AppIcons.sendIcon,
-                        color: Colors.white,
-                      ),
-                    )),
-              )
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(12.w),
+                    child: SvgPicture.asset(
+                      AppIcons.sendIcon,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -317,11 +288,11 @@ class _ChatScreenState extends State<ChatScreen> {
                       ? CustomNetworkImage(
                           imageUrl:
                               '${ApiConstants.imageBaseUrl}${message.imageUrl}',
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(8.r),
                           height: 140.h,
                           width: 155.w)
                       : Text(
-                          message.text ?? "",
+                          '${message.text}',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 14.sp,
@@ -378,21 +349,26 @@ class _ChatScreenState extends State<ChatScreen> {
                       ? CustomNetworkImage(
                           imageUrl:
                               '${ApiConstants.imageBaseUrl}${message.imageUrl}',
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(8.r),
                           height: 140.h,
                           width: 155.w)
                       : Text(
-                          message.text ?? "",
+                          "${message.text}",
                           style: const TextStyle(color: Colors.white),
                           textAlign: TextAlign.start,
                         ),
                   Align(
                     alignment: Alignment.centerRight,
                     child: Text(
-                      '${TimeFormatHelper.timeAgo(message.createdAt!)}',
+                      '${message.text}',
                       textAlign: TextAlign.end,
                       style: TextStyle(color: Colors.white, fontSize: 12.sp),
                     ),
+                  ),
+                  Text(
+                    '${TimeFormatHelper.timeAgo(message.createdAt!)}',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(color: Colors.white, fontSize: 12.sp),
                   ),
                 ],
               ),
@@ -408,65 +384,15 @@ class _ChatScreenState extends State<ChatScreen> {
       ],
     );
   }
+
   //==================================> Gallery <===============================
-  Future openGallery() async {
-    final pickImage =
-    await ImagePicker().pickImage(source: ImageSource.gallery);
-    setState(() {
-      // selectedIMage = File(pickImage!.path);
-      // _image = File(pickImage.path).readAsBytesSync();
-    });
+  Future<void> openGallery() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      _controller.imagesPath.value = pickedFile.path;
+      _controller.update();
+    }
   }
-  //================================> Popup Menu Button Method <=============================
- /* PopupMenuButton<int> _popupMenuButton() {
-    return PopupMenuButton<int>(
-      icon: const Icon(Icons.more_vert),
-      onSelected: (int result) {
-        if (result == 0) {
-          if (kDebugMode) {
-            print('Report selected');
-          }
-
-          Get.toNamed(AppRoutes.reportScreen, parameters: {
-            'receiverId': recevierId,
-          });
-
-        } else if (result == 1) {
-          print('Block selected');
-        }
-      },
-      itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
-        PopupMenuItem<int>(
-          value: 0,
-          child: Row(
-            children: [
-              const Icon(Icons.report, color: Colors.black54),
-              SizedBox(width: 10.w),
-              const Text(
-                'Report',
-                style: TextStyle(color: Colors.black),
-              ),
-            ],
-          ),
-        ),
-        PopupMenuItem<int>(
-          value: 1,
-          child: Row(
-            children: [
-              const Icon(Icons.block, color: Colors.black54),
-              SizedBox(width: 10.w),
-              const Text(
-                'Block',
-                style: TextStyle(color: Colors.black),
-              ),
-            ],
-          ),
-        ),
-      ],
-      color: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-    );
-  }*/
 }

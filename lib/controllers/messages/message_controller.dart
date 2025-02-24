@@ -6,60 +6,60 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../helpers/prefs_helpers.dart';
 import '../../helpers/route.dart';
-import '../../helpers/toast_message_helper.dart';
-import '../../models/conversation_media_model.dart';
-import '../../models/message_model.dart';
-import '../../models/conversation_model.dart';
-import '../../models/get_user_by_model.dart';
 import '../../service/api_checker.dart';
 import '../../service/api_client.dart';
 import '../../service/api_constants.dart';
 import '../../service/socket_services.dart';
 import '../../utils/app_constants.dart';
-import '../../utils/logger.dart';
+import '../../models/message_model.dart';
+import '../../models/conversation_model.dart';
 
 class MessageController extends GetxController {
   final ScrollController scrollController = ScrollController();
-  var page = 1;
   RxBool isActive = false.obs;
   RxBool seenMessage = false.obs;
-  File? selectedImage;
-  RxString imagesPath=''.obs;
-
-  //============================================> Get All Conversation List <========================================
+  RxList<MessageModel> messageModel = <MessageModel>[].obs;
+  RxBool inboxFirstLoading = false.obs;
+  RxBool sentMessageLoading = false.obs;
+  var inboxPage = 1;
+  var inboxTotalPages = 0;
+  var inboxCurrentPage = 0;
   RxBool conversationLoading = false.obs;
   RxList<ConversationModel> conversationModel = <ConversationModel>[].obs;
-  getConversation() async {
+  RxString imagesPath = ''.obs;
+  File? selectedImage;
+  final TextEditingController sentMsgCtrl = TextEditingController();
+  final SocketServices _socket = SocketServices();
+  @override
+  void onInit() {
+    super.onInit();
+    _socket.init();
+  }
+
+  //===================================> GET CONVERSATIONS <===================================
+  Future<void> getConversation() async {
     conversationLoading(true);
-    var response = await ApiClient.getData(
-      ApiConstants.getAllConversationEndPoint,
-    );
+    var response = await ApiClient.getData(ApiConstants.getAllConversationEndPoint);
     if (response.statusCode == 200) {
       var data = response.body["data"]['attributes'];
       conversationModel.value = List<ConversationModel>.from(
-          data.map((x) => ConversationModel.fromJson(x))
-      );
-      conversationLoading(false);
+          data.map((x) => ConversationModel.fromJson(x)));
     } else {
-      conversationLoading(false);
       ApiChecker.checkApi(response);
       Fluttertoast.showToast(msg: '${response.statusText}');
-      update();
     }
+    conversationLoading(false);
   }
-  //============================================> Create Conversation  <=========================================
-  var isCreatingConversation = false.obs;
-  createConversation(String receiverId) async {
-    isCreatingConversation(true);
+
+  //===================================> CREATE A NEW CONVERSATION <===================================
+   createConversation(String conversationId) async {
     var response = await ApiClient.postData(
-      ApiConstants.createConversationEndPoint(receiverId),
-      {"receiver": receiverId},
+      ApiConstants.createConversationEndPoint(conversationId),
+      {"receiver": conversationId},
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
       var currentUserID = await PrefsHelper.getString(AppConstants.userId);
       var data = response.body['data']['attributes'];
-      isCreatingConversation(false);
-      showInfo("Conversation created successfully.");
       Get.toNamed(AppRoutes.messageScreen, parameters: {
         'conversationId': data['id'],
         'currentUserId': currentUserID,
@@ -70,164 +70,193 @@ class MessageController extends GetxController {
       });
     } else {
       ApiChecker.checkApi(response);
-      isCreatingConversation(false);
     }
   }
 
+  //===================================> LOAD MESSAGES FOR CONVERSATION <===================================
+  inboxFirstLoad(String conversationId) async {
+    inboxFirstLoading(true);
+    var response = await ApiClient.getData(
+        ApiConstants.getAllSingleMessageEndPoint(conversationId));
+    if (response.statusCode == 200) {
+      var data = response.body['data']['attributes']['data'];
+      messageModel.value =
+          List<MessageModel>.from(data.map((x) => MessageModel.fromJson(x)));
+    } else {
+      ApiChecker.checkApi(response);
+    }
+    inboxFirstLoading(false);
+  }
 
-  //======================================> Get All Message <==================================
-  RxList<MessageModel> messageModel=<MessageModel>[].obs;
-  var inboxpage = 1;
-  var inboxfirstLoading=false.obs;
-  var inboxloadMoreLoading=false.obs;
-  var inboxtotalPage = 0;
-  var inboxcurrentPage = 0;
-
-  listenMessage(String conversationId) async {
-    SocketServices().socket.on("new-message::$conversationId", (data) {
-      debugPrint("=========> Response Message $data");
-      MessageModel demoData = MessageModel.fromJson(data);
-      messageModel.add(demoData);
+  //===================================> LISTEN FOR NEW MESSAGES VIA SOCKET <===================================
+  listenMessage(String conversationId) {
+    SocketServices().socket?.on("new-message::$conversationId", (data) {
+      debugPrint("🔵 Live Message Received: $data");
+      MessageModel receivedMessage = MessageModel.fromJson(data);
+      messageModel.removeWhere((msg) => msg.imageUrl == receivedMessage.imageUrl && msg.id == null);
+      messageModel.add(receivedMessage);
+      messageModel.refresh();
+      messageModel.refresh();
       messageModel.refresh();
       update();
+      update();
+      update();
+      //=======================> Auto-scroll to the latest message <==================
+      scrollToBottom();
+
     });
   }
 
-  socketOffListen(String conversationId)async{
-    SocketServices().socket.off("new-message::$conversationId");
-    debugPrint("Socket off New message");
-  }
-
-
-
-  //========================> All Inbox Message <=================================
-
-  Future inboxFirstLoad(String conversationId)async{
-    inboxpage=1;
-    inboxfirstLoading(true);
-    var response=await ApiClient.getData(ApiConstants.getAllSingleMessageEndPoint(conversationId));
-    if(response.statusCode==200){
-      messageModel.value= List<MessageModel>.from(response.body['data']['attributes']['data'].map((x) => MessageModel.fromJson(x)));
-      inboxcurrentPage=response.body['data']['attributes']['page'];
-      inboxtotalPage=response.body['data']['attributes']['totalPages'];
-      debugPrint("Current Check>>${inboxcurrentPage}");
-      debugPrint("Total Check>>${inboxtotalPage}");
-      // rxRequestStatus(Status.completed);
-      inboxfirstLoading(false);
-      update();
-    } else{
-      if (ApiClient.noInternetMessage == response.statusText) {
-        // setRxRequestStatus(Status.internetError);
-      } else
-      {
-        //setRxRequestStatus(Status.error);
-      }
-      ApiChecker.checkApi(response);
-      inboxfirstLoading.value=false;
-      update();
+  Future<void> scrollToBottom() async {
+    await Future.delayed(const Duration(milliseconds: 100));
+    if (scrollController.hasClients) {
+      scrollController.animateTo(
+        scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeOut,
+      );
     }
   }
 
-
-  //======================================> Listen User Active Status <==================================
-  RxBool userActiveStatus = false.obs;
-  void listenUserActiveStatus() {
-    try {
-      SocketServices().socket.on("active-users", (data) {
-        if (data != null) {
-          print(
-              "=====================> user active status ==: ${data["isActive"]}");
-          if (data["isActive"] == true &&
-              data["id"] == Get.arguments['receiverID']) {
-            isActive.value = true;
-          } else {
-            isActive.value = false;
-          }
-        }
-      });
-    } catch (e, s) {
-      print("Error in listenUserActiveStatus: $e");
-      print("Stack Trace: $s");
-    }
-  }
-
-//================================> Emit Function <=============================
-  void emitUserActiveStatus(bool isActive) {
-    try {
-      SocketServices().socket.emit("active-inactive", {"myId": Get.arguments});
-      print("================> User active-inactive emitted: $isActive");
-    } catch (e, s) {
-      print("Error in emitUserActiveStatus: $e");
-      print("Stack Trace: $s");
-    }
-  }
-
-  //================================> Send Seen Emit Function <=============================
-  void sendSeenEmit({required String conversationId}) {
-    final messagePayload = {
-      "conversationID": conversationId,
+  //===================================> SEND A TEXT MESSAGE <===================================
+  /*sentMessage(String conversationId, String type) async {
+    sentMessageLoading(true);
+    Map<String, dynamic> body = {
+      "conversationId": conversationId,
+      "type": type,
+      "text": sentMsgCtrl.text
     };
-    SocketServices().emit('seen', messagePayload);
-  }
-
-    //========================> Sent Message <==================================
-    final TextEditingController sentMsgCtrl = TextEditingController();
-    var sentMessageLoading = false.obs;
-    sentMessage(String conversationId, String type) async {
-      sentMessageLoading(true);
-      Map<String, dynamic> body = {
-        "conversationId": conversationId,
-        "type": type,
-        "text": sentMsgCtrl.text
-      };
-      var response = await ApiClient.postData(
-        ApiConstants.sentMessageEndPoint, body,);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        sentMsgCtrl.clear();
-        sentMessageLoading(false);
-        update();
-      }
-      else {
-        sentMessageLoading(false);
-        update();
-      }
-    }
-    //========================> Sent Image <==================================
-    sentImage(String conversationId, String type) async {
-      sentMessageLoading(true);
-      Map<String, String> body = {
-        "conversationId": conversationId,
-        "type": type,
-      };
-      List<MultipartBody> multipartList = [
-        MultipartBody(
-            "image", File(imagesPath.value)
-        )
-      ];
-      var response = await ApiClient.postMultipartData(
-          ApiConstants.sentMessageEndPoint, body, multipartBody: multipartList);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        imagesPath.value = '';
-        sentMessageLoading(false);
-        update();
-      }
-      else {
-        sentMessageLoading(false);
-        update();
-      }
-    }
-
-
-    //========================> PickImages <==================================
-    Future pickImages(ImageSource source) async {
-      final returnImage = await ImagePicker().pickImage(source: source);
-      if (returnImage == null) return;
-      selectedImage = File(returnImage.path);
-      imagesPath.value = selectedImage!.path;
-      //  image = File(returnImage.path).readAsBytesSync();
+    var response = await ApiClient.postData(
+      ApiConstants.sentMessageEndPoint, body,);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      sentMsgCtrl.clear();
+      sentMessageLoading(false);
       update();
-      print('ImagesPath===========================>:${imagesPath.value}');
-      // Get.back(); //
+    }
+    else {
+      sentMessageLoading(false);
+      update();
+    }
+  }*/
+  void sentMessage(String conversationId, String type, String text) async {
+    if (text.isEmpty) return; // ✅ Prevent sending empty messages
+
+    sentMessageLoading(true);
+    update();
+
+    String currentUserID = await PrefsHelper.getString(AppConstants.userId);
+
+    // ✅ Add message immediately for instant UI update
+    MessageModel newMessage = MessageModel(
+      text: text,
+      type: type,
+      msgByUserId: MsgByUserId(id: currentUserID),
+      createdAt: DateTime.now(),
+    );
+
+    messageModel.add(newMessage);
+    messageModel.refresh();
+    update();
+
+    // ✅ WebSocket Handling
+    try {
+      if (_socket != null) {
+        _socket.emit("send-message", {
+          "conversationId": conversationId,
+          "type": type,
+          "text": text,
+        });
+      } else {
+        Fluttertoast.showToast(msg: "WebSocket not connected!");
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: "Socket Error: ${e.toString()}");
+      sentMessageLoading(false);
+      return;
+    }
+
+    // ✅ API Call to save message
+    try {
+      var response = await ApiClient.postData(ApiConstants.sentMessageEndPoint, {
+        "conversationId": conversationId,
+        "type": type,
+        "text": text,
+      });
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        Fluttertoast.showToast(msg: "Failed to save message in database!");
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: "API Error: ${e.toString()}");
+    }
+
+    sentMessageLoading(false);
+    update();
+
+    // ✅ Scroll to latest message
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (scrollController.hasClients) {
+        scrollController.animateTo(
+          scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 100),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
+
+  //===================================> SEND AN IMAGE MESSAGE <===================================
+  Future<void> sentImage(String conversationId, String type) async {
+    if (imagesPath.value.isEmpty) {
+      Fluttertoast.showToast(msg: "No image selected!");
+      return;
+    }
+    sentMessageLoading(true);
+    Map<String, String> body = {
+      "conversationId": conversationId,
+      "type": type,
+    };
+
+    List<MultipartBody> multipartList = [
+      MultipartBody("image", File(imagesPath.value))
+    ];
+    SocketServices().emit("send-message", {
+      "conversationId": conversationId,
+      "type": type,
+      "imageUrl": imagesPath.value,
+    });
+    messageModel.add(MessageModel(
+      type: type,
+      msgByUserId: MsgByUserId(id: await PrefsHelper.getString(AppConstants.userId)),
+      imageUrl: imagesPath.value,
+      createdAt: DateTime.now(),
+    ));
+    messageModel.refresh();
+    update();
+    var response = await ApiClient.postMultipartData(
+      ApiConstants.sentMessageEndPoint,
+      body,
+      multipartBody: multipartList,
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      imagesPath.value = '';
+      listenMessage(conversationId);
+      sentMessageLoading(false);
+      update();
+    } else {
+      sentMessageLoading(false);
+      Fluttertoast.showToast(msg: "Failed to send image!");
+      update();
+      scrollToBottom();
     }
   }
 
+  //=================================> PICK IMAGE FROM GALLERY <===================================
+  Future<void> pickImages(ImageSource source) async {
+    final returnImage = await ImagePicker().pickImage(source: source);
+    if (returnImage == null) return;
+    imagesPath.value = returnImage.path;
+    update();
+  }
+}
