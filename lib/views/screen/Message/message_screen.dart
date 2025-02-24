@@ -170,7 +170,7 @@ class _MessageScreenState extends State<MessageScreen> {
                 padding: EdgeInsets.only(bottom: 16.h),
                 child: GestureDetector(
                   onTap: () {
-                    Get.toNamed(AppRoutes.chatScreen, arguments: {
+                    Get.toNamed(AppRoutes.chatScreen, parameters: {
                       'conversationId': conversation.id ?? '',
                       'currentUserId': currentUserId ?? '',
                       'receiverId': receiverId ?? '',
@@ -188,26 +188,11 @@ class _MessageScreenState extends State<MessageScreen> {
                       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.h),
                       child: Row(
                         children: [
-                          Stack(
-                            children: [
-                              //=====================> Image <=======================
-                              CustomNetworkImage(
-                                imageUrl: '${ApiConstants.imageBaseUrl}$displayImage',
-                                height: 45.h,
-                                width: 45.w,
-                                boxShape: BoxShape.circle,
-                              ),
-                              //=====================> Active Green Icon <=======================
-                              Positioned(
-                                right: 0.w,
-                                bottom: 4.h,
-                                child: Icon(
-                                  Icons.circle,
-                                  color: Colors.green,
-                                  size: 10.w,
-                                ),
-                              ),
-                            ],
+                          CustomNetworkImage(
+                            imageUrl: '${ApiConstants.imageBaseUrl}$displayImage',
+                            height: 45.h,
+                            width: 45.w,
+                            boxShape: BoxShape.circle,
                           ),
                           SizedBox(width: 12.w),
                           Expanded(
@@ -225,11 +210,14 @@ class _MessageScreenState extends State<MessageScreen> {
                                 ),
                                 //=====================> Last Message <=======================
                                 CustomText(
-                                  text: conversation.lastMessage?.text ?? 'No message available',
+                                  text: conversation.lastMessage is Map<String, dynamic>
+                                      ? (conversation.lastMessage['text'] ?? 'No message available')
+                                      : (conversation.lastMessage?.text ?? 'No message available'),
                                   fontWeight: FontWeight.w500,
                                   maxLine: 2,
                                   textAlign: TextAlign.start,
                                 ),
+
                               ],
                             ),
                           ),
