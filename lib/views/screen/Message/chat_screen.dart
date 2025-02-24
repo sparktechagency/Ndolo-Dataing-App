@@ -52,12 +52,20 @@ class _ChatScreenState extends State<ChatScreen> {
       receiverImage = Get.parameters['receiverImage'] ?? "";
       receiverName = Get.parameters['receiverName'] ?? "";
       receiverId = Get.parameters['receiverId'] ?? "";
-      _controller.listenMessage(conversationId);
+
+      print("DEBUG: Current User ID: $currentUserId");
+      print("DEBUG: Receiver ID: $receiverId");
+
       _controller.inboxFirstLoad(conversationId);
-      _controller.getConversation();
+      _controller.listenMessage(conversationId);
     });
   }
 
+  @override
+  void dispose() {
+    _controller.socketOffListen(conversationId);
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -139,18 +147,11 @@ class _ChatScreenState extends State<ChatScreen> {
                           return const SizedBox();
                         },
                         itemBuilder: (context, MessageModel message) {
-                          print(
-                              'Sent Id==========================> ${message.msgByUserId!.id}');
-                          print(
-                              'Save Sent Id=====================> {currentUserId}');
-
-                          if (message.msgByUserId!.id == currentUserId) {
-                            return senderBubble(context, message);
-                          } else if (message.msgByUserId!.id != currentUserId) {
-                            return receiverBubble(context, message);
-                          } else {
-                            return const SizedBox();
-                          }
+                          print('Current User ID: =========> $currentUserId');  // Debugging
+                          print('Message Sent By: =========>${message.msgByUserId!.id}');  // Debugging
+                          return message.msgByUserId!.id == currentUserId
+                              ? senderBubble(context, message)
+                              : receiverBubble(context, message);
                         },
                       ),
                       //========================================> Show Select Image <============================

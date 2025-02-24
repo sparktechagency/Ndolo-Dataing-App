@@ -117,48 +117,25 @@ class MessageController extends GetxController {
       );
     }
   }
-
+  socketOffListen(String conversationId)async{
+    SocketServices().socket?.off("new-message::$conversationId");
+    debugPrint("Socket off New message");
+  }
   //===================================> SEND A TEXT MESSAGE <===================================
-  /*sentMessage(String conversationId, String type) async {
-    sentMessageLoading(true);
-    Map<String, dynamic> body = {
-      "conversationId": conversationId,
-      "type": type,
-      "text": sentMsgCtrl.text
-    };
-    var response = await ApiClient.postData(
-      ApiConstants.sentMessageEndPoint, body,);
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      sentMsgCtrl.clear();
-      sentMessageLoading(false);
-      update();
-    }
-    else {
-      sentMessageLoading(false);
-      update();
-    }
-  }*/
   void sentMessage(String conversationId, String type, String text) async {
-    if (text.isEmpty) return; // ✅ Prevent sending empty messages
-
+    if (text.isEmpty) return;
     sentMessageLoading(true);
     update();
-
     String currentUserID = await PrefsHelper.getString(AppConstants.userId);
-
-    // ✅ Add message immediately for instant UI update
     MessageModel newMessage = MessageModel(
       text: text,
       type: type,
       msgByUserId: MsgByUserId(id: currentUserID),
       createdAt: DateTime.now(),
     );
-
     messageModel.add(newMessage);
     messageModel.refresh();
     update();
-
-    // ✅ WebSocket Handling
     try {
       if (_socket != null) {
         _socket.emit("send-message", {
@@ -174,8 +151,6 @@ class MessageController extends GetxController {
       sentMessageLoading(false);
       return;
     }
-
-    // ✅ API Call to save message
     try {
       var response = await ApiClient.postData(ApiConstants.sentMessageEndPoint, {
         "conversationId": conversationId,
@@ -192,17 +167,7 @@ class MessageController extends GetxController {
 
     sentMessageLoading(false);
     update();
-
-    // ✅ Scroll to latest message
-    Future.delayed(const Duration(milliseconds: 100), () {
-      if (scrollController.hasClients) {
-        scrollController.animateTo(
-          scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 100),
-          curve: Curves.easeOut,
-        );
-      }
-    });
+    scrollToBottom();
   }
 
 
