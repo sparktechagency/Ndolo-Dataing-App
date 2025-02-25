@@ -36,9 +36,9 @@ class _ChatScreenState extends State<ChatScreen> {
   var conversationId = "";
   var currentUserId = "";
   var currentUserImage = "";
-  var receiverImage = "";
-  var receiverName = "";
-  var receiverId = "";
+  var senderImage = "";
+  var senderName = "";
+  var senderId = "";
   Uint8List? _image;
   File? selectedIMage;
 
@@ -49,12 +49,12 @@ class _ChatScreenState extends State<ChatScreen> {
       conversationId = Get.parameters['conversationId'] ?? "";
       currentUserId = Get.parameters['currentUserId'] ?? "";
       currentUserImage = Get.parameters['currentUserImage'] ?? "";
-      receiverImage = Get.parameters['receiverImage'] ?? "";
-      receiverName = Get.parameters['receiverName'] ?? "";
-      receiverId = Get.parameters['receiverId'] ?? "";
+      senderImage = Get.parameters['senderImage'] ?? "";
+      senderName = Get.parameters['senderName'] ?? "";
+      senderId = Get.parameters['senderId'] ?? "";
 
       print("DEBUG: Current User ID: $currentUserId");
-      print("DEBUG: Receiver ID: $receiverId");
+      print("DEBUG: Receiver ID: $senderId");
 
       _controller.inboxFirstLoad(conversationId);
       _controller.listenMessage(conversationId);
@@ -87,14 +87,14 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             CustomNetworkImage(
               imageUrl:
-                  "${ApiConstants.imageBaseUrl}${Get.parameters["receiverImage"]}",
+                  "${ApiConstants.imageBaseUrl}${Get.parameters["senderImage"]}",
               height: 45.h,
               width: 45.w,
               boxShape: BoxShape.circle,
             ),
             SizedBox(width: 12.w),
             CustomText(
-              text: "${Get.parameters["receiverName"]}",
+              text: "${Get.parameters["senderName"]}",
               fontSize: 18.sp,
               fontWeight: FontWeight.w700,
               color: Colors.white,
@@ -148,7 +148,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         },
                         itemBuilder: (context, MessageModel message) {
                           print('Current User ID: =========> $currentUserId');  // Debugging
-                          print('Message Sent By: =========>${message.msgByUserId!.id}');  // Debugging
+                          print('Message Sent By: =========>${Get.parameters["senderId"]}');  // Debugging
                           return message.msgByUserId!.id == currentUserId
                               ? senderBubble(context, message)
                               : receiverBubble(context, message);
@@ -268,7 +268,7 @@ class _ChatScreenState extends State<ChatScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomNetworkImage(
-            imageUrl: '${ApiConstants.imageBaseUrl}$receiverImage',
+            imageUrl: '${ApiConstants.imageBaseUrl}$senderImage',
             boxShape: BoxShape.circle,
             height: 38.h,
             width: 38.w),
@@ -296,7 +296,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           '${message.text}',
                           style: TextStyle(
                             color: Colors.black,
-                            fontSize: 14.sp,
+                            fontSize: 16.sp,
                           ),
                           textAlign: TextAlign.start,
                         ),
@@ -348,24 +348,15 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: [
                   message.type == 'image'
                       ? CustomNetworkImage(
-                          imageUrl:
-                              '${ApiConstants.imageBaseUrl}${message.imageUrl}',
+                          imageUrl: '${ApiConstants.imageBaseUrl}${message.imageUrl}',
                           borderRadius: BorderRadius.circular(8.r),
                           height: 140.h,
                           width: 155.w)
                       : Text(
                           "${message.text}",
-                          style: const TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.white, fontSize: 16.sp),
                           textAlign: TextAlign.start,
                         ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      '${message.text}',
-                      textAlign: TextAlign.end,
-                      style: TextStyle(color: Colors.white, fontSize: 12.sp),
-                    ),
-                  ),
                   Text(
                     '${TimeFormatHelper.timeAgo(message.createdAt!)}',
                     textAlign: TextAlign.right,
