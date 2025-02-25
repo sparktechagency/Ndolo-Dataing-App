@@ -12,6 +12,7 @@ import 'package:grouped_list/grouped_list.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ndolo_dating/service/api_constants.dart';
 import 'package:ndolo_dating/views/base/custom_page_loading.dart';
+import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import '../../../../../utils/app_colors.dart';
 import '../../../../../utils/app_icons.dart';
 import '../../../../../utils/app_images.dart';
@@ -104,10 +105,18 @@ class _ChatScreenState extends State<ChatScreen> {
         centerTitle: false,
         actions: [
           //==============================> Audio Call Button <=======================
-          InkWell(onTap: () {}, child: SvgPicture.asset(AppIcons.audio)),
+          InkWell(onTap: () {
+            actionButton(
+                context, false, Get.parameters['senderId']!,
+                Get.parameters['senderName']!);
+            }, child: SvgPicture.asset(AppIcons.audio)),
           SizedBox(width: 16.w),
           //==============================> Video Call Button <=======================
-          InkWell(onTap: () {}, child: SvgPicture.asset(AppIcons.video)),
+          InkWell(onTap: () {
+            actionButton(
+                context, true, Get.parameters['senderId']!,
+                Get.parameters['senderName']!);
+          }, child: SvgPicture.asset(AppIcons.video)),
           SizedBox(width: 24.w),
         ],
       ),
@@ -287,8 +296,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: [
                   message.type == 'image'
                       ? CustomNetworkImage(
-                          imageUrl:
-                              '${ApiConstants.imageBaseUrl}${message.imageUrl}',
+                          imageUrl: '${ApiConstants.imageBaseUrl}${message.imageUrl}',
                           borderRadius: BorderRadius.circular(8.r),
                           height: 140.h,
                           width: 155.w)
@@ -381,10 +389,26 @@ class _ChatScreenState extends State<ChatScreen> {
   Future<void> openGallery() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
-
     if (pickedFile != null) {
       _controller.imagesPath.value = pickedFile.path;
       _controller.update();
     }
+  }
+
+  //==================================> Zego Send Call Invitation Button <===============================
+  ZegoSendCallInvitationButton actionButton(
+      BuildContext context, bool isVideo, String userId, String name) {
+    return ZegoSendCallInvitationButton(
+      invitees: [
+        ZegoUIKitUser(
+          id: userId,
+          name: name,
+        )
+      ],
+      buttonSize: const Size(30, 30),
+      iconSize: const Size(30, 30),
+      resourceID: 'zegouikit_call',
+      isVideoCall: isVideo,
+    );
   }
 }
