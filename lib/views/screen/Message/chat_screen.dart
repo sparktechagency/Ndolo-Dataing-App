@@ -17,8 +17,10 @@ import '../../../../../utils/app_colors.dart';
 import '../../../../../utils/app_icons.dart';
 import '../../../../../utils/app_images.dart';
 import '../../../controllers/messages/message_controller.dart';
+import '../../../helpers/prefs_helpers.dart';
 import '../../../helpers/time_formate.dart';
 import '../../../models/message_model.dart';
+import '../../../utils/app_constants.dart';
 import '../../base/custom_loading.dart';
 import '../../base/custom_network_image.dart';
 import '../../base/custom_text.dart';
@@ -34,29 +36,24 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final MessageController _controller = Get.put(MessageController());
   TextEditingController messageController = TextEditingController();
-  var conversationId = "";
-  var currentUserId = "";
-  var currentUserImage = "";
-  var senderImage = "";
-  var senderName = "";
-  var senderId = "";
-  Uint8List? _image;
+  var conversationId="";
+  var currentUserId="";
+  var currentUserImage="";
+  var receiverImage="";
+  var receiverName="";
+  var receiverId="";
   File? selectedIMage;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      conversationId = Get.parameters['conversationId'] ?? "";
-      currentUserId = Get.parameters['currentUserId'] ?? "";
-      currentUserImage = Get.parameters['currentUserImage'] ?? "";
-      senderImage = Get.parameters['senderImage'] ?? "";
-      senderName = Get.parameters['senderName'] ?? "";
-      senderId = Get.parameters['senderId'] ?? "";
-
-      print("DEBUG: Current User ID: $currentUserId");
-      print("DEBUG: Receiver ID: $senderId");
-
+      getUserId();
+      conversationId=Get.parameters['conversationId']!;
+      currentUserId=Get.parameters['currentUserId']!;
+      receiverImage = Get.parameters['receiverImage']!;
+      receiverName= Get.parameters['receiverName']!;
+      receiverId = Get.parameters['receiverId']!;
       _controller.inboxFirstLoad(conversationId);
       _controller.listenMessage(conversationId);
     });
@@ -64,9 +61,14 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void dispose() {
-    _controller.socketOffListen(conversationId);
     super.dispose();
   }
+
+  getUserId() async {
+    currentUserId = await PrefsHelper.getString(AppConstants.userId);
+    print('currentId ======================> ${currentUserId}');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,14 +90,14 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             CustomNetworkImage(
               imageUrl:
-                  "${ApiConstants.imageBaseUrl}${Get.parameters["senderImage"]}",
+                  "${ApiConstants.imageBaseUrl}${Get.parameters["receiverImage"]}",
               height: 45.h,
               width: 45.w,
               boxShape: BoxShape.circle,
             ),
             SizedBox(width: 12.w),
             CustomText(
-              text: "${Get.parameters["senderName"]}",
+              text: "${Get.parameters["receiverName"]}",
               fontSize: 18.sp,
               fontWeight: FontWeight.w700,
               color: Colors.white,
@@ -157,7 +159,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         },
                         itemBuilder: (context, MessageModel message) {
                           print('Current User ID: =========> $currentUserId');  // Debugging
-                          print('Message Sent By: =========>${Get.parameters["senderId"]}');  // Debugging
+                          print('Message Sent By: =========>${Get.parameters["receiverId"]}');  // Debugging
                           return message.msgByUserId!.id == currentUserId
                               ? senderBubble(context, message)
                               : receiverBubble(context, message);
@@ -239,9 +241,8 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
               GestureDetector(
                 onTap: () {
-                  if (messageController.text.isNotEmpty) {
-                    _controller.sentMessage(
-                        conversationId, 'text', messageController.text);
+                  if (messageController.text.isNotEmpty && !_controller.sentMessageLoading.value ) {
+                    _controller.sentMessage(conversationId, 'text', messageController.text);
                     messageController.clear();
                   } else if (_controller.imagesPath.value.isNotEmpty) {
                     _controller.sentImage(conversationId, 'image');
@@ -277,7 +278,7 @@ class _ChatScreenState extends State<ChatScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomNetworkImage(
-            imageUrl: '${ApiConstants.imageBaseUrl}$senderImage',
+            imageUrl: '${ApiConstants.imageBaseUrl}$receiverImage',
             boxShape: BoxShape.circle,
             height: 38.h,
             width: 38.w),
@@ -294,12 +295,12 @@ class _ChatScreenState extends State<ChatScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  message.type == 'image'
+                  message.type == 'image' && message.imageUrl != null
                       ? CustomNetworkImage(
-                          imageUrl: '${ApiConstants.imageBaseUrl}${message.imageUrl}',
-                          borderRadius: BorderRadius.circular(8.r),
-                          height: 140.h,
-                          width: 155.w)
+                      imageUrl: '${ApiConstants.imageBaseUrl}${message.imageUrl}',
+                      borderRadius: BorderRadius.circular(8.r),
+                      height: 140.h,
+                      width: 155.w)
                       : Text(
                           '${message.text}',
                           style: TextStyle(
@@ -354,12 +355,12 @@ class _ChatScreenState extends State<ChatScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  message.type == 'image'
+                  message.type == 'image' && message.imageUrl != null
                       ? CustomNetworkImage(
-                          imageUrl: '${ApiConstants.imageBaseUrl}${message.imageUrl}',
-                          borderRadius: BorderRadius.circular(8.r),
-                          height: 140.h,
-                          width: 155.w)
+                      imageUrl: '${ApiConstants.imageBaseUrl}${message.imageUrl}',
+                      borderRadius: BorderRadius.circular(8.r),
+                      height: 140.h,
+                      width: 155.w)
                       : Text(
                           "${message.text}",
                           style: TextStyle(color: Colors.white, fontSize: 16.sp),
