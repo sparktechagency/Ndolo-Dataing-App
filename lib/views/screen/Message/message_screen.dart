@@ -156,27 +156,21 @@ class _MessageScreenState extends State<MessageScreen> {
             itemBuilder: (context, index) {
               final conversation = controller.conversationModel[index];
               bool isCurrentUserSender = conversation.sender!.id == currentUserId;
-              String displayName = isCurrentUserSender
-                  ? conversation.receiver!.fullName!
-                  : conversation.sender!.fullName!;
-              String displayImage = isCurrentUserSender
-                  ? conversation.receiver!.profileImage!
-                  : conversation.sender!.profileImage!;
               String conversationId = conversation.id!;
-              String receiverId = isCurrentUserSender
-                  ? conversation.receiver!.id!
-                  : conversation.sender!.id!;
+              String senderName = isCurrentUserSender ? conversation.receiver!.fullName! : conversation.sender!.fullName!;
+              String senderImage = isCurrentUserSender ? conversation.receiver!.profileImage! : conversation.sender!.profileImage!;
+              String senderId = isCurrentUserSender ? conversation.receiver!.id! : conversation.sender!.id!;
               return Padding(
                 padding: EdgeInsets.only(bottom: 16.h),
                 child: GestureDetector(
                   onTap: () {
                     Get.toNamed(AppRoutes.chatScreen, parameters: {
-                      'conversationId': conversation.id ?? '',
-                      'currentUserId': currentUserId ?? '',
-                      'receiverId': receiverId ?? '',
+                      'conversationId': conversationId ?? '',
+                      'currentUserId': isCurrentUserSender ? conversation.sender!.id! : conversation.receiver!.id!,
                       'currentUserImage': isCurrentUserSender ? conversation.sender!.profileImage! : conversation.receiver!.profileImage!,
-                      'receiverImage': displayImage ?? '',
-                      'receiverName': displayName ?? '',
+                      'senderId': senderId ?? '',
+                      'senderImage': senderImage ?? '',
+                      'senderName': senderName ?? '',
                     });
                   },
                   child: Container(
@@ -189,7 +183,7 @@ class _MessageScreenState extends State<MessageScreen> {
                       child: Row(
                         children: [
                           CustomNetworkImage(
-                            imageUrl: '${ApiConstants.imageBaseUrl}$displayImage',
+                            imageUrl: '${ApiConstants.imageBaseUrl}$senderImage',
                             height: 45.h,
                             width: 45.w,
                             boxShape: BoxShape.circle,
@@ -201,7 +195,7 @@ class _MessageScreenState extends State<MessageScreen> {
                               children: [
                                 //=====================> Name <=======================
                                 CustomText(
-                                  text: displayName,
+                                  text: senderName,
                                   fontSize: 16.sp,
                                   fontWeight: FontWeight.w700,
                                   bottom: 6.h,

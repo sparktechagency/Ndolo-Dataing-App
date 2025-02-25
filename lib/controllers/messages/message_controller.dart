@@ -102,21 +102,18 @@ class MessageController extends GetxController {
       update();
       update();
       //=======================> Auto-scroll to the latest message <==================
-      scrollToBottom();
-
+      Future.delayed(const Duration(milliseconds: 100));
+        if (scrollController.hasClients) {
+          scrollController.animateTo(
+            scrollController.position.minScrollExtent,
+            duration: const Duration(milliseconds: 100),
+            curve: Curves.easeInOut,
+          );
+        }
     });
   }
 
-  Future<void> scrollToBottom() async {
-    await Future.delayed(const Duration(milliseconds: 100));
-    if (scrollController.hasClients) {
-      scrollController.animateTo(
-        scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 100),
-        curve: Curves.easeOut,
-      );
-    }
-  }
+
   socketOffListen(String conversationId)async{
     SocketServices().socket?.off("new-message::$conversationId");
     debugPrint("Socket off New message");
@@ -164,10 +161,16 @@ class MessageController extends GetxController {
     } catch (e) {
       Fluttertoast.showToast(msg: "API Error: ${e.toString()}");
     }
-
     sentMessageLoading(false);
     update();
-    scrollToBottom();
+    Future.delayed(const Duration(milliseconds: 100));
+    if (scrollController.hasClients) {
+      scrollController.animateTo(
+        scrollController.position.minScrollExtent,
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
 
@@ -213,7 +216,6 @@ class MessageController extends GetxController {
       sentMessageLoading(false);
       Fluttertoast.showToast(msg: "Failed to send image!");
       update();
-      scrollToBottom();
     }
   }
 
