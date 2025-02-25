@@ -7,6 +7,7 @@ import 'package:ndolo_dating/utils/app_constants.dart';
 import 'package:ndolo_dating/views/base/custom_network_image.dart';
 import 'package:ndolo_dating/views/base/custom_page_loading.dart';
 import '../../../controllers/messages/message_controller.dart';
+import '../../../service/socket_services.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_strings.dart';
 import '../../base/bottom_menu..dart';
@@ -21,11 +22,18 @@ class MessageScreen extends StatefulWidget {
 
 class _MessageScreenState extends State<MessageScreen> {
   final MessageController controller = Get.put(MessageController());
+  final SocketServices _socket = SocketServices();
+
   var currentUserId='';
+  @override
+  void initState() {
+    super.initState();
+    controller.getConversation();
+    _socket.init();
+  }
 
   @override
   Widget build(BuildContext context) {
-    controller.getConversation();
     return Scaffold(
       bottomNavigationBar: const BottomMenu(2),
       appBar: AppBar(
@@ -49,21 +57,21 @@ class _MessageScreenState extends State<MessageScreen> {
             itemBuilder: (context, index) {
               final conversation = controller.conversationModel[index];
               bool isCurrentUserSender = conversation.sender!.id == currentUserId;
+              String displayName = isCurrentUserSender ? conversation.receiver!.fullName! : conversation.sender!.fullName!;
+              String displayImage = isCurrentUserSender ? conversation.receiver!.profileImage! : conversation.sender!.profileImage!;
               String conversationId = conversation.id!;
-              String senderName = isCurrentUserSender ? conversation.receiver!.fullName! : conversation.sender!.fullName!;
-              String senderImage = isCurrentUserSender ? conversation.receiver!.profileImage! : conversation.sender!.profileImage!;
-              String senderId = isCurrentUserSender ? conversation.receiver!.id! : conversation.sender!.id!;
+              String receiverId = isCurrentUserSender ? conversation.receiver!.id! : conversation.sender!.id!;
+
               return Padding(
                 padding: EdgeInsets.only(bottom: 16.h),
                 child: GestureDetector(
                   onTap: () {
                     Get.toNamed(AppRoutes.chatScreen, parameters: {
-                      'conversationId': conversationId ?? '',
-                      'currentUserId': isCurrentUserSender ? conversation.sender!.id! : conversation.receiver!.id!,
-                      'currentUserImage': isCurrentUserSender ? conversation.sender!.profileImage! : conversation.receiver!.profileImage!,
-                      'senderId': senderId ?? '',
-                      'senderImage': senderImage ?? '',
-                      'senderName': senderName ?? '',
+                      "conversationId": conversationId,
+                      "currentUserId": currentUserId,
+                      "receiverId": receiverId,
+                      "receiverImage": displayImage,
+                      "receiverName": displayName,
                     });
                   },
                   child: Container(
@@ -76,7 +84,7 @@ class _MessageScreenState extends State<MessageScreen> {
                       child: Row(
                         children: [
                           CustomNetworkImage(
-                            imageUrl: '${ApiConstants.imageBaseUrl}$senderImage',
+                            imageUrl: '${ApiConstants.imageBaseUrl}$displayImage',
                             height: 45.h,
                             width: 45.w,
                             boxShape: BoxShape.circle,
@@ -88,7 +96,7 @@ class _MessageScreenState extends State<MessageScreen> {
                               children: [
                                 //=====================> Name <=======================
                                 CustomText(
-                                  text: senderName,
+                                  text:  displayName,
                                   fontSize: 16.sp,
                                   fontWeight: FontWeight.w700,
                                   bottom: 6.h,

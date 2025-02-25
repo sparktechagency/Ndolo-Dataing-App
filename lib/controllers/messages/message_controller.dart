@@ -63,10 +63,9 @@ class MessageController extends GetxController {
       Get.toNamed(AppRoutes.messageScreen, parameters: {
         'conversationId': data['id'],
         'currentUserId': currentUserID,
-        'currentUserImage': currentUserID == data['sender']['id'] ? data['sender']['profileImage'] : data['receiver']['profileImage'],
-        "receiverImage": currentUserID == data['sender']['id'] ? data['receiver']['profileImage'] : data['sender']['profileImage'],
-        "receiverName": currentUserID == data['sender']['id'] ? data['receiver']['fullName'] : data['sender']['fullName'],
-        "receiverId": currentUserID == data['sender']['id'] ? data['receiver']['id'] : data['sender']['id'],
+        'currentUserImage': currentUserID == data['sender'] ? data['sender']['profileImage'] : data['receiver']['profileImage'],
+        "receiverName": currentUserID == data['sender'] ? data['receiver']['fullName'] : data['sender']['fullName'],
+        "receiverId": currentUserID == data['sender'] ? data['receiver'] : data['sender'],
       });
     } else {
       ApiChecker.checkApi(response);
@@ -113,14 +112,9 @@ class MessageController extends GetxController {
     });
   }
 
-
-  socketOffListen(String conversationId)async{
-    SocketServices().socket?.off("new-message::$conversationId");
-    debugPrint("Socket off New message");
-  }
   //===================================> SEND A TEXT MESSAGE <===================================
   void sentMessage(String conversationId, String type, String text) async {
-    if (text.isEmpty) return;
+    if (text.isEmpty || sentMessageLoading.value) return;
     sentMessageLoading(true);
     update();
     String currentUserID = await PrefsHelper.getString(AppConstants.userId);
