@@ -148,7 +148,7 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                 ),
                 CustomTextField(
                   controller: _profileController.firstNameCTRL,
-                  hintText: 'Janet',
+                  hintText: 'First Name',
                 ),
                 SizedBox(height: 16.h),
                 //======================> Last Name Text Field <========================
@@ -160,7 +160,7 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                 ),
                 CustomTextField(
                   controller: _profileController.lastNameCTRL,
-                  hintText: 'Doe',
+                  hintText: 'Last Name',
                 ),
                 SizedBox(height: 16.h),
                 //======================> Phone Number Text Field <========================
@@ -212,7 +212,7 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                   },
                   readOnly: true,
                   controller: _profileController.dateBirthCTRL,
-                  hintText: '16 AUG 2000',
+                  hintText: 'Date of birth',
                   suffixIcons: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: SvgPicture.asset(AppIcons.calenderIcon),
@@ -228,7 +228,7 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                 ),
                 CustomTextField(
                   controller: _profileController.countryCTRL,
-                  hintText: 'Bangladesh',
+                  hintText: 'Your Country',
                 ),
                 SizedBox(height: 16.h),
                 //======================> State Text Field <========================
@@ -240,7 +240,7 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                 ),
                 CustomTextField(
                   controller: _profileController.stateCTRL,
-                  hintText: 'BD',
+                  hintText: 'Your State',
                 ),
                 SizedBox(height: 16.h),
                 //======================> City Text Field <========================
@@ -252,7 +252,7 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                 ),
                 CustomTextField(
                   controller: _profileController.cityCTRL,
-                  hintText: 'Dhaka',
+                  hintText: 'Your City',
                 ),
                 SizedBox(height: 16.h),
                 //======================> Address Text Field <========================
@@ -264,7 +264,7 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                 ),
                 CustomTextField(
                   controller: _profileController.addressCTRL,
-                  hintText: '6391 Elgin St. Celina, Delaware 10299',
+                  hintText: 'Your address',
                 ),
                 SizedBox(height: 16.h),
                 //======================> Bio Text Field <========================
@@ -277,7 +277,7 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                 CustomTextField(
                   controller: _profileController.bioCTRL,
                   hintText:
-                      'Lorem ipsum dolor sit amet consectetur. Proin id massa consectetur magna urna. Sed sed curabitur est congue nulla habitant egestas. Interdum et sed viverra adipiscing. Mi venenatis habitant tincidunt id integer sed vitae.',
+                      'Enter your bio...',
                   maxLines: 5,
                 ),
                SizedBox(height: 32.h),
