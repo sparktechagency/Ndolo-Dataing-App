@@ -121,7 +121,7 @@ class _MatchesScreenState extends State<MatchesScreen> {
                                       CustomText(text: '${calculateAge(user)}'),
                                       //==========================> Location <===============================
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
                                           SvgPicture.asset(AppIcons.location, color: AppColors.primaryColor, width: 12.w, height: 12.h),
                                           SizedBox(width: 4.w),
