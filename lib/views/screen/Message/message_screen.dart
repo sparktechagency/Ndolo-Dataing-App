@@ -56,12 +56,11 @@ class _MessageScreenState extends State<MessageScreen> {
             itemCount: controller.conversationModel.length,
             itemBuilder: (context, index) {
               final conversation = controller.conversationModel[index];
-              bool isCurrentUserSender = conversation.sender!.id == currentUserId;
-              String displayName = isCurrentUserSender ? conversation.receiver!.fullName! : conversation.sender!.fullName!;
-              String displayImage = isCurrentUserSender ? conversation.receiver!.profileImage! : conversation.sender!.profileImage!;
+             bool isCurrentUserSender = conversation.resiver!.id == currentUserId;
+              String displayName = isCurrentUserSender ? conversation.resiver!.fullName! : conversation.resiver!.fullName!;
+              String displayImage = isCurrentUserSender ? conversation.resiver!.profileImage! : conversation.resiver!.profileImage!;
               String conversationId = conversation.id!;
-              String receiverId = isCurrentUserSender ? conversation.receiver!.id! : conversation.sender!.id!;
-
+              String receiverId = isCurrentUserSender ? conversation.resiver!.id! : conversation.resiver!.id!;
               return Padding(
                 padding: EdgeInsets.only(bottom: 16.h),
                 child: GestureDetector(
@@ -106,7 +105,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                 //=====================> Last Message <=======================
                                 CustomText(
                                   text: conversation.lastMessage is Map<String, dynamic>
-                                      ? (conversation.lastMessage['text'] ?? 'No message available')
+                                      ? (conversation.lastMessage!['text'] ?? 'No message available')
                                       : (conversation.lastMessage?.text ?? 'No message available'),
                                   fontWeight: FontWeight.w500,
                                   maxLine: 2,
