@@ -88,7 +88,33 @@ class MessageController extends GetxController {
   }
 
   //===================================> LISTEN FOR NEW MESSAGES VIA SOCKET <===================================
+  bool isListening = false; // Add this flag inside MessageController
   listenMessage(String conversationId) {
+    if (isListening) return; // Prevent multiple listeners
+    isListening = true;
+
+    SocketServices().socket?.on("new-message::$conversationId", (data) {
+      debugPrint("🔵 Live Message Received: $data");
+
+      MessageModel receivedMessage = MessageModel.fromJson(data);
+
+      // Avoid adding duplicates
+      if (!messageModel.any((msg) => msg.id == receivedMessage.id)) {
+        messageModel.add(receivedMessage);
+        messageModel.refresh();
+        Future.delayed(const Duration(milliseconds: 100));
+        if (scrollController.hasClients) {
+          scrollController.animateTo(
+            scrollController.position.minScrollExtent,
+            duration: const Duration(milliseconds: 100),
+            curve: Curves.easeInOut,
+          );
+        }
+      }
+    });
+  }
+
+  /* listenMessage(String conversationId) {
     SocketServices().socket?.on("new-message::$conversationId", (data) {
       debugPrint("🔵 Live Message Received: $data");
       MessageModel receivedMessage = MessageModel.fromJson(data);
@@ -110,7 +136,7 @@ class MessageController extends GetxController {
           );
         }
     });
-  }
+  }*/
 
   //===================================> SEND A TEXT MESSAGE <===================================
   void sentMessage(String conversationId, String type, String text) async {
@@ -148,9 +174,8 @@ class MessageController extends GetxController {
         "type": type,
         "text": text,
       });
-
       if (response.statusCode != 200 && response.statusCode != 201) {
-        Fluttertoast.showToast(msg: "Failed to save message in database!");
+        throw Exception("Failed to save message!");
       }
     } catch (e) {
       Fluttertoast.showToast(msg: "API Error: ${e.toString()}");

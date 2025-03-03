@@ -23,8 +23,7 @@ class MessageScreen extends StatefulWidget {
 class _MessageScreenState extends State<MessageScreen> {
   final MessageController controller = Get.put(MessageController());
   final SocketServices _socket = SocketServices();
-
-  var currentUserId='';
+  var currentUserId ='';
   @override
   void initState() {
     super.initState();
@@ -56,11 +55,12 @@ class _MessageScreenState extends State<MessageScreen> {
             itemCount: controller.conversationModel.length,
             itemBuilder: (context, index) {
               final conversation = controller.conversationModel[index];
-             bool isCurrentUserSender = conversation.resiver!.id == currentUserId;
-              String displayName = isCurrentUserSender ? conversation.resiver!.fullName! : conversation.resiver!.fullName!;
-              String displayImage = isCurrentUserSender ? conversation.resiver!.profileImage! : conversation.resiver!.profileImage!;
-              String conversationId = conversation.id!;
-              String receiverId = isCurrentUserSender ? conversation.resiver!.id! : conversation.resiver!.id!;
+              String conversationId = conversation.id ?? '';
+          //    bool isCurrentUser = conversation.resiver!.id == currentUserId;
+              String displayName = conversation.resiver?.fullName ?? 'Unknown';
+              String displayImage = conversation.resiver?.profileImage ?? '';
+              String receiverId =  conversation.resiver!.id!;
+
               return Padding(
                 padding: EdgeInsets.only(bottom: 16.h),
                 child: GestureDetector(
@@ -104,14 +104,13 @@ class _MessageScreenState extends State<MessageScreen> {
                                 ),
                                 //=====================> Last Message <=======================
                                 CustomText(
-                                  text: conversation.lastMessage is Map<String, dynamic>
-                                      ? (conversation.lastMessage!['text'] ?? 'No message available')
+                                  text: (conversation.lastMessage?.type == 'image')
+                                      ? 'An image'
                                       : (conversation.lastMessage?.text ?? 'No message available'),
                                   fontWeight: FontWeight.w500,
                                   maxLine: 2,
                                   textAlign: TextAlign.start,
                                 ),
-
                               ],
                             ),
                           ),
