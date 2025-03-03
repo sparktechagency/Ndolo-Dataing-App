@@ -50,6 +50,10 @@ class _ChatScreenState extends State<ChatScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getUserId();
       conversationId=Get.parameters['conversationId']!;
+      if (conversationId.isEmpty) {
+        Fluttertoast.showToast(msg: "Invalid conversation ID");
+        return;
+      }
       currentUserId=Get.parameters['currentUserId']!;
       receiverImage = Get.parameters['receiverImage']!;
       receiverName= Get.parameters['receiverName']!;
@@ -109,15 +113,15 @@ class _ChatScreenState extends State<ChatScreen> {
           //==============================> Audio Call Button <=======================
           InkWell(onTap: () {
             actionButton(
-                context, false, Get.parameters['senderId']!,
-                Get.parameters['senderName']!);
+                context, false, Get.parameters['receiverId']!,
+                Get.parameters['receiverName']!);
             }, child: SvgPicture.asset(AppIcons.audio)),
           SizedBox(width: 16.w),
           //==============================> Video Call Button <=======================
           InkWell(onTap: () {
             actionButton(
-                context, true, Get.parameters['senderId']!,
-                Get.parameters['senderName']!);
+                context, true, Get.parameters['receiverId']!,
+                Get.parameters['receiverName']!);
           }, child: SvgPicture.asset(AppIcons.video)),
           SizedBox(width: 24.w),
         ],
