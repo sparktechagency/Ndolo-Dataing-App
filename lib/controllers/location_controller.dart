@@ -24,21 +24,25 @@ class LocationController extends GetxController {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $bearerToken',
       };
-      setLocationLoading(true);
-      Response response = await ApiClient.postData(
-          ApiConstants.setLocationEndPoint, jsonEncode(body),
-          headers: headers);
-      print("============> ${response.body} and ${response.statusCode}");
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        await PrefsHelper.setBool(AppConstants.hasUpdateGallery, true);
-        print("Your Location is set");
-        Get.offAllNamed(AppRoutes.idealMatchScreen);
-        Fluttertoast.showToast(msg: "Your Location is set successfully");
+      try {
+        setLocationLoading(true);
+        Response response = await ApiClient.postData(
+            ApiConstants.setLocationEndPoint, jsonEncode(body),
+            headers: headers);
+        print("Response: ${response.body}, Status: ${response.statusCode}");
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          await PrefsHelper.setBool(AppConstants.hasUpdateGallery, true);
+          Fluttertoast.showToast(msg: "Your Location is set successfully");
+          Get.offAllNamed(AppRoutes.idealMatchScreen);
+        } else {
+          print("Failed: ${response.body}");
+          Fluttertoast.showToast(msg: response.statusText ?? "Failed to update location");
+        }
+      } catch (e) {
+        print("Error in API call: $e");
+        Fluttertoast.showToast(msg: "Error updating location");
+      } finally {
         setLocationLoading(false);
-      } else {
-        ApiChecker.checkApi(response);
-        Fluttertoast.showToast(msg: response.statusText ?? "");
       }
-    setLocationLoading(false);
   }
 }

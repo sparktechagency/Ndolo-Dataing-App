@@ -1,71 +1,107 @@
 class ConversationModel {
-  final Receiver? sender;
-  final Receiver? receiver;
-  final dynamic lastMessage;
-  final List<dynamic>? messages;
-  final dynamic blockedBy;
-  final String? blockStatus;
+  final String? id;
+  final Resiver? resiver;
+  final LastMessage? lastMessage;
+  final DateTime? updatedAt;
+
+  ConversationModel({
+    this.id,
+    this.resiver,
+    this.lastMessage,
+    this.updatedAt,
+  });
+
+  factory ConversationModel.fromJson(Map<String, dynamic> json) => ConversationModel(
+    id: json["_id"],
+    resiver: json["resiver"] == null ? null : Resiver.fromJson(json["resiver"]),
+    lastMessage: json["lastMessage"] == null ? null : LastMessage.fromJson(json["lastMessage"]),
+    updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "_id": id,
+    "resiver": resiver?.toJson(),
+    "lastMessage": lastMessage?.toJson(),
+    "updatedAt": updatedAt?.toIso8601String(),
+  };
+}
+
+class LastMessage {
+  final String? conversationId;
+  final String? text;
+  final String? imageUrl;
+  final String? videoUrl;
+  final String? fileUrl;
+  final String? type;
+  final bool? seen;
+  final String? msgByUserId;
   final DateTime? createdAt;
   final String? id;
 
-  ConversationModel({
-    this.sender,
-    this.receiver,
-    this.lastMessage,
-    this.messages,
-    this.blockedBy,
-    this.blockStatus,
+  LastMessage({
+    this.conversationId,
+    this.text,
+    this.imageUrl,
+    this.videoUrl,
+    this.fileUrl,
+    this.type,
+    this.seen,
+    this.msgByUserId,
     this.createdAt,
     this.id,
   });
 
-  factory ConversationModel.fromJson(Map<String, dynamic> json) => ConversationModel(
-    sender: json["sender"] == null ? null : Receiver.fromJson(json["sender"]),
-    receiver: json["receiver"] == null ? null : Receiver.fromJson(json["receiver"]),
-    lastMessage: json["lastMessage"],
-    messages: json["messages"] == null ? [] : List<dynamic>.from(json["messages"]!.map((x) => x)),
-    blockedBy: json["blockedBy"],
-    blockStatus: json["blockStatus"],
+  factory LastMessage.fromJson(Map<String, dynamic> json) => LastMessage(
+    conversationId: json["conversationId"],
+    text: json["text"],
+    imageUrl: json["imageUrl"],
+    videoUrl: json["videoUrl"],
+    fileUrl: json["fileUrl"],
+    type: json["type"],
+    seen: json["seen"],
+    msgByUserId: json["msgByUserId"],
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
     id: json["id"],
   );
 
   Map<String, dynamic> toJson() => {
-    "sender": sender?.toJson(),
-    "receiver": receiver?.toJson(),
-    "lastMessage": lastMessage,
-    "messages": messages == null ? [] : List<dynamic>.from(messages!.map((x) => x)),
-    "blockedBy": blockedBy,
-    "blockStatus": blockStatus,
+    "conversationId": conversationId,
+    "text": text,
+    "imageUrl": imageUrl,
+    "videoUrl": videoUrl,
+    "fileUrl": fileUrl,
+    "type": type,
+    "seen": seen,
+    "msgByUserId": msgByUserId,
     "createdAt": createdAt?.toIso8601String(),
     "id": id,
   };
 }
 
-class Receiver {
-  final String? fullName;
-  final String? profileImage;
-  final String? role;
+class Resiver {
   final String? id;
+  final String? fullName;
+  final String? role;
+  final String? profileImage;
 
-  Receiver({
-    this.fullName,
-    this.profileImage,
-    this.role,
+  Resiver({
     this.id,
+    this.fullName,
+    this.role,
+    this.profileImage,
   });
 
-  factory Receiver.fromJson(Map<String, dynamic> json) => Receiver(
+  factory Resiver.fromJson(Map<String, dynamic> json) => Resiver(
+    id: json["_id"],
     fullName: json["fullName"],
-    profileImage: json["profileImage"],
     role: json["role"],
-    id: json["id"],
+    profileImage: json["profileImage"],
   );
 
   Map<String, dynamic> toJson() => {
+    "_id": id,
     "fullName": fullName,
-    "profileImage": profileImage,
     "role": role,
-    "id": id,
+    "profileImage": profileImage,
   };
 }

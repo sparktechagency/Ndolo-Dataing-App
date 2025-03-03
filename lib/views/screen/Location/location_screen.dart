@@ -80,7 +80,6 @@ class _LocationScreenState extends State<LocationScreen> {
 
   Future<void> _getCurrentLocation() async {
     final status = await Permission.location.request();
-
     if (status.isGranted) {
       try {
         bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -106,7 +105,6 @@ class _LocationScreenState extends State<LocationScreen> {
           }
           return;
         }
-
         // Get current position
         Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high,
@@ -121,7 +119,6 @@ class _LocationScreenState extends State<LocationScreen> {
           position.latitude,
           position.longitude,
         );
-
         if (mounted) {
           setState(() {
             _commonLocationController.locationNameController.text =
