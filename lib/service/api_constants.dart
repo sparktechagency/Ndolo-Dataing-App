@@ -1,7 +1,7 @@
 class ApiConstants {
-  static const String socketBaseUrl = "http://10.0.60.206:9091";
-  static const String baseUrl = "http://10.0.60.206:9090/api/v1";
-  static const String imageBaseUrl = "http://10.0.60.206:9090";
+  static const String socketBaseUrl = "https://ws.ndolomeet.com";
+  static const String baseUrl = "https://api.ndolomeet.com/api/v1";
+  static const String imageBaseUrl = "https://api.ndolomeet.com";
   static const String signUpEndPoint = "/auth/register";
   static const String otpVerifyEndPoint = "/auth/verify-email";
   static const String logInEndPoint = "/auth/login";
@@ -29,15 +29,11 @@ class ApiConstants {
   static const String sentMessageEndPoint = "/conversation/send-message";
   static  String createConversationEndPoint(String receiverId) =>  "/conversation/create";
   static  String sendMessageEndPoint(String conversationId) =>  "/conversation/send-message";
-  // static  String getAllMessageUserEndPoint (String page, String limit ) => "/conversation/conversation-list";
-  //static  String getMessageEndPoint (String page, String limit, String id ) => "/message/$id?page=$page&limit=$limit";
-  static  String conversationMediaEndPoint (String page, String limit, String id ) => "/conversation/media/$id?page=$page&limit=$limit";
   static  String messageEndPoint =  "/message";
   static  String messageLocationEndPoint =  "/message/location";
   static  String blockConversationEndPoint(String id) =>  "/conversation/block/$id";
   static  String getUserByIdEndPoint (String id) =>  "/users/$id";
   static  String deleteConversationEndPoint (String id) =>  "/conversation/$id";
-
   static  String reportEndPoint =  "/report";
 
 }
