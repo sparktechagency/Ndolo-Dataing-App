@@ -210,13 +210,13 @@ class _ChatScreenState extends State<ChatScreen> {
                     ],
                   ),
                 ),
-                //===============================================> Write Sms Section <=============================
                 SizedBox(height: 80.h),
               ],
             ),
           ),
         );
       }),
+      //===============================================> Write Sms Section <=============================
       bottomSheet: Container(
         color: Colors.white,
         height: MediaQuery.of(context).size.height * 0.1,

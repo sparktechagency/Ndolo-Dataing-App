@@ -78,9 +78,9 @@ class MessageController extends GetxController {
     var response = await ApiClient.getData(
         ApiConstants.getAllSingleMessageEndPoint(conversationId));
     if (response.statusCode == 200) {
+      inboxFirstLoading(false);
       var data = response.body['data']['attributes']['data'];
-      messageModel.value =
-          List<MessageModel>.from(data.map((x) => MessageModel.fromJson(x)));
+      messageModel.value = List<MessageModel>.from(data.map((x) => MessageModel.fromJson(x)));
     } else {
       ApiChecker.checkApi(response);
     }
@@ -88,17 +88,13 @@ class MessageController extends GetxController {
   }
 
   //===================================> LISTEN FOR NEW MESSAGES VIA SOCKET <===================================
-  bool isListening = false; // Add this flag inside MessageController
+  bool isListening = false;
   listenMessage(String conversationId) {
-    if (isListening) return; // Prevent multiple listeners
+    if (isListening) return;
     isListening = true;
-
-    SocketServices().socket?.on("new-message::$conversationId", (data) {
+    SocketServices().socket?.on("new-message:$conversationId", (data) {
       debugPrint("🔵 Live Message Received: $data");
-
       MessageModel receivedMessage = MessageModel.fromJson(data);
-
-      // Avoid adding duplicates
       if (!messageModel.any((msg) => msg.id == receivedMessage.id)) {
         messageModel.add(receivedMessage);
         messageModel.refresh();
@@ -113,30 +109,6 @@ class MessageController extends GetxController {
       }
     });
   }
-
-  /* listenMessage(String conversationId) {
-    SocketServices().socket?.on("new-message::$conversationId", (data) {
-      debugPrint("🔵 Live Message Received: $data");
-      MessageModel receivedMessage = MessageModel.fromJson(data);
-      messageModel.removeWhere((msg) => msg.imageUrl == receivedMessage.imageUrl && msg.id == null);
-      messageModel.add(receivedMessage);
-      messageModel.refresh();
-      messageModel.refresh();
-      messageModel.refresh();
-      update();
-      update();
-      update();
-      //=======================> Auto-scroll to the latest message <==================
-      Future.delayed(const Duration(milliseconds: 100));
-        if (scrollController.hasClients) {
-          scrollController.animateTo(
-            scrollController.position.minScrollExtent,
-            duration: const Duration(milliseconds: 100),
-            curve: Curves.easeInOut,
-          );
-        }
-    });
-  }*/
 
   //===================================> SEND A TEXT MESSAGE <===================================
   void sentMessage(String conversationId, String type, String text) async {
@@ -229,6 +201,7 @@ class MessageController extends GetxController {
     if (response.statusCode == 200 || response.statusCode == 201) {
       imagesPath.value = '';
       listenMessage(conversationId);
+      inboxFirstLoad(conversationId);
       sentMessageLoading(false);
       update();
     } else {
