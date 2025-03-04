@@ -114,14 +114,14 @@ class _ChatScreenState extends State<ChatScreen> {
           InkWell(onTap: () {
             actionButton(
                 context, false, Get.parameters['receiverId']!,
-                Get.parameters['receiverName']!);
+                Get.parameters['receiverName']!, Get.parameters['conversationId']);
             }, child: SvgPicture.asset(AppIcons.audio)),
           SizedBox(width: 16.w),
           //==============================> Video Call Button <=======================
           InkWell(onTap: () {
             actionButton(
                 context, true, Get.parameters['receiverId']!,
-                Get.parameters['receiverName']!);
+                Get.parameters['receiverName']!, Get.parameters['conversationId']);
           }, child: SvgPicture.asset(AppIcons.video)),
           SizedBox(width: 24.w),
         ],
@@ -232,8 +232,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   controller: messageController,
                   hintText: "Type something…",
                   suffixIcons: Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
+                    padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
                     child: GestureDetector(
                         onTap: () {
                           openGallery();
@@ -402,7 +401,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   //==================================> Zego Send Call Invitation Button <===============================
   ZegoSendCallInvitationButton actionButton(
-      BuildContext context, bool isVideo, String userId, String name) {
+      BuildContext context, bool isVideo, String userId, String name, conversationId) {
     return ZegoSendCallInvitationButton(
       invitees: [
         ZegoUIKitUser(
