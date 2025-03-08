@@ -1,7 +1,7 @@
 class ApiConstants {
-  static const String socketBaseUrl = "https://ws.ndolomeet.com";
-  static const String baseUrl = "https://api.ndolomeet.com/api/v1";
-  static const String imageBaseUrl = "https://api.ndolomeet.com";
+  static const String socketBaseUrl = "http://ws.ndolomeet.com";
+  static const String baseUrl = "http://api.ndolomeet.com/api/v1";
+  static const String imageBaseUrl = "http://api.ndolomeet.com";
   static const String signUpEndPoint = "/auth/register";
   static const String otpVerifyEndPoint = "/auth/verify-email";
   static const String logInEndPoint = "/auth/login";
@@ -23,7 +23,6 @@ class ApiConstants {
   static const String termsConditionEndPoint = "/info/terms-services";
   static const String privacyPolicyEndPoint = "/info/privacy-policy";
   static const String aboutUsEndPoint = "/info/about-us";
-
   static  String getAllSingleMessageEndPoint (String conversationId) =>  "/conversation/get-messages?conversationId=$conversationId";
   static const String getAllConversationEndPoint = "/conversation/conversation-list";
   static const String sentMessageEndPoint = "/conversation/send-message";
