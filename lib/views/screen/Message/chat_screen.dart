@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,19 +14,17 @@ import 'package:ndolo_dating/views/base/custom_page_loading.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import '../../../../../utils/app_colors.dart';
 import '../../../../../utils/app_icons.dart';
-import '../../../../../utils/app_images.dart';
 import '../../../controllers/messages/message_controller.dart';
 import '../../../helpers/prefs_helpers.dart';
 import '../../../helpers/time_formate.dart';
 import '../../../models/message_model.dart';
 import '../../../utils/app_constants.dart';
-import '../../base/custom_loading.dart';
 import '../../base/custom_network_image.dart';
 import '../../base/custom_text.dart';
 import '../../base/custom_text_field.dart';
 
 class ChatScreen extends StatefulWidget {
-  ChatScreen({super.key});
+  const ChatScreen({super.key});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -36,12 +33,12 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final MessageController _controller = Get.put(MessageController());
   TextEditingController messageController = TextEditingController();
-  var conversationId="";
-  var currentUserId="";
-  var currentUserImage="";
-  var receiverImage="";
-  var receiverName="";
-  var receiverId="";
+  var conversationId = "";
+  var currentUserId = "";
+  var currentUserImage = "";
+  var receiverImage = "";
+  var receiverName = "";
+  var receiverId = "";
   File? selectedIMage;
 
   @override
@@ -49,14 +46,14 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getUserId();
-      conversationId=Get.parameters['conversationId']!;
+      conversationId = Get.parameters['conversationId']!;
       if (conversationId.isEmpty) {
         Fluttertoast.showToast(msg: "Invalid conversation ID");
         return;
       }
-      currentUserId=Get.parameters['currentUserId']!;
+      currentUserId = Get.parameters['currentUserId']!;
       receiverImage = Get.parameters['receiverImage']!;
-      receiverName= Get.parameters['receiverName']!;
+      receiverName = Get.parameters['receiverName']!;
       receiverId = Get.parameters['receiverId']!;
       _controller.inboxFirstLoad(conversationId);
       _controller.listenMessage(conversationId);
@@ -70,14 +67,15 @@ class _ChatScreenState extends State<ChatScreen> {
 
   getUserId() async {
     currentUserId = await PrefsHelper.getString(AppConstants.userId);
-    print('currentId ======================> ${currentUserId}');
+    if (kDebugMode) {
+      print('currentId ======================> $currentUserId');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
-      //========================================> AppBar Section <=======================================
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor,
         leading: InkWell(
@@ -94,7 +92,7 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             CustomNetworkImage(
               imageUrl:
-                  "${ApiConstants.imageBaseUrl}${Get.parameters["receiverImage"]}",
+              "${ApiConstants.imageBaseUrl}${Get.parameters["receiverImage"]}",
               height: 45.h,
               width: 45.w,
               boxShape: BoxShape.circle,
@@ -110,23 +108,24 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         centerTitle: false,
         actions: [
-          //==============================> Audio Call Button <=======================
-          InkWell(onTap: () {
-            actionButton(
-                context, false, Get.parameters['receiverId']!,
-                Get.parameters['receiverName']!, Get.parameters['conversationId']);
-            }, child: SvgPicture.asset(AppIcons.audio)),
+          InkWell(
+              onTap: () {
+                actionButton(
+                    context, false, Get.parameters['receiverId']!,
+                    Get.parameters['receiverName']!, Get.parameters['conversationId']);
+              },
+              child: SvgPicture.asset(AppIcons.audio)),
           SizedBox(width: 16.w),
-          //==============================> Video Call Button <=======================
-          InkWell(onTap: () {
-            actionButton(
-                context, true, Get.parameters['receiverId']!,
-                Get.parameters['receiverName']!, Get.parameters['conversationId']);
-          }, child: SvgPicture.asset(AppIcons.video)),
+          InkWell(
+              onTap: () {
+                actionButton(
+                    context, true, Get.parameters['receiverId']!,
+                    Get.parameters['receiverName']!, Get.parameters['conversationId']);
+              },
+              child: SvgPicture.asset(AppIcons.video)),
           SizedBox(width: 24.w),
         ],
       ),
-      //========================================> Body Section <=======================================
       body: Obx(() {
         if (_controller.inboxFirstLoading.value) {
           return const Center(child: CustomPageLoading());
@@ -162,50 +161,10 @@ class _ChatScreenState extends State<ChatScreen> {
                           return const SizedBox();
                         },
                         itemBuilder: (context, MessageModel message) {
-                          print('Current User ID: =========> $currentUserId');  // Debugging
-                          print('Message Sent By: =========>${Get.parameters["receiverId"]}');  // Debugging
                           return message.msgByUserId!.id == currentUserId
                               ? senderBubble(context, message)
                               : receiverBubble(context, message);
                         },
-                      ),
-                      //========================================> Show Select Image <============================
-                      Positioned(
-                        bottom: 0.h,
-                        left: 0.w,
-                        child: Obx(() {
-                          if (_controller.imagesPath.value.isNotEmpty) {
-                            return Stack(
-                              children: [
-                                Container(
-                                  height: 120.h,
-                                  width: 120.w,
-                                  margin: EdgeInsets.only(bottom: 10.h),
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: FileImage(
-                                          File(_controller.imagesPath.value)),
-                                      fit: BoxFit.cover,
-                                    ),
-                                    borderRadius: BorderRadius.circular(12.r),
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 0.h,
-                                  left: 0.w,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      _controller.imagesPath.value = "";
-                                      _controller.update();
-                                    },
-                                    child: const Icon(Icons.cancel_outlined),
-                                  ),
-                                )
-                              ],
-                            );
-                          }
-                          return const SizedBox();
-                        }),
                       ),
                     ],
                   ),
@@ -216,7 +175,6 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         );
       }),
-      //===============================================> Write Sms Section <=============================
       bottomSheet: Container(
         color: Colors.white,
         height: MediaQuery.of(context).size.height * 0.1,
@@ -274,7 +232,6 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  //=============================================> Receiver Bubble <=================================
   receiverBubble(BuildContext context, MessageModel message) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -305,13 +262,13 @@ class _ChatScreenState extends State<ChatScreen> {
                       height: 140.h,
                       width: 155.w)
                       : Text(
-                          '${message.text}',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16.sp,
-                          ),
-                          textAlign: TextAlign.start,
-                        ),
+                    '${message.text}',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.sp,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     mainAxisSize: MainAxisSize.min,
@@ -337,7 +294,6 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  //=============================================> Sender Bubble <========================================
   senderBubble(BuildContext context, MessageModel message) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -345,9 +301,7 @@ class _ChatScreenState extends State<ChatScreen> {
       children: [
         Expanded(
           child: ChatBubble(
-            clipper: ChatBubbleClipper5(
-              type: BubbleType.sendBubble,
-            ),
+            clipper: ChatBubbleClipper5(type: BubbleType.sendBubble),
             alignment: Alignment.topRight,
             margin: EdgeInsets.only(top: 8.h, bottom: 8.h),
             backGroundColor: AppColors.primaryColor,
@@ -365,10 +319,10 @@ class _ChatScreenState extends State<ChatScreen> {
                       height: 140.h,
                       width: 155.w)
                       : Text(
-                          "${message.text}",
-                          style: TextStyle(color: Colors.white, fontSize: 16.sp),
-                          textAlign: TextAlign.start,
-                        ),
+                    "${message.text}",
+                    style: TextStyle(color: Colors.white, fontSize: 16.sp),
+                    textAlign: TextAlign.start,
+                  ),
                   Text(
                     '${TimeFormatHelper.timeAgo(message.createdAt!)}',
                     textAlign: TextAlign.right,
@@ -379,27 +333,19 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ),
         ),
-        /*SizedBox(width: 8.w),
-        CustomNetworkImage(
-            imageUrl: message['image']!,
-            boxShape: BoxShape.circle,
-            height: 38.h,
-            width: 38.w),*/
       ],
     );
   }
 
-  //==================================> Gallery <===============================
   Future<void> openGallery() async {
     final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       _controller.imagesPath.value = pickedFile.path;
       _controller.update();
     }
   }
 
-  //==================================> Zego Send Call Invitation Button <===============================
   ZegoSendCallInvitationButton actionButton(
       BuildContext context, bool isVideo, String userId, String name, conversationId) {
     return ZegoSendCallInvitationButton(

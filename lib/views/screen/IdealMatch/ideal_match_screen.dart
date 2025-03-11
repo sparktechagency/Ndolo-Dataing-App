@@ -1,14 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:ndolo_dating/service/api_constants.dart';
 import 'package:ndolo_dating/utils/app_colors.dart';
 import 'package:ndolo_dating/utils/app_strings.dart';
 import 'package:ndolo_dating/views/base/custom_network_image.dart';
 import '../../../controllers/ideal_match_controller.dart';
-import '../../../helpers/route.dart';
-import '../../../utils/app_icons.dart';
 import '../../../utils/app_images.dart';
 import '../../base/custom_button.dart';
 import '../../base/custom_text.dart';
@@ -61,7 +59,9 @@ class _IdealMatchScreenState extends State<IdealMatchScreen> {
                         onTap: () {
                           setState(() {
                             _idealMatchController.selectedOption.value = '${role.title}';
-                            print('===================> ${role.title}');
+                            if (kDebugMode) {
+                              print('===================> ${role.title}');
+                            }
                           });
                         },
                         child: Container(

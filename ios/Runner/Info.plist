@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Your message to request location access</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Your message to request always location access</string>
     <key>NSCameraUsageDescription</key>
     <string>We require camera access to connect to a call</string>
     <key>NSMicrophoneUsageDescription</key>

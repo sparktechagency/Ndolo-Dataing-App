@@ -32,11 +32,11 @@ class LocationController extends GetxController {
         print("Response: ${response.body}, Status: ${response.statusCode}");
         if (response.statusCode == 200 || response.statusCode == 201) {
           await PrefsHelper.setBool(AppConstants.hasUpdateGallery, true);
-          Fluttertoast.showToast(msg: "Your Location is set successfully");
+          Fluttertoast.showToast(msg: "Your location is set successfully");
           Get.offAllNamed(AppRoutes.idealMatchScreen);
         } else {
+          Fluttertoast.showToast(msg: "Failed to update location: ${response.body}");
           print("Failed: ${response.body}");
-          Fluttertoast.showToast(msg: response.statusText ?? "Failed to update location");
         }
       } catch (e) {
         print("Error in API call: $e");
