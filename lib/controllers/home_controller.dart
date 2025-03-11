@@ -97,4 +97,40 @@ class HomeController extends GetxController implements GetxService {
     postLoading(false);
     update();
   }
+
+  //=============================> Get Filtered Users <===============================
+  RxList<HomeUserModel> filteredUsers = <HomeUserModel>[].obs;
+  RxBool filterLoading = false.obs;
+
+  getFilteredUsers({
+    required double maxDistance,
+    required double minAge,
+    required double maxAge,
+    String? gender,
+    String? matchPreference,
+  }) async {
+    filterLoading(true);
+    String queryParams = '?maxDistance=$maxDistance&minAge=$minAge&maxAge=$maxAge';
+    if (gender != null) queryParams += '&gender=$gender';
+    if (matchPreference != null) queryParams += '&idealMatch=$matchPreference';
+    var response = await ApiClient.getData('${ApiConstants.getHomeAllUserEndPoint}$queryParams');
+
+    if (response.statusCode == 200) {
+      filterLoading(false);
+      var responseData = response.body['data']['attributes'];
+      print("==========================> Filtered User Data: $responseData");
+      if (responseData is List) {
+        filteredUsers.assignAll(
+            responseData.map((e) => HomeUserModel.fromJson(e)).toList());
+      } else {
+        filteredUsers.assignAll([HomeUserModel.fromJson(responseData)]);
+      }
+    } else {
+      ApiChecker.checkApi(response);
+      Fluttertoast.showToast(msg: response.statusText ?? "Failed to fetch users");
+    }
+
+    filterLoading(false);
+    update();
+  }
 }

@@ -13,6 +13,7 @@ class ApiConstants {
   static const String updateProfileEndPoint = "/users/self/update";
   static const String updateGalleryEndPoint = "/users/self/gallery";
   static const String getHomeAllUserEndPoint = "/users/all/profiles";
+  static const String getHomeFilterUserEndPoint = "users/all/profiles?fullName=Testing&maxDistance=4&minAge=5&maxAge=35&idealMatch=67a9de1f1d839809c164c30e&country=&city=&state=";
   static String getSingleUserEndPoint(String userID) => "/users/profile/$userID";
   static const String getMatchListEndPoint = "/users/all/lick-list";
   static const String likeUserEndPoint = "/users/lick";
