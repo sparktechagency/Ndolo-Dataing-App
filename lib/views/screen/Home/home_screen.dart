@@ -112,13 +112,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Image.asset(AppImages.appLogo, width: 121.w, height: 32.h),
                   const Spacer(),
-                 /* InkWell(
+                  InkWell(
                     onTap: () {
                       Get.toNamed(AppRoutes.filterScreen);
                     },
                     child: SvgPicture.asset(AppIcons.filter, width: 24.w, height: 24.h),
                   ),
-                  SizedBox(width: 12.w),*/
+                  SizedBox(width: 12.w),
                   InkWell(
                     onTap: () {
                       Get.toNamed(AppRoutes.notificationsScreen);
