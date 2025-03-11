@@ -1,15 +1,10 @@
-import 'dart:convert';
-
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:ndolo_dating/helpers/route.dart';
-
-import '../helpers/prefs_helpers.dart';
 import '../models/ideal_match_model.dart';
 import '../service/api_checker.dart';
 import '../service/api_client.dart';
 import '../service/api_constants.dart';
-import '../utils/app_constants.dart';
 
 class IdealMatchController extends GetxController {
   //==========================> Get All Ideal Match Method <============================

@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:ndolo_dating/controllers/auth_controller.dart';
-import 'package:ndolo_dating/helpers/route.dart';
+import 'package:ndolo_dating/controllers/localization_controller.dart';
+import 'package:ndolo_dating/utils/app_colors.dart';
 import 'package:ndolo_dating/utils/app_icons.dart';
 import 'package:ndolo_dating/utils/app_strings.dart';
 import 'package:ndolo_dating/views/base/custom_button.dart';
 import 'package:ndolo_dating/views/base/custom_text.dart';
 import 'package:ndolo_dating/views/base/custom_text_field.dart';
-import '../../../../utils/app_colors.dart';
+
+import '../../../../helpers/route.dart';
+import '../../../../utils/app_constants.dart';
 import '../../../../utils/app_images.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -21,11 +24,18 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  LocalizationController localizationController = Get.find<LocalizationController>();
   final AuthController _authController = Get.put(AuthController());
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isChecked = false;
   final List<String> language = ['English', 'French'];
   String? selectedLanguage;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedLanguage = language[localizationController.selectedIndex];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +60,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       color: AppColors.fillColor,
                       borderRadius: BorderRadius.circular(16.r),
                       border:
-                          Border.all(color: AppColors.borderColor, width: 1),
+                      Border.all(color: AppColors.borderColor, width: 1),
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
@@ -79,8 +89,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             child: CustomText(
                               text: value,
                               fontSize: 14.sp,
-                              color:
-                                  AppColors.backgroundColor, // Item text color
+                              color: AppColors.backgroundColor, // Item text color
                             ),
                           );
                         }).toList(),
@@ -97,14 +106,21 @@ class _SignInScreenState extends State<SignInScreen> {
                           }).toList();
                         },
                         onChanged: (newValue) {
-                          setState(() {
-                            selectedLanguage = newValue;
-                          });
+                          int index = language.indexOf(newValue!);
+                          if (index != -1) {
+                            localizationController.setLanguage(Locale(
+                              AppConstants.languages[index].languageCode,
+                              AppConstants.languages[index].countryCode,
+                            ));
+                            localizationController.setSelectIndex(index);
+                            setState(() {
+                              selectedLanguage = newValue;
+                            });
+                          }
                         },
                       ),
                     ),
                   ),
-                  //_popupMenuButton(),
                 ),
                 Center(
                   child: SvgPicture.asset(AppIcons.appLogo),
@@ -173,20 +189,19 @@ class _SignInScreenState extends State<SignInScreen> {
                 _checkboxSection(),
                 SizedBox(height: 16.h),
                 //=======================> Sign In Button <=====================
-                Obx(()=> CustomButton(
-                    loading: _authController.signInLoading.value,
-                      onTap: () {
-                        if (_formKey.currentState!.validate()) {
-                          if(isChecked){
-                            _authController.handleLogIn();
-                          }else {
-                            Fluttertoast.showToast(
-                                msg: 'Please remember me');
-                          }
-                        }
-                      },
-                      text: AppStrings.signIn.tr),
-                ),
+                Obx(() => CustomButton(
+                  loading: _authController.signInLoading.value,
+                  onTap: () {
+                    if (_formKey.currentState!.validate()) {
+                      if (isChecked) {
+                        _authController.handleLogIn();
+                      } else {
+                        Fluttertoast.showToast(msg: 'Please remember me');
+                      }
+                    }
+                  },
+                  text: AppStrings.signIn.tr,
+                )),
                 SizedBox(height: 8.h),
                 //=======================> Or  <=====================
                 Center(
@@ -207,14 +222,13 @@ class _SignInScreenState extends State<SignInScreen> {
                             border: Border.all(
                                 width: 1.w, color: AppColors.primaryColor)),
                         child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal:  12.w, vertical: 4.h),
+                          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Image.asset(AppImages.googleLogo,
-                                  width: 32.w, height: 32.h),
-                              SizedBox( width: 12.w),
+                              Image.asset(AppImages.googleLogo, width: 32.w, height: 32.h),
+                              SizedBox(width: 12.w),
                               CustomText(
                                 text: 'Sign in With Google'.tr,
                                 fontSize: 18.sp,
@@ -224,39 +238,6 @@ class _SignInScreenState extends State<SignInScreen> {
                         )),
                   ),
                 ),
-
-                /*Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16.r),
-                              border: Border.all(
-                                  width: 1.w, color: AppColors.primaryColor)),
-                          child: Padding(
-                            padding: EdgeInsets.all(8.w),
-                            child: Image.asset(AppImages.googleLogo,
-                                width: 32.w, height: 32.h),
-                          )),
-                    ),
-                    SizedBox(width: 12.w),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16.r),
-                              border: Border.all(
-                                  width: 1.w, color: AppColors.primaryColor)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Image.asset(AppImages.facebookLogo,
-                                width: 32.w, height: 32.h),
-                          )),
-                    ),
-                  ],
-                ),*/
                 SizedBox(height: 16.h),
                 //=======================> Don’t have an account <=====================
                 Row(
@@ -325,42 +306,6 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
         ),
       ],
-    );
-  }
-  //================================> Popup Menu Button Method <=============================
-  PopupMenuButton<int> _popupMenuButton() {
-    return PopupMenuButton<int>(
-      padding: EdgeInsets.zero,
-      icon: const Icon(Icons.more_vert),
-      onSelected: (int result) {
-        if (result == 0) {
-          print('French');
-        } else if (result == 1) {
-          print('English');
-        }
-      },
-      itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
-        PopupMenuItem<int>(
-          onTap: () {},
-          value: 0,
-          child: const Text(
-            'French',
-            style: TextStyle(color: Colors.black),
-          ),
-        ),
-        PopupMenuItem<int>(
-          onTap: () {},
-          value: 1,
-          child: const Text(
-            'English',
-            style: TextStyle(color: Colors.black),
-          ),
-        ),
-      ],
-      color: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
     );
   }
 }

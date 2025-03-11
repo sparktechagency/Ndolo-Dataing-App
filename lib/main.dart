@@ -55,7 +55,6 @@ class MyApp extends StatelessWidget {
                 title: AppConstants.APP_NAME,
                 debugShowCheckedModeBanner: false,
                 navigatorKey: Get.key,
-                // theme: themeController.darkTheme ? dark(): light(),
                 theme: light(),
                 defaultTransition: Transition.topLevel,
                 locale: localizeController.locale,
