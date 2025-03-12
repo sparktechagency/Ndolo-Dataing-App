@@ -52,7 +52,7 @@ class SettingsScreen extends StatelessWidget {
                 suffixIcon: SvgPicture.asset(AppIcons.rightArrow),
               ),
               //=====================> Privacy Policy  List Tile <===================
-              CustomListTile(
+             /* CustomListTile(
                 onTap: () {
                   Get.toNamed(AppRoutes.privacyPolicyScreen);
                 },
@@ -78,7 +78,7 @@ class SettingsScreen extends StatelessWidget {
                 prefixIcon: SvgPicture.asset(AppIcons.about),
                 suffixIcon: SvgPicture.asset(AppIcons.rightArrow),
               ),
-
+*/
               //=====================> Delete Account List Tile <===================
               CustomListTile(
                 onTap: () {

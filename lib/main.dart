@@ -30,7 +30,7 @@ void main() async {
       await NotificationHelper.init(flutterLocalNotificationsPlugin);
       FirebaseMessaging.onBackgroundMessage(NotificationHelper.firebaseMessagingBackgroundHandler);
     }
-  }catch(e) {}
+  } catch(e) {}
   NotificationHelper.getFcmToken();
   Map<String, Map<String, String>> _languages = await di.init();
   runApp(MyApp(
@@ -41,7 +41,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key, required this.languages});
   final Map<String, Map<String, String>> languages;
-  // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ThemeController>(builder: (themeController) {
@@ -59,8 +59,7 @@ class MyApp extends StatelessWidget {
                 defaultTransition: Transition.topLevel,
                 locale: localizeController.locale,
                 translations: Messages(languages: languages),
-                fallbackLocale: Locale(AppConstants.languages[0].languageCode,
-                    AppConstants.languages[0].countryCode),
+                fallbackLocale: Locale(AppConstants.languages[0].languageCode, AppConstants.languages[0].countryCode),
                 transitionDuration: const Duration(milliseconds: 500),
                 getPages: AppRoutes.page,
                 initialRoute: AppRoutes.splashScreen,

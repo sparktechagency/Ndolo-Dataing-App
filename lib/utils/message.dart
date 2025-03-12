@@ -6,7 +6,5 @@ class Messages extends Translations {
   Messages({required this.languages});
 
   @override
-  Map<String, Map<String, String>> get keys {
-    return languages;
-  }
+  Map<String, Map<String, String>> get keys => languages;
 }
