@@ -34,7 +34,11 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   void initState() {
     super.initState();
-    selectedLanguage = language[localizationController.selectedIndex];
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        selectedLanguage = language[localizationController.selectedIndex];
+      });
+    });
   }
 
   @override
@@ -59,22 +63,20 @@ class _SignInScreenState extends State<SignInScreen> {
                     decoration: BoxDecoration(
                       color: AppColors.fillColor,
                       borderRadius: BorderRadius.circular(16.r),
-                      border:
-                      Border.all(color: AppColors.borderColor, width: 1),
+                      border: Border.all(color: AppColors.borderColor, width: 1),
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         focusColor: Colors.white,
                         value: selectedLanguage,
-                        dropdownColor: AppColors.borderColor,
+                        dropdownColor: AppColors.whiteColor,
                         style: TextStyle(
                           color: AppColors.borderColor,
                           fontSize: 14.sp,
                         ),
-                        menuWidth: 132.w,
                         borderRadius: BorderRadius.circular(8.r),
                         hint: CustomText(
-                          text: 'English'.tr,
+                          text: 'Language'.tr,
                           fontSize: 14.sp,
                           color: AppColors.borderColor,
                         ),
@@ -85,37 +87,37 @@ class _SignInScreenState extends State<SignInScreen> {
                         isExpanded: true,
                         items: language.map((String value) {
                           return DropdownMenuItem<String>(
+                            onTap: () {
+                              int selectedIndex = language.indexOf(value);
+                              localizationController.setLanguage(Locale(
+                                AppConstants.languages[selectedIndex].languageCode,
+                                AppConstants.languages[selectedIndex].countryCode,
+                              ));
+                              localizationController.setSelectIndex(selectedIndex);
+                              setState(() {
+                                selectedLanguage = value;
+                              });
+                            },
                             value: value,
                             child: CustomText(
                               text: value,
                               fontSize: 14.sp,
-                              color: AppColors.backgroundColor, // Item text color
+                              color: AppColors.borderColor,
                             ),
                           );
                         }).toList(),
-                        selectedItemBuilder: (BuildContext context) {
-                          return language.map((String value) {
-                            return Align(
-                              alignment: Alignment.centerLeft,
-                              child: CustomText(
-                                text: value,
-                                fontSize: 14.sp,
-                                color: AppColors.borderColor,
-                              ),
-                            );
-                          }).toList();
-                        },
                         onChanged: (newValue) {
-                          int index = language.indexOf(newValue!);
-                          if (index != -1) {
-                            localizationController.setLanguage(Locale(
-                              AppConstants.languages[index].languageCode,
-                              AppConstants.languages[index].countryCode,
-                            ));
-                            localizationController.setSelectIndex(index);
-                            setState(() {
-                              selectedLanguage = newValue;
-                            });
+                          if (newValue != null) {
+                            int selectedIndex = language.indexOf(newValue);
+                            if (selectedIndex != -1) {
+                              localizationController.setLanguage(Locale(
+                                AppConstants.languages[selectedIndex].languageCode,
+                                AppConstants.languages[selectedIndex].countryCode,
+                              ));
+                              setState(() {
+                                selectedLanguage = language[selectedIndex];
+                              });
+                            }
                           }
                         },
                       ),
@@ -213,7 +215,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                 ),
                 //=======================> Google and Facebook Button <=====================
-                Center(
+               /* Center(
                   child: GestureDetector(
                     onTap: () {},
                     child: Container(
@@ -237,7 +239,41 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                         )),
                   ),
+                ),*/
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16.r),
+                              border: Border.all(
+                                  width: 1.w, color: AppColors.primaryColor)),
+                          child: Padding(
+                            padding: EdgeInsets.all(8.w),
+                            child: Image.asset(AppImages.googleLogo,
+                                width: 32.w, height: 32.h),
+                          )),
+                    ),
+                    SizedBox(width: 12.w),
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16.r),
+                              border: Border.all(
+                                  width: 1.w, color: AppColors.primaryColor)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.asset(AppImages.facebookLogo,
+                                width: 32.w, height: 32.h),
+                          )),
+                    ),
+                    // Image.asset(AppImages.facebookLogo, width: 32.w, height: 32.h)
+                  ],
                 ),
+
                 SizedBox(height: 16.h),
                 //=======================> Don’t have an account <=====================
                 Row(

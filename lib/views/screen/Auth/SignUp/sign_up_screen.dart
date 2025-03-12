@@ -177,7 +177,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 //=======================> Google and Facebook Button <=====================
-                Center(
+                /*Center(
                   child: GestureDetector(
                     onTap: () {},
                     child: Container(
@@ -202,8 +202,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         )),
                   ),
-                ),
-              /*  Row(
+                ),*/
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
@@ -235,7 +235,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     // Image.asset(AppImages.facebookLogo, width: 32.w, height: 32.h)
                   ],
-                ),*/
+                ),
                 SizedBox(height: 16.h),
                 //=======================> Already have an account <=====================
                 Row(

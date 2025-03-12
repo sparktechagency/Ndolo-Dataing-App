@@ -67,7 +67,6 @@ class HomeController extends GetxController implements GetxService {
       update();
     } else {
       ApiChecker.checkApi(response);
-      Fluttertoast.showToast(msg: response.statusText ?? "");
       singleLoading(false);
       update();
     }
@@ -92,7 +91,7 @@ class HomeController extends GetxController implements GetxService {
       print('Response:================> ${response.body}');
     } else {
       ApiChecker.checkApi(response);
-     // Fluttertoast.showToast(msg: response.statusText ?? "");
+     Fluttertoast.showToast(msg: response.statusText ?? "");
     }
     postLoading(false);
     update();
@@ -127,7 +126,6 @@ class HomeController extends GetxController implements GetxService {
       }
     } else {
       ApiChecker.checkApi(response);
-      Fluttertoast.showToast(msg: response.statusText ?? "Failed to fetch users");
     }
 
     filterLoading(false);
