@@ -11,7 +11,6 @@ import 'package:ndolo_dating/utils/app_strings.dart';
 import 'package:ndolo_dating/views/base/custom_button.dart';
 import 'package:ndolo_dating/views/base/custom_text.dart';
 import 'package:ndolo_dating/views/base/custom_text_field.dart';
-
 import '../../../../helpers/route.dart';
 import '../../../../utils/app_constants.dart';
 import '../../../../utils/app_images.dart';
@@ -66,9 +65,9 @@ class _SignInScreenState extends State<SignInScreen> {
                       border: Border.all(color: AppColors.borderColor, width: 1),
                     ),
                     child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
+                      child:DropdownButton<String>(
                         focusColor: Colors.white,
-                        value: selectedLanguage,
+                        value: selectedLanguage ?? language[0],
                         dropdownColor: AppColors.whiteColor,
                         style: TextStyle(
                           color: AppColors.borderColor,
@@ -87,17 +86,6 @@ class _SignInScreenState extends State<SignInScreen> {
                         isExpanded: true,
                         items: language.map((String value) {
                           return DropdownMenuItem<String>(
-                            onTap: () {
-                              int selectedIndex = language.indexOf(value);
-                              localizationController.setLanguage(Locale(
-                                AppConstants.languages[selectedIndex].languageCode,
-                                AppConstants.languages[selectedIndex].countryCode,
-                              ));
-                              localizationController.setSelectIndex(selectedIndex);
-                              setState(() {
-                                selectedLanguage = value;
-                              });
-                            },
                             value: value,
                             child: CustomText(
                               text: value,
@@ -110,11 +98,12 @@ class _SignInScreenState extends State<SignInScreen> {
                           if (newValue != null) {
                             int selectedIndex = language.indexOf(newValue);
                             if (selectedIndex != -1) {
-                              localizationController.setLanguage(Locale(
+                              Locale newLocale = Locale(
                                 AppConstants.languages[selectedIndex].languageCode,
                                 AppConstants.languages[selectedIndex].countryCode,
-                              ));
+                              );
                               setState(() {
+                                localizationController.setLanguage(newLocale);
                                 selectedLanguage = language[selectedIndex];
                               });
                             }

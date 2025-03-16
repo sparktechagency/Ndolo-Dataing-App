@@ -32,9 +32,9 @@ void main() async {
     }
   } catch(e) {}
   NotificationHelper.getFcmToken();
-  Map<String, Map<String, String>> _languages = await di.init();
+  Map<String, Map<String, String>> languages = await di.init();
   runApp(MyApp(
-    languages: _languages,
+    languages: languages,
   ));
 }
 
