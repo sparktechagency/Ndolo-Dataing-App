@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,6 +8,7 @@ import 'package:ndolo_dating/utils/app_strings.dart';
 import 'package:ndolo_dating/views/base/custom_alart.dart';
 import 'package:ndolo_dating/views/base/custom_app_bar.dart';
 import 'package:ndolo_dating/views/base/custom_list_tile.dart';
+import '../../../controllers/localization_controller.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_icons.dart';
 import '../../base/custom_button.dart';
@@ -178,6 +180,8 @@ class SettingsScreen extends StatelessWidget {
 
   //===============================> Language Bottom Sheet <===============================
   _languageBottomSheet(BuildContext context) {
+    final LocalizationController localizationController = Get.find<LocalizationController>();
+
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -225,8 +229,11 @@ class SettingsScreen extends StatelessWidget {
                   CustomButton(
                     width: 120.w,
                     onTap: () {
+                      localizationController.setLanguage(const Locale('fr', 'FR'));
+                      if (kDebugMode) {
+                        print('==============> Select French Language');
+                      }
                       Get.back();
-                      print('==============> Select French Language');
                     },
                     text: "French",
                     color: Colors.white,
@@ -236,8 +243,11 @@ class SettingsScreen extends StatelessWidget {
                   CustomButton(
                       width: 120.w,
                       onTap: () {
+                        localizationController.setLanguage(const Locale('en', 'US'));
+                        if (kDebugMode) {
+                          print('==============> Select English Language');
+                        }
                         Get.back();
-                        print('==============> Select English Language');
                       },
                       text: "English"),
                 ],

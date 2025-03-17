@@ -45,9 +45,8 @@ class LocalizationController extends GetxController {
 
     int index = AppConstants.languages.indexWhere((lang) => lang.languageCode == languageCode);
     _selectedIndex = (index != -1) ? index : 0;
-
-    Get.updateLocale(_locale); // Update the app language globally
-    update(); // Refresh UI
+    Get.updateLocale(_locale);
+    update();
   }
 
 

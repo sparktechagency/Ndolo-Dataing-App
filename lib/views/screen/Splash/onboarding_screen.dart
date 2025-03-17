@@ -25,9 +25,10 @@ class OnboardingScreen extends StatelessWidget {
             //==================> Meet And Connect Text <=====================
             CustomText(
               text: AppStrings.meetAndConnect.tr,
-              fontSize: 24.sp,
+              fontSize: 22.sp,
               fontWeight: FontWeight.w700,
-              maxLine: 2,
+              fontName: 'Gotham Rounded',
+              maxLine: 3,
             ),
             //==================> Get Started Button <=====================
             const Spacer(),

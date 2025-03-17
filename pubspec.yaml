@@ -138,6 +138,9 @@ flutter:
     - family: OpenSans
       fonts:
         - asset: assets/fonts/OpenSans-Regular.ttf
+    - family: Gotham Rounded
+      fonts:
+        - asset: assets/fonts/gothamrnd_medium.otf
 
   #For details regarding fonts from package dependencies,
   #see https://flutter.dev/to/font-from-package

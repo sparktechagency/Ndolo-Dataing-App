@@ -65,7 +65,7 @@ class _MatchesScreenState extends State<MatchesScreen> {
         if (_matchController.matchLoading.value) {
           return const Center(child: CustomPageLoading());
         } else if (_matchController.matchModel.isEmpty) {
-          return Center(child: CustomText(text: 'No Matches Found'));
+          return Center(child: CustomText(text: 'No matches found'.tr));
         }
 
         return Padding(

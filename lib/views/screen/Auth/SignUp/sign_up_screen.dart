@@ -77,7 +77,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Please enter your first name";
+                      return "Please enter your first name".tr;
                     }
                     return null;
                   },
@@ -99,7 +99,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Please enter your last name";
+                      return "Please enter your last name".tr;
                     }
                     return null;
                   },
@@ -121,7 +121,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Please enter your email";
+                      return "Please enter your email".tr;
                     }
                     return null;
                   },
@@ -144,7 +144,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Please enter your password";
+                      return "Please enter your password".tr;
                     }
                     return null;
                   },
@@ -161,7 +161,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           Get.toNamed(AppRoutes.completeProfileScreen);
                         } else {
                           Fluttertoast.showToast(
-                              msg: 'Please accept Terms & Conditions');
+                              msg: 'Please accept Terms & Conditions'.tr);
                         }
                       }
                     },
@@ -290,11 +290,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
         Text.rich(
           maxLines: 4,
           TextSpan(
-            text: 'By creating an account, I accept \nthe ',
+            text: 'By creating an account, I accept \nthe '.tr,
             style: TextStyle(fontSize: 14.w, fontWeight: FontWeight.w500),
             children: [
               TextSpan(
-                text: 'Terms of Service',
+                text: 'Terms of Service'.tr,
                 style: TextStyle(
                     color: AppColors.primaryColor,
                     fontSize: 14.w,
@@ -304,9 +304,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Get.toNamed(AppRoutes.termsServicesScreen);
                   },
               ),
-              const TextSpan(text: ' & '),
+              TextSpan(text: ' & '.tr),
               TextSpan(
-                text: 'Privacy Policy\n',
+                text: 'Privacy Policy\n'.tr,
                 style: TextStyle(
                     color: AppColors.primaryColor,
                     fontSize: 14.w,
@@ -318,7 +318,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
              // const TextSpan(text: '\n to learn more '),
               TextSpan(
-                text: 'About Us.',
+                text: 'About Us.'.tr,
                 style: TextStyle(
                     color: AppColors.primaryColor,
                     fontSize: 14.w,

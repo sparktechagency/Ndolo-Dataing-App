@@ -34,10 +34,10 @@ class BottomMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     List<BottomNavigationBarItem> menuItems = [
-      getItem(menuIndex == 0 ? AppIcons.homeOut: AppIcons.home, 'Home', theme, 0),
-      getItem(menuIndex == 1 ? AppIcons.matchOut :  AppIcons.match, 'Matches', theme, 1),
-      getItem(menuIndex == 2 ? AppIcons.messageOut: AppIcons.message, 'Message', theme, 2),
-      getItem(menuIndex == 3 ? AppIcons.profileOut: AppIcons.profile, 'Profile', theme, 3),
+      getItem(menuIndex == 0 ? AppIcons.homeOut: AppIcons.home, 'Home'.tr, theme, 0),
+      getItem(menuIndex == 1 ? AppIcons.matchOut :  AppIcons.match, 'Matches'.tr, theme, 1),
+      getItem(menuIndex == 2 ? AppIcons.messageOut: AppIcons.message, 'Message'.tr, theme, 2),
+      getItem(menuIndex == 3 ? AppIcons.profileOut: AppIcons.profile, 'Profile'.tr, theme, 3),
     ];
 
     return Padding(

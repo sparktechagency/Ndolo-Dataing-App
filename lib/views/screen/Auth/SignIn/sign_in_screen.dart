@@ -148,7 +148,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Please enter your email";
+                      return "Please enter your email".tr;
                     }
                     return null;
                   },
@@ -171,7 +171,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Please enter your password";
+                      return "Please enter your password".tr;
                     }
                     return null;
                   },
@@ -187,7 +187,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       if (isChecked) {
                         _authController.handleLogIn();
                       } else {
-                        Fluttertoast.showToast(msg: 'Please remember me');
+                        Fluttertoast.showToast(msg: 'Please remember me'.tr);
                       }
                     }
                   },
@@ -316,7 +316,7 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
         CustomText(
           text: AppStrings.rememberMe.tr,
-          fontSize: 14.sp,
+          fontSize: 12.sp,
         ),
         const Spacer(),
         InkWell(
@@ -325,9 +325,11 @@ class _SignInScreenState extends State<SignInScreen> {
           },
           child: CustomText(
             text: AppStrings.forgot_Password.tr,
-            fontSize: 16.sp,
+            fontSize: 14.sp,
             fontWeight: FontWeight.bold,
             color: AppColors.primaryColor,
+            maxLine: 2,
+            textAlign: TextAlign.start,
           ),
         ),
       ],
