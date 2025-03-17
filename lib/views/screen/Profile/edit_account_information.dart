@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -26,6 +27,8 @@ class EditAccountInformation extends StatefulWidget {
 class _EditAccountInformationState extends State<EditAccountInformation> {
   final ProfileController _profileController = Get.put(ProfileController());
   var parameter = Get.parameters;
+
+
 
   @override
   void initState() {
@@ -227,6 +230,10 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                   bottom: 8.h,
                 ),
                 CustomTextField(
+                  onTab: (){
+                    _profileController.pickCountry(context);
+                  },
+                  readOnly: true,
                   controller: _profileController.countryCTRL,
                   hintText: 'Your Country',
                 ),

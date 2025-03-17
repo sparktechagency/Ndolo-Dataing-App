@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -146,6 +147,27 @@ updateProfile() async {
     super.onClose();
   }
 
+
+  //======================================> Pick Country Name <========================================
+  pickCountry(BuildContext context) async {
+    showCountryPicker(
+      context: context,
+      onSelect: (Country country) {
+        countryCTRL.text = country.name;
+        update();
+      },
+      countryListTheme: CountryListThemeData(
+        backgroundColor: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        inputDecoration: InputDecoration(
+          hintText: 'Search Countries',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      ),
+    );
+  }
 
 
   //============================================> Block controller <====================================
