@@ -57,8 +57,8 @@ class _LocationScreenState extends State<LocationScreen> {
                 loading: _commonLocationController.setLocationLoading.value,
                 onTap: () {
                   _commonLocationController.setLocation(
-                      latitude: currentLat.toString(),
-                      longitude: currentLong.toString());
+                    latitude: currentLat.toString(),
+                    longitude: currentLong.toString());
                 },
                 text: 'User Current Location'.tr),
             SizedBox(height: 16.h),
