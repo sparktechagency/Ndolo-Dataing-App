@@ -290,11 +290,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
         Text.rich(
           maxLines: 4,
           TextSpan(
-            text: 'By creating an account, I accept \nthe '.tr,
+            text: 'By creating an account, I accept the'.tr,
             style: TextStyle(fontSize: 14.w, fontWeight: FontWeight.w500),
             children: [
               TextSpan(
-                text: 'Terms of Service'.tr,
+                text: '\nTerms of Service',
                 style: TextStyle(
                     color: AppColors.primaryColor,
                     fontSize: 14.w,
@@ -306,7 +306,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               TextSpan(text: ' & '.tr),
               TextSpan(
-                text: 'Privacy Policy\n'.tr,
+                text: 'Privacy Policy',
                 style: TextStyle(
                     color: AppColors.primaryColor,
                     fontSize: 14.w,
@@ -316,9 +316,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Get.toNamed(AppRoutes.privacyPolicyScreen);
                   },
               ),
-             // const TextSpan(text: '\n to learn more '),
+              TextSpan(text: ' & '.tr),
               TextSpan(
-                text: 'About Us.'.tr,
+                text: '\nAbout Us.',
                 style: TextStyle(
                     color: AppColors.primaryColor,
                     fontSize: 14.w,
