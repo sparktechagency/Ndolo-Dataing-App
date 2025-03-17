@@ -49,7 +49,7 @@ class _MessageScreenState extends State<MessageScreen> {
             return const Center(child: CustomPageLoading());
           }
           if (controller.conversationModel.isEmpty) {
-            return Center(child: CustomText(text: 'No conversations available.'));
+            return Center(child: CustomText(text: 'No conversations found'.tr));
           }
           return ListView.builder(
             itemCount: controller.conversationModel.length,

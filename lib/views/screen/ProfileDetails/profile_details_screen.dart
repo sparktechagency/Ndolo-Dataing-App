@@ -40,7 +40,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: AppStrings.profileDetails),
+      appBar: CustomAppBar(title: AppStrings.profileDetails.tr),
       body: Obx(() {
         if (_homeController.singleLoading.value) {
           return const Center(child: CustomPageLoading());

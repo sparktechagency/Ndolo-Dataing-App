@@ -343,7 +343,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 bottom: 8.h,
               ),
               _distanceSlider(),
-              _rangeLabels('Minimum', _minDistance, 'Maximum', _maxDistance),
+              _rangeLabels('Minimum'.tr, _minDistance, 'Maximum'.tr, _maxDistance),
 
               SizedBox(height: 24.h),
 
@@ -394,7 +394,7 @@ class _FilterScreenState extends State<FilterScreen> {
               //====================> Find Friends Button <=====================
               CustomButton(
                 onTap: _applyFilters,
-                text: 'Find Friends',
+                text: 'Find Friends'.tr,
               ),
               SizedBox(height: 16.h),
             ],
