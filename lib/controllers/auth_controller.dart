@@ -23,7 +23,7 @@ class AuthController extends GetxController {
     var response = await ApiClient.getData(ApiConstants.interestEndPoint);
     if (response.statusCode == 200) {
       interestsModel.value = List<InterestsModel>.from(response.body['data']
-              ['attributes']['results']
+      ['attributes']['results']
           .map((x) => InterestsModel.fromJson(x)));
       interestsModel.refresh();
       interestsLoading(false);
@@ -92,8 +92,8 @@ class AuthController extends GetxController {
   var verifyLoading = false.obs;
   handleOtpVery(
       {required String email,
-      required String otp,
-      required String screenType}) async {
+        required String otp,
+        required String screenType}) async {
     try {
       var body = {'oneTimeCode': otpCtrl.text, 'email': email};
       var headers = {'Content-Type': 'application/json'};
@@ -158,6 +158,7 @@ class AuthController extends GetxController {
       'email': signInEmailCtrl.text.trim(),
       'password': signInPassCtrl.text.trim(),
       "fcmToken": fcmToken,
+      "loginType": 1
     };
     Response response = await ApiClient.postData(
         ApiConstants.logInEndPoint, json.encode(body),
@@ -225,25 +226,25 @@ class AuthController extends GetxController {
           context: Get.context!,
           barrierDismissible: false,
           builder: (_) => AlertDialog(
-                backgroundColor: AppColors.cardColor,
-                title: CustomText(text: "Password Reset!", fontSize: 20.sp),
-                content: CustomText(
-                  text: "Your password has been reset successfully.",
-                  fontSize: 18.sp,
-                  maxLine: 3,
-                  textAlign: TextAlign.start,
-                ),
-                actions: [
-                  TextButton(
-                      style: ButtonStyle(
-                          backgroundColor:
-                              WidgetStatePropertyAll(AppColors.primaryColor)),
-                      onPressed: () {
-                        Get.toNamed(AppRoutes.signInScreen);
-                      },
-                      child: const Text("Ok"))
-                ],
-              ));
+            backgroundColor: AppColors.cardColor,
+            title: CustomText(text: "Password Reset!", fontSize: 20.sp),
+            content: CustomText(
+              text: "Your password has been reset successfully.",
+              fontSize: 18.sp,
+              maxLine: 3,
+              textAlign: TextAlign.start,
+            ),
+            actions: [
+              TextButton(
+                  style: ButtonStyle(
+                      backgroundColor:
+                      WidgetStatePropertyAll(AppColors.primaryColor)),
+                  onPressed: () {
+                    Get.toNamed(AppRoutes.signInScreen);
+                  },
+                  child: const Text("Ok"))
+            ],
+          ));
     } else {
       debugPrint("error set password ${response.statusText}");
       Fluttertoast.showToast(
@@ -262,7 +263,7 @@ class AuthController extends GetxController {
     changePassLoading(true);
     var body = {"oldPassword": oldPassword, "newPassword": newPassword};
     var response =
-        await ApiClient.postData(ApiConstants.changePassEndPoint, body);
+    await ApiClient.postData(ApiConstants.changePassEndPoint, body);
     print("===============> ${response.body}");
     if (response.statusCode == 200) {
       Fluttertoast.showToast(
@@ -280,7 +281,7 @@ class AuthController extends GetxController {
   }
 
   //======================> Google login Info <============================
-  /* handleGoogleSingIn(String email,String userRole) async {
+  handleGoogleSingIn(String email,String userRole) async {
     var fcmToken=await PrefsHelper.getString(AppConstants.fcmToken);
     // var userRole=await PrefsHelper.getString(AppConstants.userRole);
 
@@ -299,14 +300,54 @@ class AuthController extends GetxController {
     if (response.statusCode == 200) {
       await PrefsHelper.setString(AppConstants.bearerToken,
           response.body['data']['attributes']['tokens']['access']['token']);
-      await PrefsHelper.setString(AppConstants.id, response.body['data']['attributes']['user']['id']);
+      await PrefsHelper.setString(AppConstants.userId, response.body['data']['attributes']['user']['id']);
       await PrefsHelper.setBool(AppConstants.isLogged, true);
       Get.offAllNamed(AppRoutes.homeScreen);
-        await PrefsHelper.setBool(AppConstants.isLogged, true);
+      await PrefsHelper.setBool(AppConstants.isLogged, true);
       update();
     } else {
       ApiChecker.checkApi(response);
       update();
     }
-  }*/
+  }
+
+  //======================> Facebook login Info <============================
+  handleFacebookSignIn(String email, String userRole) async {
+    var fcmToken = await PrefsHelper.getString(AppConstants.fcmToken);
+    // var userRole = await PrefsHelper.getString(AppConstants.userRole);
+
+    Map<String, dynamic> body = {
+      "email": email,
+      "fcmToken": fcmToken ?? "",
+      "role": userRole,
+      "loginType": 3
+    };
+
+    var headers = {'Content-Type': 'application/json'};
+    Response response = await ApiClient.postData(
+      ApiConstants.logInEndPoint,
+      jsonEncode(body),
+      headers: headers,
+    );
+
+    if (response.statusCode == 200) {
+      await PrefsHelper.setString(
+        AppConstants.bearerToken,
+        response.body['data']['attributes']['tokens']['access']['token'],
+      );
+      await PrefsHelper.setString(
+        AppConstants.userId,
+        response.body['data']['attributes']['user']['id'],
+      );
+      await PrefsHelper.setBool(AppConstants.isLogged, true);
+      Get.offAllNamed(AppRoutes.homeScreen);
+      await PrefsHelper.setBool(AppConstants.isLogged, true);
+      update();
+    } else {
+      ApiChecker.checkApi(response);
+      update();
+    }
+  }
+
+
 }

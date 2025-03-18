@@ -46,7 +46,6 @@ class MessageController extends GetxController {
           data.map((x) => ConversationModel.fromJson(x)));
     } else {
       ApiChecker.checkApi(response);
-      Fluttertoast.showToast(msg: '${response.statusText}');
     }
     conversationLoading(false);
   }
