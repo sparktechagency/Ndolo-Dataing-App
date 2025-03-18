@@ -55,7 +55,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
                 //========================> Image Container <==========================
                 CustomNetworkImage(
                   imageUrl:
-                      '${ApiConstants.imageBaseUrl}${user.gallery?[0] ?? ""}',
+                  '${ApiConstants.imageBaseUrl}${user.gallery?[0] ?? ""}',
                   height: 400.h,
                   width: double.infinity,
                   borderRadius: BorderRadius.only(
@@ -74,7 +74,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
                   ),
                   child: Padding(
                     padding:
-                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                    EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                     child: Column(
                       children: [
                         Row(
@@ -96,7 +96,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
                               fontWeight: FontWeight.w500,
                               color: const Color(0xff430750),
                             ),
-                      /*      const Spacer(),
+                            /*      const Spacer(),
                             InkWell(
                               onTap: () {
                                 controller.createConversation(parameter['_id']!);
@@ -140,7 +140,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
                   ),
                   child: Padding(
                     padding:
-                        EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                    EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
                     child: CustomText(
                       text: user.bio ?? "No bio available",
                       fontSize: 14.sp,
@@ -162,16 +162,16 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
                   runSpacing: 8.0,
                   children: List.generate(
                     user.interests?.length ?? 0,
-                    (index) {
+                        (index) {
                       final interest = user.interests![index];
                       return _interestChip(
                         CustomNetworkImage(
                             imageUrl: '${ApiConstants.imageBaseUrl}${interest.icon ?? ""}',
                             height: 24.h,
                             width: 24.w,
-                        boxShape: BoxShape.circle
+                            boxShape: BoxShape.circle
                         ),
-                        interest.name?.capitalize ?? "N/A", // Null check for label
+                        interest.name?.capitalize ?? "N/A",
                       );
                     },
                   ),
@@ -189,12 +189,12 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
                   child: Row(
                     children: List.generate(
                       user.gallery?.length ?? 0,
-                      (index) {
+                          (index) {
                         return Padding(
                           padding: EdgeInsets.only(right: 8.w),
                           child: CustomNetworkImage(
                             imageUrl:
-                                '${ApiConstants.imageBaseUrl}${user.gallery![index] ?? ""}',
+                            '${ApiConstants.imageBaseUrl}${user.gallery![index] ?? ""}',
                             height: 75.h,
                             width: 70.w,
                             borderRadius: BorderRadius.circular(4.r),

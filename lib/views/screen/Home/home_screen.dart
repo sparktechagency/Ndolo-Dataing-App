@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } else if (direction == SwipDirection.Right) {
       _handleLike(index);
     }
-   //_moveToNextCard();
+    //_moveToNextCard();
   }
 
 //==========================> Handle "Like" action (Right swipe) <====================
@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
 //==========================> Handle Like or Dislike when button is pressed <==========================
- /* void _handleLikeDislike(bool isLiked) {
+  /* void _handleLikeDislike(bool isLiked) {
     if (_currentIndex >= _homeController.homeUserModel.length) return;
     if (isLiked) {
       _handleLike(_currentIndex);
@@ -136,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
                 final userList = _homeController.homeUserModel.value;
                 if (userList.isEmpty) {
-                  return Center(child: CustomText(text: "No Users Available"));
+                  return Center(child: CustomText(text: "No users found".tr));
                 }
                 return Column(
                   children: [
@@ -146,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         size: const Size(double.infinity, double.infinity),
                         cards: List.generate(userList.length, (index) {
                           final HomeUserModel user = userList[index];
-                          final String imageUrl = '${ApiConstants.imageBaseUrl}${user.profileImage ?? ""}';
+                          final String imageUrl = user.gallery?.isNotEmpty ?? false ? '${ApiConstants.imageBaseUrl}${user.gallery![0]}' : '';
                           return Stack(
                             fit: StackFit.expand,
                             children: [
@@ -238,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 //==========================> Slide Button <==================
-   _slideButton(Widget icon, Color borderColor) {
+  _slideButton(Widget icon, Color borderColor) {
     return Container(
       decoration: BoxDecoration(
           shape: BoxShape.circle,
