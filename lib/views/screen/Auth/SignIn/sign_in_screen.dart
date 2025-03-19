@@ -233,7 +233,9 @@ class _SignInScreenState extends State<SignInScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        _authController.handleGoogleSignIn(context);
+                      },
                       child: Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(16.r),
