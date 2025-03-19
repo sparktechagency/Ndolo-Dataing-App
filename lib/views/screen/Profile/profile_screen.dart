@@ -62,8 +62,7 @@ class ProfileScreen extends StatelessWidget {
                             children: [
                               //=========================> Cover Picture <=======================
                               CustomNetworkImage(
-                                imageUrl:
-                                    '${ApiConstants.imageBaseUrl}${_profileController.profileModel.value.coverImage}',
+                                imageUrl: '${ApiConstants.imageBaseUrl}${_profileController.profileModel.value.coverImage}',
                                 height: 135.h,
                                 width: 345.w,
                                 borderRadius: BorderRadius.circular(8.r),

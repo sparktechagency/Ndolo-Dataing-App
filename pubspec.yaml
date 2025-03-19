@@ -81,6 +81,7 @@ dependencies:
   google_sign_in: ^6.2.2
   zego_express_engine: ^3.19.0
   flutter_localization:
+  floating: ^6.0.0
 
 
 
