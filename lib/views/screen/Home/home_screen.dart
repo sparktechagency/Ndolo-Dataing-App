@@ -10,6 +10,7 @@ import 'package:ndolo_dating/utils/app_images.dart';
 import 'package:tcard/tcard.dart';
 import '../../../helpers/route.dart';
 import '../../base/bottom_menu..dart';
+import '../../base/custom_page_loading.dart';
 import '../../base/custom_text.dart';
 import '../../base/custom_tinder_card.dart';
 
@@ -132,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: Obx(() {
                 if (_homeController.homeLoading.value) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: CustomPageLoading());
                 }
                 final userList = _homeController.homeUserModel.value;
                 if (userList.isEmpty) {
@@ -146,7 +147,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         size: const Size(double.infinity, double.infinity),
                         cards: List.generate(userList.length, (index) {
                           final HomeUserModel user = userList[index];
-                          final String imageUrl = user.gallery?.isNotEmpty ?? false ? '${ApiConstants.imageBaseUrl}${user.gallery![0]}' : '';
+                          final String imageUrl = (user.gallery?.isNotEmpty ?? false)
+                              ? '${ApiConstants.imageBaseUrl}${user.gallery![0]}'
+                              : 'https://example.com/placeholder-image.png';
                           return Stack(
                             fit: StackFit.expand,
                             children: [
