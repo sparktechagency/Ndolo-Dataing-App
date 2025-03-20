@@ -43,5 +43,6 @@ class ApiConstants {
   static  String getUserByIdEndPoint (String id) =>  "/users/$id";
   static  String deleteConversationEndPoint (String id) =>  "/conversation/$id";
   static  String reportEndPoint =  "/report";
+  static  String notificationEndPoint =  "/info/notifications";
 
 }
