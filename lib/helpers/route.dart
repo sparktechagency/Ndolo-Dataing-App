@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:ndolo_dating/views/screen/Location/set_distance_screen.dart';
 import '../views/screen/AboutUs/about_us_screen.dart';
 import '../views/screen/Auth/ChangePass/change_password_screen.dart';
 import '../views/screen/Auth/CompleteProfile/complete_profile_screen.dart';
@@ -57,6 +58,7 @@ class AppRoutes{
   static String searchResultScreen="/search_result_screen";
   static String locationPickerScreen="/location_picker_screen";
   static String locationScreen="/location_screen";
+  static String setDistanceScreen="/set_distance_screen";
 
  static List<GetPage> page=[
     GetPage(name:splashScreen, page: ()=>const SplashScreen()),
@@ -77,6 +79,7 @@ class AppRoutes{
     GetPage(name:profileScreen, page: ()=> ProfileScreen(),transition: Transition.noTransition),
     GetPage(name:chatScreen, page: ()=> ChatScreen()),
     GetPage(name:settingsScreen, page: ()=> SettingsScreen()),
+    GetPage(name:setDistanceScreen, page: ()=> SetDistanceScreen()),
     GetPage(name:accountInformationScreen, page: ()=> const AccountInformationScreen()),
     GetPage(name:editAccountInformation, page: ()=> EditAccountInformation()),
     GetPage(name:aboutUsScreen, page: ()=> AboutUsScreen()),

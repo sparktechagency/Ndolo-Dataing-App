@@ -221,20 +221,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 width: 32.w, height: 32.h),
                           )),
                     ),
-                    SizedBox(width: 12.w),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16.r),
-                              border: Border.all(
-                                  width: 1.w, color: AppColors.primaryColor)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Image.asset(AppImages.facebookLogo,
-                                width: 32.w, height: 32.h),
-                          )),
-                    ),
+                    // SizedBox(width: 12.w),
+                    // GestureDetector(
+                    //   onTap: () {},
+                    //   child: Container(
+                    //       decoration: BoxDecoration(
+                    //           borderRadius: BorderRadius.circular(16.r),
+                    //           border: Border.all(
+                    //               width: 1.w, color: AppColors.primaryColor)),
+                    //       child: Padding(
+                    //         padding: const EdgeInsets.all(8.0),
+                    //         child: Image.asset(AppImages.facebookLogo,
+                    //             width: 32.w, height: 32.h),
+                    //       )),
+                    // ),
                     // Image.asset(AppImages.facebookLogo, width: 32.w, height: 32.h)
                   ],
                 ),
