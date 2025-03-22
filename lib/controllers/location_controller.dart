@@ -67,18 +67,15 @@ class LocationController extends GetxController {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         await PrefsHelper.setBool(AppConstants.hasUpdateGallery, true);
-        Fluttertoast.showToast(msg: "Your location distance is set successfully");
-        Get.back();  // Navigate to the next screen
+        Get.back();
       } else {
-        Fluttertoast.showToast(msg: "Failed to update location: ${response.body}");
         print("Failed: ${response.body}");
       }
     } catch (e) {
       setDistanceLoading(false);
       print("Error in API call: $e");
-      Fluttertoast.showToast(msg: "Error updating location");
     } finally {
-      setDistanceLoading(false);  // Stop loading state
+      setDistanceLoading(false);
     }
   }
 

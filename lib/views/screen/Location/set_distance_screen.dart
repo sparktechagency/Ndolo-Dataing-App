@@ -36,7 +36,7 @@ class _SetDistanceScreenState extends State<SetDistanceScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
-            CustomText(text: AppStrings.distanceLabel,),
+            CustomText(text: AppStrings.distanceLabel.tr, fontSize: 16.sp, fontWeight: FontWeight.bold,),
             const SizedBox(height: 16.0,),
             CustomTextField(
               controller: _locationController.locationDistanceController,

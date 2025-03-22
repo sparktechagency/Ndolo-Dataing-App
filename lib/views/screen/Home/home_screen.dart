@@ -149,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           final HomeUserModel user = userList[index];
                           final String imageUrl = (user.gallery?.isNotEmpty ?? false)
                               ? '${ApiConstants.imageBaseUrl}${user.gallery![0]}'
-                              : 'https://example.com/placeholder-image.png';
+                              : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
                           return Stack(
                             fit: StackFit.expand,
                             children: [
