@@ -11,7 +11,9 @@ import '../utils/app_constants.dart';
 
 class LocationController extends GetxController {
   var locationNameController = TextEditingController();
+  var locationDistanceController = TextEditingController();
   var setLocationLoading = false.obs;
+  var setDistanceLoading = false.obs;
 
   setLocation({required String latitude, required String longitude}) async {
     var body = {
@@ -44,6 +46,36 @@ class LocationController extends GetxController {
       Fluttertoast.showToast(msg: "Error updating location");
     } finally {
       setLocationLoading(false);  // Stop loading state
+    }
+  }
+
+  setDistance() async {
+    var body = {
+      "setDistance": int.parse(locationDistanceController.text.trim()),
+    };
+    String bearerToken = await PrefsHelper.getString(AppConstants.bearerToken);
+    var headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $bearerToken',
+    };
+    try {
+      setDistanceLoading(true);
+      Response response = await ApiClient.postData(
+          ApiConstants.setDistanceEndPoint, jsonEncode(body),
+          headers: headers);
+      print("Response: ${response.body}, Status: ${response.statusCode}");
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        await PrefsHelper.setBool(AppConstants.hasUpdateGallery, true);
+        Get.back();
+      } else {
+        print("Failed: ${response.body}");
+      }
+    } catch (e) {
+      setDistanceLoading(false);
+      print("Error in API call: $e");
+    } finally {
+      setDistanceLoading(false);
     }
   }
 

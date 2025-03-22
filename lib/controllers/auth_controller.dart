@@ -311,6 +311,9 @@ class AuthController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
    handleGoogleSignIn(BuildContext context) async {
+     await _auth.signOut();
+     await googleSignIn.signOut();
+
      final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
      if (googleSignInAccount != null) {
        final GoogleSignInAuthentication googleSignInAuthentication =
@@ -335,11 +338,20 @@ class AuthController extends GetxController {
            'Authorization': 'Bearer $bearerToken',
          };
          Response response = await ApiClient.postData(ApiConstants.logInEndPoint, jsonEncode(body), headers: headers);
+         print("response on google login :${response.body}");
+
          if (response.statusCode == 200) {
            await PrefsHelper.setString(AppConstants.bearerToken, response.body['data']['attributes']['tokens']['access']['token']);
            await PrefsHelper.setString(AppConstants.userId, response.body['data']['attributes']['user']['id']);
-           await PrefsHelper.setBool(AppConstants.isLogged, true);
-           Get.offAllNamed(AppRoutes.uploadPhotosScreen);
+
+           var condition = response.body['data']['attributes']['user']['gallery'];
+           if( condition.isEmpty){
+             Get.offAllNamed(AppRoutes.uploadPhotosScreen);
+           } else {
+             await PrefsHelper.setBool(AppConstants.isLogged, true);
+             Get.offAllNamed(AppRoutes.homeScreen);
+           }
+           // Get.offAllNamed(AppRoutes.uploadPhotosScreen);
            update();
          } else {
            ApiChecker.checkApi(response);

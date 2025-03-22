@@ -12,6 +12,8 @@ class AppStrings {
   static String phoneNumber = 'Phone Number';
   static String userPassword = 'User Password';
   static String password = 'Password';
+  static String distanceLabel = 'Distance';
+  static String distanceHint = 'Enter your distance';
   static String firstName = 'First Name';
   static String profileImage = 'Profile Image';
   static String coverImage = 'Cover Image';

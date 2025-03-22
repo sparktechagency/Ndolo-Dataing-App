@@ -39,7 +39,7 @@ class SettingsScreen extends StatelessWidget {
               ),
               //=====================> Set a distance  List Tile <===================
               CustomListTile(
-                onTap: () {},
+                onTap: () {Get.toNamed(AppRoutes.setDistanceScreen);},
                 title: AppStrings.setDistance.tr,
                 prefixIcon: SvgPicture.asset(AppIcons.location),
                 suffixIcon: SvgPicture.asset(AppIcons.rightArrow),
