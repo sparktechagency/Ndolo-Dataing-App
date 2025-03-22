@@ -169,6 +169,7 @@ class AuthController extends GetxController {
     if (response.statusCode == 200) {
       await PrefsHelper.setString(AppConstants.bearerToken, response.body['data']['attributes']['tokens']['access']['token']);
       await PrefsHelper.setString(AppConstants.userId, response.body['data']['attributes']['user']['id']);
+      await PrefsHelper.setString(AppConstants.userName, response.body['data']['attributes']['user']['firstName']);
       await PrefsHelper.setBool(AppConstants.isLogged, true);
       var condition = response.body['data']['attributes']['user']['gallery'];
       if( condition.isEmpty){
@@ -343,7 +344,7 @@ class AuthController extends GetxController {
          if (response.statusCode == 200) {
            await PrefsHelper.setString(AppConstants.bearerToken, response.body['data']['attributes']['tokens']['access']['token']);
            await PrefsHelper.setString(AppConstants.userId, response.body['data']['attributes']['user']['id']);
-
+           await PrefsHelper.setString(AppConstants.userName, response.body['data']['attributes']['user']['fullName']);
            var condition = response.body['data']['attributes']['user']['gallery'];
            if( condition.isEmpty){
              Get.offAllNamed(AppRoutes.uploadPhotosScreen);
@@ -383,6 +384,7 @@ class AuthController extends GetxController {
     if (response.statusCode == 200) {
       await PrefsHelper.setString(AppConstants.bearerToken, response.body['data']['attributes']['tokens']['access']['token']);
       await PrefsHelper.setString(AppConstants.userId, response.body['data']['attributes']['user']['id']);
+      await PrefsHelper.setString(AppConstants.userName, response.body['data']['attributes']['user']['firstName']);
       await PrefsHelper.setBool(AppConstants.isLogged, true);
       Get.offAllNamed(AppRoutes.homeScreen);
       await PrefsHelper.setBool(AppConstants.isLogged, true);

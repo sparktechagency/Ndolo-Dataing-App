@@ -13,6 +13,7 @@ class AppConstants{
   static String isLogged = "IsLogged";
   static String hasUpdateGallery  = "hasUpdateGallery";
   static String userId = "id";
+  static String userName = "userName";
 
   // share preference Key
   static String THEME ="theme";

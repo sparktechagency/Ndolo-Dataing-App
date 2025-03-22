@@ -9,9 +9,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ndolo_dating/helpers/route.dart';
 import 'package:ndolo_dating/service/api_constants.dart';
 import 'package:ndolo_dating/views/base/custom_page_loading.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
+import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 import '../../../../../utils/app_colors.dart';
 import '../../../../../utils/app_icons.dart';
 import '../../../controllers/messages/message_controller.dart';
@@ -33,9 +35,10 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final MessageController _controller = Get.put(MessageController());
   TextEditingController messageController = TextEditingController();
+  final params = Get.parameters;
   var conversationId = "";
   var currentUserId = "";
-  var currentUserImage = "";
+  var currentUserName = "";
   var receiverImage = "";
   var receiverName = "";
   var receiverId = "";
@@ -47,14 +50,15 @@ class _ChatScreenState extends State<ChatScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getUserId();
       conversationId = Get.parameters['conversationId']!;
+      conversationId = params['conversationId'] ?? "";
       if (conversationId.isEmpty) {
         Fluttertoast.showToast(msg: "Invalid conversation ID");
         return;
       }
-      currentUserId = Get.parameters['currentUserId']!;
-      receiverImage = Get.parameters['receiverImage']!;
-      receiverName = Get.parameters['receiverName']!;
-      receiverId = Get.parameters['receiverId']!;
+      currentUserId = params['currentUserId'] ?? "";
+      receiverImage = params['receiverImage'] ?? "";
+      receiverName = params['receiverName'] ?? "";
+      receiverId = params['receiverId'] ?? "";
       _controller.inboxFirstLoad(conversationId);
       _controller.listenMessage(conversationId);
     });
@@ -62,14 +66,23 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void dispose() {
+    messageController.dispose();
     super.dispose();
   }
 
   getUserId() async {
     currentUserId = await PrefsHelper.getString(AppConstants.userId);
+    currentUserName = await PrefsHelper.getString(AppConstants.userName);
     if (kDebugMode) {
       print('currentId ======================> $currentUserId');
+      print('currentUserName ======================> $currentUserName');
     }
+  }
+
+  Future<void> _refreshMessages() async {
+    getUserId();
+    _controller.inboxFirstLoad(conversationId);
+    _controller.listenMessage(conversationId);
   }
 
   @override
@@ -92,17 +105,21 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             CustomNetworkImage(
               imageUrl:
-              "${ApiConstants.imageBaseUrl}${Get.parameters["receiverImage"]}",
+                  "${ApiConstants.imageBaseUrl}${Get.parameters["receiverImage"]}",
               height: 45.h,
               width: 45.w,
               boxShape: BoxShape.circle,
             ),
             SizedBox(width: 12.w),
-            CustomText(
-              text: "${Get.parameters["receiverName"]}",
-              fontSize: 18.sp,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
+            Flexible(
+              child: CustomText(
+                text: "${Get.parameters["receiverName"]}",
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w700,
+                textAlign: TextAlign.start,
+                maxLine: 2,
+                color: Colors.white,
+              ),
             ),
           ],
         ),
@@ -110,17 +127,24 @@ class _ChatScreenState extends State<ChatScreen> {
         actions: [
           InkWell(
               onTap: () {
-                actionButton(
-                    context, false, Get.parameters['receiverId']!,
-                    Get.parameters['receiverName']!, Get.parameters['conversationId']);
+                Get.to(() => CallMethod(
+                      conversationID: conversationId,
+                      userID: receiverId,
+                      userName: receiverName,
+                    config: ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall(),
+                    ));
               },
               child: SvgPicture.asset(AppIcons.audio)),
           SizedBox(width: 16.w),
           InkWell(
               onTap: () {
-                actionButton(
-                    context, true, Get.parameters['receiverId']!,
-                    Get.parameters['receiverName']!, Get.parameters['conversationId']);
+                Get.to(() => CallMethod(
+                      conversationID: conversationId,
+                      userID: receiverId,
+                      userName: receiverName,
+                  config: ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall(),
+
+                ));
               },
               child: SvgPicture.asset(AppIcons.video)),
           SizedBox(width: 24.w),
@@ -144,28 +168,76 @@ class _ChatScreenState extends State<ChatScreen> {
                 Expanded(
                   child: Stack(
                     children: [
-                      GroupedListView<MessageModel, DateTime>(
-                        elements: _controller.messageModel.value,
-                        controller: _controller.scrollController,
-                        padding: EdgeInsets.symmetric(horizontal: 20.w),
-                        order: GroupedListOrder.DESC,
-                        itemComparator: (item1, item2) =>
-                            item1.createdAt!.compareTo(item2.createdAt!),
-                        groupBy: (MessageModel message) => DateTime(
-                            message.createdAt!.year,
-                            message.createdAt!.month,
-                            message.createdAt!.day),
-                        reverse: true,
-                        shrinkWrap: true,
-                        groupSeparatorBuilder: (DateTime date) {
-                          return const SizedBox();
-                        },
-                        itemBuilder: (context, MessageModel message) {
-                          return message.msgByUserId!.id == currentUserId
-                              ? senderBubble(context, message)
-                              : receiverBubble(context, message);
-                        },
+                      RefreshIndicator(
+                        onRefresh: _refreshMessages,
+                        child: GroupedListView<MessageModel, DateTime>(
+                          elements: _controller.messageModel.value,
+                          controller: _controller.scrollController,
+                          padding: EdgeInsets.symmetric(horizontal: 20.w),
+                          order: GroupedListOrder.DESC,
+                          itemComparator: (item1, item2) =>
+                              item1.createdAt!.compareTo(item2.createdAt!),
+                          groupBy: (MessageModel message) => DateTime(
+                              message.createdAt!.year,
+                              message.createdAt!.month,
+                              message.createdAt!.day),
+                          reverse: true,
+                          shrinkWrap: true,
+                          groupSeparatorBuilder: (DateTime date) {
+                            return const SizedBox();
+                          },
+                          itemBuilder: (context, MessageModel message) {
+                            return message.msgByUserId!.id == currentUserId
+                                ? senderBubble(context, message)
+                                : receiverBubble(context, message);
+                          },
+                        ),
                       ),
+                      //=====================================> Show Select Image <=====================
+                      Positioned(
+                          bottom: -5.h,
+                          child: Column(
+                            children: [
+                              if (_controller.imagesPath.value.isNotEmpty)
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 8.h),
+                                  child: Stack(
+                                    alignment: Alignment.topRight,
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(12.r),
+                                        child: Image.file(
+                                          File(_controller.imagesPath.value),
+                                          height: 120.h,
+                                          width: 120.h,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      Positioned(
+                                        right: 4.w,
+                                        top: 4.h,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            _controller.imagesPath.value = "";
+                                            _controller.update();
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Colors.black54,
+                                            ),
+                                            child: Icon(Icons.close,
+                                                color: Colors.white,
+                                                size: 18.w),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                            ],
+                          ))
                     ],
                   ),
                 ),
@@ -190,7 +262,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   controller: messageController,
                   hintText: "Type something…",
                   suffixIcons: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
+                    padding:
+                        EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
                     child: GestureDetector(
                         onTap: () {
                           openGallery();
@@ -202,8 +275,10 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
               GestureDetector(
                 onTap: () {
-                  if (messageController.text.isNotEmpty && !_controller.sentMessageLoading.value ) {
-                    _controller.sentMessage(conversationId, 'text', messageController.text);
+                  if (messageController.text.isNotEmpty &&
+                      !_controller.sentMessageLoading.value) {
+                    _controller.sentMessage(
+                        conversationId, 'text', messageController.text);
                     messageController.clear();
                   } else if (_controller.imagesPath.value.isNotEmpty) {
                     _controller.sentImage(conversationId, 'image');
@@ -232,6 +307,7 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  // receiverBubble and senderBubble remain the same as previous code...
   receiverBubble(BuildContext context, MessageModel message) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -257,18 +333,19 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: [
                   message.type == 'image' && message.imageUrl != null
                       ? CustomNetworkImage(
-                      imageUrl: '${ApiConstants.imageBaseUrl}${message.imageUrl}',
-                      borderRadius: BorderRadius.circular(8.r),
-                      height: 140.h,
-                      width: 155.w)
+                          imageUrl:
+                              '${ApiConstants.imageBaseUrl}${message.imageUrl}',
+                          borderRadius: BorderRadius.circular(8.r),
+                          height: 140.h,
+                          width: 155.w)
                       : Text(
-                    '${message.text}',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16.sp,
-                    ),
-                    textAlign: TextAlign.start,
-                  ),
+                          '${message.text}',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16.sp,
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     mainAxisSize: MainAxisSize.min,
@@ -314,15 +391,17 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: [
                   message.type == 'image' && message.imageUrl != null
                       ? CustomNetworkImage(
-                      imageUrl: '${ApiConstants.imageBaseUrl}${message.imageUrl}',
-                      borderRadius: BorderRadius.circular(8.r),
-                      height: 140.h,
-                      width: 155.w)
+                          imageUrl:
+                              '${ApiConstants.imageBaseUrl}${message.imageUrl}',
+                          borderRadius: BorderRadius.circular(8.r),
+                          height: 140.h,
+                          width: 155.w)
                       : Text(
-                    "${message.text}",
-                    style: TextStyle(color: Colors.white, fontSize: 16.sp),
-                    textAlign: TextAlign.start,
-                  ),
+                          "${message.text}",
+                          style:
+                              TextStyle(color: Colors.white, fontSize: 16.sp),
+                          textAlign: TextAlign.start,
+                        ),
                   Text(
                     '${TimeFormatHelper.timeAgo(message.createdAt!)}',
                     textAlign: TextAlign.right,
@@ -339,26 +418,37 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future<void> openGallery() async {
     final pickedFile =
-    await ImagePicker().pickImage(source: ImageSource.gallery);
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       _controller.imagesPath.value = pickedFile.path;
       _controller.update();
     }
   }
+}
 
-  ZegoSendCallInvitationButton actionButton(
-      BuildContext context, bool isVideo, String userId, String name, conversationId) {
-    return ZegoSendCallInvitationButton(
-      invitees: [
-        ZegoUIKitUser(
-          id: userId,
-          name: name,
-        )
-      ],
-      buttonSize: const Size(30, 30),
-      iconSize: const Size(30, 30),
-      resourceID: 'zegouikit_call',
-      isVideoCall: isVideo,
+class CallMethod extends StatelessWidget {
+  final String userID;
+  final String userName;
+  final String conversationID;
+  final ZegoUIKitPrebuiltCallConfig config;
+
+  const CallMethod({
+    Key? key,
+    required this.userID,
+    required this.userName,
+    required this.conversationID,
+    required this.config,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ZegoUIKitPrebuiltCall(
+      appID: 1059598849,
+      appSign: '6ea42a0e9c416a604335cf5d521cc0120cf4244d4dac79a6c0419eba10150a99',
+      userID: userID,
+      userName: userName,
+      callID: conversationID,
+      config: config,
     );
   }
 }
