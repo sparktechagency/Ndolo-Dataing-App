@@ -454,14 +454,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.4.1"
-  flutter_callkit_incoming_yoer:
+  flutter_callkit_incoming:
     dependency: transitive
     description:
-      name: flutter_callkit_incoming_yoer
-      sha256: c78b31049e4d7c94ad26619c115b2ded893733da34b3b6b0c5a987ec3dd69d54
+      name: flutter_callkit_incoming
+      sha256: a743285fc19a2337dd955d8707dde557a192a408b5ac7afe95ca8b987647b2e4
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.4+3"
+    version: "2.5.1"
   flutter_chat_bubble:
     dependency: "direct main"
     description:
@@ -1838,10 +1838,10 @@ packages:
     dependency: "direct main"
     description:
       name: zego_uikit_prebuilt_call
-      sha256: e533a93fac112e9684696d4e7f062e5dc58750c963b95e6c59504b74d6c569f9
+      sha256: b2f090babedff7cba359c14daa170828cc4df81da57deafcd824edd4e0251a2c
       url: "https://pub.dev"
     source: hosted
-    version: "4.16.24"
+    version: "4.17.0-beta.14"
   zego_uikit_signaling_plugin:
     dependency: "direct main"
     description:
