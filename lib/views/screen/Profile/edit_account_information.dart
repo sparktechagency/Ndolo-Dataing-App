@@ -9,8 +9,10 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:ndolo_dating/controllers/profile_controller.dart';
 import 'package:ndolo_dating/utils/app_icons.dart';
 import 'package:ndolo_dating/views/base/custom_text_field.dart';
+import '../../../helpers/prefs_helpers.dart';
 import '../../../service/api_constants.dart';
 import '../../../utils/app_colors.dart';
+import '../../../utils/app_constants.dart';
 import '../../../utils/app_strings.dart';
 import '../../base/custom_app_bar.dart';
 import '../../base/custom_button.dart';
@@ -42,9 +44,17 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
     _profileController.bioCTRL.text = Get.parameters['bio'] ?? '';
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _profileController.getProfileData();
+      _loadProfileData();
     });
   }
 
+  _loadProfileData() async {
+    await _profileController.getProfileData();
+    _profileController.countryCTRL.text = await PrefsHelper.getString(AppConstants.userCountry);
+    _profileController.stateCTRL.text = await PrefsHelper.getString(AppConstants.userState);
+    _profileController.cityCTRL.text = await PrefsHelper.getString(AppConstants.userCity);
+    _profileController.addressCTRL.text = await PrefsHelper.getString(AppConstants.userAddress);
+  }
 
   @override
   Widget build(BuildContext context) {

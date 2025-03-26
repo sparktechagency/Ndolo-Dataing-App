@@ -14,6 +14,8 @@ import 'package:ndolo_dating/views/base/custom_page_loading.dart';
 import 'package:ndolo_dating/views/base/custom_text.dart';
 
 import '../../../controllers/messages/message_controller.dart';
+import '../../../helpers/prefs_helpers.dart';
+import '../../../utils/app_constants.dart';
 
 class ProfileDetailsScreen extends StatefulWidget {
   const ProfileDetailsScreen({super.key});
@@ -27,7 +29,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
   final MessageController controller = Get.put(MessageController());
   var parameter = Get.parameters;
 
-  @override
+  /*@override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -35,7 +37,23 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
         _homeController.getSingleUserData(parameter['profileId']!);
       }
     });
+  }*/
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (parameter['profileId'] != null) {
+        await _homeController.getSingleUserData(parameter['profileId']!);
+        String updatedAddress = await PrefsHelper.getString(AppConstants.userAddress);
+        setState(() {
+          _homeController.singleUserModel.value.address = updatedAddress;
+        });
+        _homeController.getUserData();
+      }
+    });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -116,10 +134,10 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
                               color: Colors.black,
                             ),
                             SizedBox(width: 8.w),
-                            CustomText(
-                              text: user.address ?? "N/A",
+                             CustomText(
+                              text: _homeController.userAddress.value ?? "N/A",
                               fontSize: 18.sp,
-                            ),
+                            )
                           ],
                         ),
                       ],

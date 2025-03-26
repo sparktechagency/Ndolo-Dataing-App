@@ -1,0 +1,2 @@
+C:/Users/Mr. SwApon/StudioProjects/ndolo_dating/android/app/.cxx/RelWithDebInfo/2n4q6g24/x86/CMakeFiles/edit_cache.dir
+C:/Users/Mr. SwApon/StudioProjects/ndolo_dating/android/app/.cxx/RelWithDebInfo/2n4q6g24/x86/CMakeFiles/rebuild_cache.dir
