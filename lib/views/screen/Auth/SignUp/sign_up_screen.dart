@@ -26,6 +26,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final AuthController _authController = Get.put(AuthController());
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isChecked = false;
+  bool isCheckedYears = false;
 
   @override
   Widget build(BuildContext context) {
@@ -150,18 +151,41 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   },
                 ),
                 SizedBox(height: 16.h),
+                CustomTextField(
+                  isPassword: true,
+                  controller: _authController.confirmPassCTR,
+                  hintText: AppStrings.confirmPassword.tr,
+                  prefixIcon: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    child: SvgPicture.asset(AppIcons.lock),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter confirm password".tr;
+                    }
+                    else if(_authController.passCTR.text != _authController.confirmPassCTR.text){
+                      return "Password doesn't match".tr;
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 16.h),
                 //=======================> Agree with <=====================
+                _checkboxSectionYears(),
+                SizedBox(height: 8.h),
                 _checkboxSection(),
                 SizedBox(height: 16.h),
+
                 //=======================> Sign Up Button <=====================
                 CustomButton(
                     onTap: () {
                       if (_formKey.currentState!.validate()) {
-                        if (isChecked) {
+                        if (isChecked && isCheckedYears) {
                           Get.toNamed(AppRoutes.completeProfileScreen);
-                        } else {
+                        }
+                        else {
                           Fluttertoast.showToast(
-                              msg: 'Please accept Terms & Conditions'.tr);
+                              msg: 'Please accept Terms & Conditions and 18 years old'.tr);
                         }
                       }
                     },
@@ -208,7 +232,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        _authController.handleGoogleSignIn(context);
+                        if (isChecked && isCheckedYears) {
+                          _authController.handleGoogleSignIn(context);
+                        }
+                        else {
+                          Fluttertoast.showToast(
+                              msg: 'Please accept Terms & Conditions and 18 years old'.tr);
+                        }
                       },
                       child: Container(
                           decoration: BoxDecoration(
@@ -318,19 +348,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Get.toNamed(AppRoutes.privacyPolicyScreen);
                   },
               ),
-              TextSpan(text: ' & '.tr),
-              TextSpan(
-                text: '\nAbout Us.',
-                style: TextStyle(
-                    color: AppColors.primaryColor,
-                    fontSize: 14.w,
-                    fontWeight: FontWeight.w500),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    Get.toNamed(AppRoutes.aboutUsScreen);
-                  },
-              ),
             ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  _checkboxSectionYears() {
+    return Row(
+      children: [
+        Checkbox(
+          checkColor: Colors.white,
+          activeColor: AppColors.primaryColor,
+          focusColor: AppColors.greyColor,
+          value: isCheckedYears,
+          onChanged: (bool? value) {
+            setState(() {
+              isCheckedYears = value ?? false;
+            });
+          },
+          side: BorderSide(
+            color: isCheckedYears ? AppColors.primaryColor : AppColors.primaryColor,
+            width: 1.w,
+          ),
+        ),
+        Text.rich(
+          maxLines: 4,
+          TextSpan(
+            text: 'I confirm that I am 18 years old or older.'.tr,
+            style: TextStyle(fontSize: 14.w, fontWeight: FontWeight.w500),
           ),
         ),
       ],

@@ -42,6 +42,7 @@ class AuthController extends GetxController {
   final TextEditingController lastNameCTR = TextEditingController();
   final TextEditingController emailCTR = TextEditingController();
   final TextEditingController passCTR = TextEditingController();
+  final TextEditingController confirmPassCTR = TextEditingController();
   final TextEditingController birthDateCTRL = TextEditingController();
   final TextEditingController addressCTRL = TextEditingController();
   final TextEditingController bioCTRL = TextEditingController();
