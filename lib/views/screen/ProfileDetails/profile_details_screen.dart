@@ -29,7 +29,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
   final MessageController controller = Get.put(MessageController());
   var parameter = Get.parameters;
 
-  /*@override
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -37,22 +37,8 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
         _homeController.getSingleUserData(parameter['profileId']!);
       }
     });
-  }*/
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (parameter['profileId'] != null) {
-        await _homeController.getSingleUserData(parameter['profileId']!);
-        String updatedAddress = await PrefsHelper.getString(AppConstants.userAddress);
-        setState(() {
-          _homeController.singleUserModel.value.address = updatedAddress;
-        });
-        _homeController.getUserData();
-      }
-    });
   }
+
 
 
   @override
@@ -135,7 +121,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
                             ),
                             SizedBox(width: 8.w),
                              CustomText(
-                              text: _homeController.userAddress.value ?? "N/A",
+                              text: user.country ?? "N/A",
                               fontSize: 18.sp,
                             )
                           ],

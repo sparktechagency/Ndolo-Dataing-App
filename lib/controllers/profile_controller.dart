@@ -29,7 +29,6 @@ class ProfileController extends GetxController {
       update();
     }
   }
-
   //===============================> Update Profile Data <=============================
   RxString profileImagePath = ''.obs;
   RxString coverImagePath = ''.obs;

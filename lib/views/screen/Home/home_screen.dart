@@ -164,11 +164,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    CustomText(
-                                      text: '${user.firstName ?? "N/A"}, ${user.age ?? "N/A"}',
-                                      fontSize: 32.sp,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.white,
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Flexible(
+                                          child: CustomText(
+                                            text: user.fullName ?? "N/A",
+                                            fontSize: 24.sp,
+                                            fontWeight: FontWeight.w700,
+                                            maxLine: 2,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        CustomText(
+                                          text: ', ${user.age ?? "N/A"}',
+                                          fontSize: 24.sp,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white,
+                                        ),
+                                      ],
                                     ),
                                     SizedBox(height: 6.h),
                                     Row(
@@ -178,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         SizedBox(width: 4.w),
                                         Flexible(
                                           child: CustomText(
-                                            text: user.address ?? "N/A",
+                                            text: user.country ?? "N/A",
                                             color: Colors.white,
                                             maxLine: 2,
                                             textAlign: TextAlign.start,

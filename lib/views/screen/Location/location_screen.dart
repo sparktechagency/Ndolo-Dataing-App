@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:ndolo_dating/utils/app_colors.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../../controllers/location_controller.dart';
+import '../../../controllers/profile_controller.dart';
 import '../../../helpers/prefs_helpers.dart';
 import '../../../helpers/route.dart';
 import '../../../utils/app_constants.dart';
@@ -23,8 +24,8 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-  final LocationController _commonLocationController =
-      Get.put(LocationController());
+  final LocationController _commonLocationController = Get.put(LocationController());
+
   var currentLat = 0.0;
   var currentLong = 0.0;
 
@@ -58,10 +59,9 @@ class _LocationScreenState extends State<LocationScreen> {
             CustomButton(
                 loading: _commonLocationController.setLocationLoading.value,
                 onTap: () {
-                  _commonLocationController.setLocation(
-                    latitude: currentLat.toString(),
-                    longitude: currentLong.toString());
-
+                  _commonLocationController.setLocation();
+                   /* latitude: currentLat.toString(),
+                    longitude: currentLong.toString());*/
                 },
                 text: 'User Current Location'.tr),
             SizedBox(height: 16.h),
