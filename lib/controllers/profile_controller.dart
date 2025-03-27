@@ -29,7 +29,6 @@ class ProfileController extends GetxController {
       update();
     }
   }
-
   //===============================> Update Profile Data <=============================
   RxString profileImagePath = ''.obs;
   RxString coverImagePath = ''.obs;
@@ -50,7 +49,7 @@ updateProfile() async {
     'firstName' : firstNameCTRL.text,
     'lastName' : lastNameCTRL.text,
     'phoneNumber' : phoneNumberCTRL.text,
-    'dataOfBirth' : dateBirthCTRL.text,
+    'dateOfBirth' : dateBirthCTRL.text,
     'country' : countryCTRL.text,
     'state' : stateCTRL.text,
     'city' : cityCTRL.text,

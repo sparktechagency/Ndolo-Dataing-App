@@ -9,8 +9,10 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:ndolo_dating/controllers/profile_controller.dart';
 import 'package:ndolo_dating/utils/app_icons.dart';
 import 'package:ndolo_dating/views/base/custom_text_field.dart';
+import '../../../helpers/prefs_helpers.dart';
 import '../../../service/api_constants.dart';
 import '../../../utils/app_colors.dart';
+import '../../../utils/app_constants.dart';
 import '../../../utils/app_strings.dart';
 import '../../base/custom_app_bar.dart';
 import '../../base/custom_button.dart';
@@ -28,8 +30,6 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
   final ProfileController _profileController = Get.put(ProfileController());
   var parameter = Get.parameters;
 
-
-
   @override
   void initState() {
     super.initState();
@@ -45,12 +45,12 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: AppStrings.editAccountInformation.tr),
-      body: Obx(()=> SingleChildScrollView(
+      body: Obx(
+        () => SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 24.w),
             child: Column(
@@ -69,21 +69,22 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                     children: [
                       _profileController.profileImagePath.value.isNotEmpty
                           ? Container(
-                        width: 134.w,
-                        height: 134.h,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                image: FileImage(File(_profileController
-                                    .profileImagePath.value)),
-                                fit: BoxFit.cover)),
-                      )
+                              width: 134.w,
+                              height: 134.h,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      image: FileImage(File(_profileController
+                                          .profileImagePath.value)),
+                                      fit: BoxFit.cover)),
+                            )
                           : CustomNetworkImage(
-                        imageUrl: '${ApiConstants.imageBaseUrl}${Get.parameters['image']}',
-                        width: 134.w,
-                        height: 134.h,
-                        boxShape: BoxShape.circle,
-                      ),
+                              imageUrl:
+                                  '${ApiConstants.imageBaseUrl}${Get.parameters['image']}',
+                              width: 134.w,
+                              height: 134.h,
+                              boxShape: BoxShape.circle,
+                            ),
                       Positioned(
                         bottom: 8.h,
                         right: 8.w,
@@ -112,21 +113,22 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                     children: [
                       _profileController.coverImagePath.value.isNotEmpty
                           ? Container(
-                        width: 345.w,
-                        height: 134.h,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8.r),
-                            image: DecorationImage(
-                                image: FileImage(File(_profileController
-                                    .coverImagePath.value)),
-                                fit: BoxFit.cover)),
-                      )
+                              width: 345.w,
+                              height: 134.h,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8.r),
+                                  image: DecorationImage(
+                                      image: FileImage(File(_profileController
+                                          .coverImagePath.value)),
+                                      fit: BoxFit.cover)),
+                            )
                           : CustomNetworkImage(
-                        imageUrl: '${ApiConstants.imageBaseUrl}${Get.parameters['coverImage']}',
-                        width: 345.w,
-                        height: 134.h,
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
+                              imageUrl:
+                                  '${ApiConstants.imageBaseUrl}${Get.parameters['coverImage']}',
+                              width: 345.w,
+                              height: 134.h,
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
                       Positioned(
                         bottom: 8.h,
                         right: 8.w,
@@ -177,7 +179,8 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                   controller: _profileController.phoneNumberCTRL,
                   decoration: InputDecoration(
                     hintText: "Phone number".tr,
-                    contentPadding:EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(16.r)),
                       borderSide: BorderSide(color: AppColors.primaryColor),
@@ -188,10 +191,10 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(16.r)),
-                      borderSide: BorderSide(color: AppColors.primaryColor, width: 1.w),
+                      borderSide:
+                          BorderSide(color: AppColors.primaryColor, width: 1.w),
                     ),
                   ),
-
                   showCountryFlag: true,
                   initialCountryCode: 'US',
                   flagsButtonMargin: EdgeInsets.only(left: 10.w),
@@ -230,7 +233,7 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                   bottom: 8.h,
                 ),
                 CustomTextField(
-                  onTab: (){
+                  onTab: () {
                     _profileController.pickCountry(context);
                   },
                   readOnly: true,
@@ -283,16 +286,16 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                 ),
                 CustomTextField(
                   controller: _profileController.bioCTRL,
-                  hintText:
-                      'Enter your bio...'.tr,
+                  hintText: 'Enter your bio...'.tr,
                   maxLines: 5,
                 ),
-               SizedBox(height: 32.h),
+                SizedBox(height: 32.h),
                 //======================> Update Button <========================
-                Obx(()=> CustomButton(
-                    loading: _profileController.updateProfileLoading.value,
+                Obx(
+                  () => CustomButton(
+                      loading: _profileController.updateProfileLoading.value,
                       onTap: () {
-                       _profileController.updateProfile();
+                        _profileController.updateProfile();
                       },
                       text: 'Update'.tr),
                 ),
@@ -319,12 +322,14 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
               Expanded(
                 child: GestureDetector(
                   onTap: () async {
-                    await _profileController.pickImage(ImageSource.gallery, isProfileImage);
+                    await _profileController.pickImage(
+                        ImageSource.gallery, isProfileImage);
                   },
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.image, size: 50.w, color: AppColors.primaryColor),
+                      Icon(Icons.image,
+                          size: 50.w, color: AppColors.primaryColor),
                       SizedBox(height: 8.h),
                       CustomText(
                         text: 'Gallery'.tr,
@@ -340,12 +345,14 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
               Expanded(
                 child: GestureDetector(
                   onTap: () async {
-                    await _profileController.pickImage(ImageSource.camera, isProfileImage);
+                    await _profileController.pickImage(
+                        ImageSource.camera, isProfileImage);
                   },
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.camera_alt, size: 50.w, color: AppColors.primaryColor),
+                      Icon(Icons.camera_alt,
+                          size: 50.w, color: AppColors.primaryColor),
                       SizedBox(height: 8.h),
                       CustomText(
                         text: 'Camera'.tr,

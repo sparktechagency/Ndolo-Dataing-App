@@ -10,9 +10,9 @@ class ProfileModel {
   final String? role;
   final int? phoneNumber;
   final DateTime? dateOfBirth;
-  final String? country;
-  final String? state;
-  final String? city;
+  late final String? country;
+  late final String? state;
+  late final String? city;
   final List<Interest>? interests;
   final List<dynamic>? lickList;
   final dynamic idealMatch;
@@ -24,7 +24,7 @@ class ProfileModel {
   final bool? isBlocked;
   final bool? isDeleted;
   final DateTime? createdAt;
-  final String? address;
+  late final String? address;
   final String? callingCode;
   final String? id;
 

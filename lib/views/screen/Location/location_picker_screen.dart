@@ -20,8 +20,7 @@ class LocationPickerScreen extends StatefulWidget {
 class _LocationPickerScreenState extends State<LocationPickerScreen> {
   final _controller = Completer<GoogleMapController>();
   MapPickerController mapPickerController = MapPickerController();
-  final LocationController _commonLocationController =
-      Get.put(LocationController());
+  final LocationController _commonLocationController = Get.put(LocationController());
 
   CameraPosition cameraPosition = const CameraPosition(
     target: LatLng(41.311158, 69.279737),
@@ -189,8 +188,8 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
               loading: _commonLocationController.setLocationLoading.value,
               onTap: () {
                 _commonLocationController.setLocation(
-                  latitude: cameraPosition.target.latitude.toString(),
-                  longitude: cameraPosition.target.longitude.toString(),
+                 // latitude: cameraPosition.target.latitude.toString(),
+                 // longitude: cameraPosition.target.longitude.toString(),
                 );
               },
               text: "Submit",

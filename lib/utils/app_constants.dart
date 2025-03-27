@@ -6,6 +6,10 @@ class AppConstants{
   static String fcmToken = "fcmToken";
   static String receiverId = "receiverId";
   static String conversationID = "conversationID";
+  static String userCountry = "userCountry";
+  static String userState = "userState";
+  static String userCity = "userCity";
+  static String userAddress = "userAddress";
 
 
   static const String bearerToken = "BearerToken";

@@ -10,6 +10,8 @@ import 'package:ndolo_dating/views/base/custom_list_tile.dart';
 import 'package:ndolo_dating/views/base/custom_page_loading.dart';
 import 'package:ndolo_dating/views/base/custom_text.dart';
 import '../../../controllers/profile_controller.dart';
+import '../../../helpers/prefs_helpers.dart';
+import '../../../utils/app_constants.dart';
 
 class AccountInformationScreen extends StatefulWidget {
   const AccountInformationScreen({super.key});
@@ -19,13 +21,40 @@ class AccountInformationScreen extends StatefulWidget {
 class _AccountInformationScreenState extends State<AccountInformationScreen> {
   final ProfileController _profileController = Get.put(ProfileController());
 
+  String _formatDateOfBirth(String? dateOfBirth) {
+    if (dateOfBirth == null || dateOfBirth.isEmpty) {
+      return "N/A";
+    }
+    try {
+      DateTime parsedDate = DateTime.parse(dateOfBirth);
+      return DateFormat('MM-dd-yyyy').format(parsedDate);
+    } catch (e) {
+      return "N/A";
+    }
+  }
+
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(milliseconds: 100), () {
-      _profileController.getProfileData();
+    Future.delayed(const Duration(milliseconds: 100), () async {
+      await _profileController.getProfileData();
+
+      // Fetch and update the latest location
+      String updatedCountry = await PrefsHelper.getString(AppConstants.userCountry);
+      String updatedState = await PrefsHelper.getString(AppConstants.userState);
+      String updatedCity = await PrefsHelper.getString(AppConstants.userCity);
+      String updatedAddress = await PrefsHelper.getString(AppConstants.userAddress);
+
+      setState(() {
+        _profileController.profileModel.value.country = updatedCountry;
+        _profileController.profileModel.value.state = updatedState;
+        _profileController.profileModel.value.city = updatedCity;
+        _profileController.profileModel.value.address = updatedAddress;
+      });
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +77,7 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
               _profileDetail(AppStrings.lastName.tr, data.lastName),
               _profileDetail(AppStrings.email.tr, data.email),
               _profileDetail(AppStrings.phoneNumber.tr, "${data.callingCode ?? ''} ${data.phoneNumber ?? ''}"),
-              _profileDetail(AppStrings.dateOfBirth.tr, DateFormat('yyyy-MM-dd').format(DateTime.parse('${data.dateOfBirth}' ?? ''))),
+              _profileDetail(AppStrings.dateOfBirth.tr, _formatDateOfBirth('${data.dateOfBirth}' ?? '')),
               _profileDetail(AppStrings.country.tr, data.country),
               _profileDetail(AppStrings.state.tr, data.state),
               _profileDetail(AppStrings.city.tr, data.city),

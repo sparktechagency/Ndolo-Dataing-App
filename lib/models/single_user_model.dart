@@ -17,7 +17,7 @@ class SingleUserModel {
   final List<dynamic>? lickList;
   final dynamic idealMatch;
   final List<dynamic>? language;
-  final String? address;
+  late final String? address;
   final String? bio;
   final int? credits;
   final bool? isProfileCompleted;

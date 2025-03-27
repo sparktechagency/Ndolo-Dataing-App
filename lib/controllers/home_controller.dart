@@ -28,6 +28,11 @@ class HomeController extends GetxController implements GetxService {
     super.onReady();
   }
 
+  var userAddress = ''.obs;
+  fetchUserAddress() async {
+    userAddress.value = await PrefsHelper.getString(AppConstants.userAddress) ?? "N/A";
+  }
+
   //=============================> Get Home All User Data <===============================
   RxList<HomeUserModel> homeUserModel = <HomeUserModel>[].obs;
   RxBool homeLoading = false.obs;

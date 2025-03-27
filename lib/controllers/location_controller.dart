@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:ndolo_dating/helpers/route.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../helpers/prefs_helpers.dart';
 import '../service/api_checker.dart';
 import '../service/api_client.dart';
@@ -14,41 +17,122 @@ class LocationController extends GetxController {
   var locationDistanceController = TextEditingController();
   var setLocationLoading = false.obs;
   var setDistanceLoading = false.obs;
+  var address = ''.obs;
+  var city = ''.obs;
+  var state = ''.obs;
+  var country = ''.obs;
+  var latitude = ''.obs;
+  var longitude = ''.obs;
+  var permissionStatus = Rx<PermissionStatus>(PermissionStatus.denied);
 
-  setLocation({required String latitude, required String longitude}) async {
-    var body = {
-      "latitude": latitude,
-      "longitude": longitude,
-      "locationName": locationNameController.text,
-    };
-    String bearerToken = await PrefsHelper.getString(AppConstants.bearerToken);
-    var headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $bearerToken',
-    };
+//=====================================> Set Location <==============================
+  Future<void> setLocation() async {
     try {
-      setLocationLoading(true);
-      Response response = await ApiClient.postData(
-          ApiConstants.setLocationEndPoint, jsonEncode(body),
-          headers: headers);
-      print("Response: ${response.body}, Status: ${response.statusCode}");
+      PermissionStatus permission = await Permission.location.status;
+      if (permission.isDenied || permission.isPermanentlyDenied) {
+        permission = await Permission.location.request();
+        if (permission.isDenied || permission.isPermanentlyDenied) {
+          Fluttertoast.showToast(msg: "Location permission is required to set your location.");
+          return;
+        }
+      }
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        await PrefsHelper.setBool(AppConstants.hasUpdateGallery, true);
-        Fluttertoast.showToast(msg: "Your location is set successfully");
-        Get.offAllNamed(AppRoutes.idealMatchScreen);  // Navigate to the next screen
+      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      String latitude = position.latitude.toString();
+      String longitude = position.longitude.toString();
+
+      List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+
+      if (placemarks.isNotEmpty) {
+        Placemark place = placemarks[0];
+        country.value = place.country ?? 'Unknown Country';
+        state.value = place.administrativeArea ?? 'Unknown State';
+        city.value = place.locality ?? 'Unknown City';
+        String address = '${place.subLocality ?? ''}, ${place.administrativeArea ?? ''}, ${place.country ?? ''}';
+        locationNameController.text = address;
+
+        var body = {
+          "latitude": latitude,
+          "longitude": longitude,
+          "locationName": address,
+        };
+
+        String bearerToken = await PrefsHelper.getString(AppConstants.bearerToken);
+
+        var headers = {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $bearerToken',
+        };
+
+        setLocationLoading(true);
+
+        var response = await ApiClient.postData(
+          ApiConstants.setLocationEndPoint,
+          jsonEncode(body),
+          headers: headers,
+        );
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          await PrefsHelper.setBool(AppConstants.hasUpdateGallery, true);
+          Fluttertoast.showToast(msg: "Your location is set successfully");
+
+          await updateProfileWithLocation(locationNameController.text, city.value, state.value, country.value);
+
+          Get.offAllNamed(AppRoutes.idealMatchScreen);
+        } else {
+          Fluttertoast.showToast(msg: "Failed to update location: ${response.body ?? 'Unknown error'}");
+        }
       } else {
-        Fluttertoast.showToast(msg: "Failed to update location: ${response.body}");
-        print("Failed: ${response.body}");
+        Fluttertoast.showToast(msg: "No placemarks found for this location.");
+        throw "No placemarks found";
       }
     } catch (e) {
-      print("Error in API call: $e");
-      Fluttertoast.showToast(msg: "Error updating location");
+      String errorMessage = e.toString();
+      Fluttertoast.showToast(msg: "Error updating location: $errorMessage");
+      print("Error: $errorMessage");
     } finally {
-      setLocationLoading(false);  // Stop loading state
+      setLocationLoading(false);
+    }
+  }
+//=====================================> Update Profile With Location <==============================
+  Future<void> updateProfileWithLocation(String address, String city, String state, String country) async {
+    try {
+      var bearerToken = await PrefsHelper.getString(AppConstants.bearerToken);
+
+      Map<String, String> body = {
+        'address': address,
+        'city': city,
+        'state': state,
+        'country': country,
+      };
+
+      var jsonBody = jsonEncode(body);
+
+      var response = await ApiClient.patchData(
+        ApiConstants.updateProfileEndPoint,
+        jsonBody,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $bearerToken',
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        country = '';
+        state = '';
+        city = '';
+        address = '';
+        Get.offAllNamed(AppRoutes.idealMatchScreen);
+      } else {
+        ApiChecker.checkApi(response);
+        update();
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: "Error in PatchData: ${e.toString()}");
     }
   }
 
+//=====================================> Set Distance <==============================
   setDistance() async {
     var body = {
       "setDistance": int.parse(locationDistanceController.text.trim()),
@@ -78,5 +162,4 @@ class LocationController extends GetxController {
       setDistanceLoading(false);
     }
   }
-
 }
