@@ -49,7 +49,7 @@ updateProfile() async {
     'firstName' : firstNameCTRL.text,
     'lastName' : lastNameCTRL.text,
     'phoneNumber' : phoneNumberCTRL.text,
-    'dataOfBirth' : dateBirthCTRL.text,
+    'dateOfBirth' : dateBirthCTRL.text,
     'country' : countryCTRL.text,
     'state' : stateCTRL.text,
     'city' : cityCTRL.text,
