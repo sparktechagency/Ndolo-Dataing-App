@@ -16,6 +16,7 @@ class LocationController extends GetxController {
   var locationNameController = TextEditingController();
   var locationDistanceController = TextEditingController();
   var setLocationLoading = false.obs;
+  var submitLocationLoading = false.obs;
   var setDistanceLoading = false.obs;
   var address = ''.obs;
   var city = ''.obs;
@@ -75,20 +76,16 @@ class LocationController extends GetxController {
         if (response.statusCode == 200 || response.statusCode == 201) {
           await PrefsHelper.setBool(AppConstants.hasUpdateGallery, true);
           Fluttertoast.showToast(msg: "Your location is set successfully");
-
           await updateProfileWithLocation(locationNameController.text, city.value, state.value, country.value);
-
           Get.offAllNamed(AppRoutes.idealMatchScreen);
         } else {
-          Fluttertoast.showToast(msg: "Failed to update location: ${response.body ?? 'Unknown error'}");
+          ApiChecker.checkApi(response);
         }
       } else {
-        Fluttertoast.showToast(msg: "No placemarks found for this location.");
         throw "No placemarks found";
       }
     } catch (e) {
       String errorMessage = e.toString();
-      Fluttertoast.showToast(msg: "Error updating location: $errorMessage");
       print("Error: $errorMessage");
     } finally {
       setLocationLoading(false);
@@ -131,6 +128,69 @@ class LocationController extends GetxController {
       Fluttertoast.showToast(msg: "Error in PatchData: ${e.toString()}");
     }
   }
+
+  //=====================================> Submit Picked Location <==============================
+  Future<void> submitPickedLocation({
+    required double lat,
+    required double lng,
+    required String locationName,
+  }) async {
+    submitLocationLoading(true);
+    try {
+      List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
+      if (placemarks.isEmpty) {
+        Fluttertoast.showToast(msg: "No placemarks found for this location.");
+        return;
+      }
+      Placemark place = placemarks[0];
+      country.value = place.country ?? 'Unknown Country';
+      state.value = place.administrativeArea ?? 'Unknown State';
+      city.value = place.locality ?? 'Unknown City';
+      final fullAddress = locationName.isNotEmpty
+          ? locationName
+          : [
+        place.street,
+        place.subLocality,
+        place.locality,
+        place.administrativeArea,
+        place.country
+      ].where((part) => part != null && part!.trim().isNotEmpty).join(', ');
+      locationNameController.text = fullAddress;
+      final body = {
+        "latitude": lat.toString(),
+        "longitude": lng.toString(),
+        "locationName": fullAddress,
+      };
+      final bearerToken = await PrefsHelper.getString(AppConstants.bearerToken);
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $bearerToken',
+      };
+      final response = await ApiClient.postData(
+        ApiConstants.setLocationEndPoint,
+        jsonEncode(body),
+        headers: headers,
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        submitLocationLoading(false);
+        await PrefsHelper.setBool(AppConstants.hasUpdateGallery, true);
+        Fluttertoast.showToast(msg: "Your location has been submitted successfully");
+        await updateProfileWithLocation(
+          fullAddress,
+          city.value,
+          state.value,
+          country.value,
+        );
+      } else {
+        ApiChecker.checkApi(response);
+      }
+    } catch (e) {
+      debugPrint("Error submitting picked location: $e");
+    } finally {
+      submitLocationLoading(false);
+    }
+  }
+
 
 //=====================================> Set Distance <==============================
   setDistance() async {
