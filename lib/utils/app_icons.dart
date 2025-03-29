@@ -33,7 +33,7 @@ class AppIcons {
   static String messageOut = "$baseUrl/messageOut.svg";
   static String notification = "$baseUrl/notification.svg";
   static String dislike = "$baseUrl/dislike.svg";
-  static String like = "$baseUrl/like.svg";
+  static String loves = "$baseUrl/love.svg";
   static String info = "$baseUrl/info.svg";
   static String movie = "$baseUrl/movie.svg";
   static String snooker = "$baseUrl/snooker.svg";
@@ -59,4 +59,7 @@ class AppIcons {
   static String about = "$baseUrl/about.svg";
   static String delete = "$baseUrl/delete.svg";
   static String filter = "$baseUrl/filter.svg";
+  static String friendsAdd = "$baseUrl/friendsAdd.svg";
+  static String like = "$baseUrl/like.svg";
+  static String sms = "$baseUrl/sms.svg";
 }
