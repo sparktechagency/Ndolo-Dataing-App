@@ -75,13 +75,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (isLiked) {
       _handleLike(_currentIndex);
-      _cardController.forward(direction: SwipDirection.Right); // Simulate right swipe
+      _cardController.forward(
+          direction: SwipDirection.Right); // Simulate right swipe
     } else {
       _handleDislike(_currentIndex);
-      _cardController.forward(direction: SwipDirection.Left); // Simulate left swipe
+      _cardController.forward(
+          direction: SwipDirection.Left); // Simulate left swipe
     }
     //_moveToNextCard();
   }
+
 //===========================> Move to the next card smoothly <=============================
   void _moveToNextCard() {
     if (_currentIndex < _homeController.homeUserModel.length - 1) {
@@ -97,7 +100,6 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -117,14 +119,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () {
                       Get.toNamed(AppRoutes.filterScreen);
                     },
-                    child: SvgPicture.asset(AppIcons.filter, width: 24.w, height: 24.h),
+                    child: SvgPicture.asset(AppIcons.filter,
+                        width: 24.w, height: 24.h),
                   ),
                   SizedBox(width: 12.w),
                   InkWell(
                     onTap: () {
                       Get.toNamed(AppRoutes.notificationsScreen);
                     },
-                    child: SvgPicture.asset(AppIcons.notification, width: 32.w, height: 32.h),
+                    child: SvgPicture.asset(AppIcons.notification,
+                        width: 32.w, height: 32.h),
                   ),
                 ],
               ),
@@ -147,7 +151,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         size: const Size(double.infinity, double.infinity),
                         cards: List.generate(userList.length, (index) {
                           final HomeUserModel user = userList[index];
-                          final String imageUrl = (user.gallery?.isNotEmpty ?? false)
+                          final String imageUrl = (user.gallery?.isNotEmpty ??
+                                  false)
                               ? '${ApiConstants.imageBaseUrl}${user.gallery![0]}'
                               : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
                           return Stack(
@@ -165,7 +170,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Flexible(
                                           child: CustomText(
@@ -176,11 +182,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                             color: Colors.white,
                                           ),
                                         ),
-                                        CustomText(
-                                          text: ', ${user.age ?? "N/A"}',
-                                          fontSize: 24.sp,
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.white,
+                                        Flexible(
+                                          child: CustomText(
+                                            text: ', ${user.age ?? "N/A"}',
+                                            fontSize: 24.sp,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -188,7 +196,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Icon(Icons.location_on, color: Colors.white, size: 20.h),
+                                        Icon(Icons.location_on,
+                                            color: Colors.white, size: 20.h),
                                         SizedBox(width: 4.w),
                                         Flexible(
                                           child: CustomText(
@@ -203,34 +212,65 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     SizedBox(height: 6.h),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Flexible(
                                           child: GestureDetector(
-                                            onTap: () => _handleLikeDislike(false),
-                                            child: _slideButton(SvgPicture.asset(AppIcons.dislike), Colors.red),
+                                            onTap: () {},
+                                            child: _slideButton(
+                                                SvgPicture.asset(AppIcons.like),
+                                                Colors.red),
                                           ),
                                         ),
-                                        SizedBox(width: 12.w),
+                                        SizedBox(width: 8.w),
+                                        Flexible(
+                                          child: GestureDetector(
+                                            onTap: () {},
+                                            child: _slideButton(
+                                                SvgPicture.asset(
+                                                    AppIcons.friendsAdd),
+                                                Colors.red),
+                                          ),
+                                        ),
+                                        SizedBox(width: 8.w),
                                         Flexible(
                                           child: GestureDetector(
                                             onTap: () {
                                               _handleLikeDislike(true);
-                                              _homeController.postUserData('$user.id');
+                                              _homeController
+                                                  .postUserData('$user.id');
                                             },
-                                            child: _slideButton(SvgPicture.asset(AppIcons.like), const Color(0xffFF9D33)),
+                                            child: _slideButton(
+                                                SvgPicture.asset(
+                                                    AppIcons.loves),
+                                                const Color(0xffFF9D33)),
                                           ),
                                         ),
-                                        SizedBox(width: 12.w),
+                                        SizedBox(width: 8.w),
+                                        Flexible(
+                                          child: GestureDetector(
+                                            onTap: () {},
+                                            child: _slideButton(
+                                                SvgPicture.asset(AppIcons.sms),
+                                                Colors.red),
+                                          ),
+                                        ),
+                                        SizedBox(width: 8.w),
                                         Flexible(
                                           child: GestureDetector(
                                             onTap: () {
-                                              Get.toNamed(AppRoutes.profileDetailsScreen, parameters: {
-                                                'profileId': user.id ?? '',
-                                                'age': '${user.age ?? ''}',
-                                              });
+                                              Get.toNamed(
+                                                  AppRoutes
+                                                      .profileDetailsScreen,
+                                                  parameters: {
+                                                    'profileId': user.id ?? '',
+                                                    'age': '${user.age ?? ''}',
+                                                  });
                                             },
-                                            child: _slideButton(SvgPicture.asset(AppIcons.info), Colors.blue),
+                                            child: _slideButton(
+                                                SvgPicture.asset(AppIcons.info),
+                                                Colors.blue),
                                           ),
                                         ),
                                       ],
@@ -241,7 +281,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           );
                         }),
-                        onForward: (index, info) => _onSwipe(info.direction, index),
+                        onForward: (index, info) =>
+                            _onSwipe(info.direction, index),
                         onEnd: () => setState(() => _allSwiped = false),
                       ),
                     ),
@@ -254,6 +295,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
 //==========================> Slide Button <==================
   _slideButton(Widget icon, Color borderColor) {
     return Container(
