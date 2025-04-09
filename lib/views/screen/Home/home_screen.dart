@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:ndolo_dating/controllers/messages/message_controller.dart';
 import 'package:ndolo_dating/service/api_constants.dart';
 import 'package:ndolo_dating/controllers/home_controller.dart';
 import 'package:ndolo_dating/models/home_user_model.dart';
+import 'package:ndolo_dating/service/socket_services.dart';
 import 'package:ndolo_dating/utils/app_icons.dart';
 import 'package:ndolo_dating/utils/app_images.dart';
 import 'package:tcard/tcard.dart';
@@ -24,6 +27,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final HomeController _homeController = Get.put(HomeController());
   final TCardController _cardController = TCardController();
+  final MessageController messageController = Get.put(MessageController());
+  final SocketServices _socket = SocketServices();
+
   bool _allSwiped = false;
   int _currentIndex = 0;
 
@@ -31,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _homeController.getUserData();
+    _socket.init();
   }
 
   void _onSwipe(SwipDirection direction, int index) {
@@ -175,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       children: [
                                         Flexible(
                                           child: CustomText(
-                                            text: user.fullName ?? "N/A",
+                                            text: user.firstName ?? "N/A",
                                             fontSize: 24.sp,
                                             fontWeight: FontWeight.w700,
                                             maxLine: 2,
@@ -215,18 +222,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
+
                                         Flexible(
                                           child: GestureDetector(
-                                            onTap: () {},
-                                            child: _slideButton(
-                                                SvgPicture.asset(AppIcons.like),
-                                                Colors.red),
-                                          ),
-                                        ),
-                                        SizedBox(width: 8.w),
-                                        Flexible(
-                                          child: GestureDetector(
-                                            onTap: () {},
+                                            onTap: () {
+                                              if(user.id != null){
+                                                messageController.createConversation(user.id!, isAddFriend: true);
+                                              }
+                                              else{
+                                                Fluttertoast.showToast(msg: "Something went wrong!");
+                                              }
+                                            },
                                             child: _slideButton(
                                                 SvgPicture.asset(
                                                     AppIcons.friendsAdd),
@@ -250,7 +256,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                         SizedBox(width: 8.w),
                                         Flexible(
                                           child: GestureDetector(
-                                            onTap: () {},
+                                            onTap: () {
+                                              if(user.id != null){
+                                                messageController.createConversation(user.id!);
+                                              }
+                                              else{
+                                                Fluttertoast.showToast(msg: "Something went wrong!");
+                                              }
+                                            },
                                             child: _slideButton(
                                                 SvgPicture.asset(AppIcons.sms),
                                                 Colors.red),

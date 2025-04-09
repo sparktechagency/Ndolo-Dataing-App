@@ -5,6 +5,8 @@ class AppStrings {
 //=========================> Authentication Section <===========================
   static String signIn = 'Sign In';
   static String welcomeBack = 'Welcome Back! Please enter your details.';
+  static const signUpSuccess = 'Sign Up Successful';
+  static const thankYouForSigningUp = 'Thank you for signing up! We\'re glad to have you on board.';
   static String userEmail = 'User Email';
   static String email = 'Email';
   static String state = 'State';

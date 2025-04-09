@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ndolo_dating/controllers/profile_controller.dart';
 import 'package:ndolo_dating/controllers/update_gallery_controller.dart';
 import 'package:ndolo_dating/helpers/route.dart';
 import 'package:ndolo_dating/utils/app_colors.dart';
@@ -21,8 +22,8 @@ class UploadPhotosScreen extends StatefulWidget {
 }
 
 class _UploadPhotosScreenState extends State<UploadPhotosScreen> {
-  final UpdateGalleryController _galleryController =
-      Get.put(UpdateGalleryController());
+  final UpdateGalleryController _galleryController = Get.put(UpdateGalleryController());
+  final ProfileController _profileController = Get.put(ProfileController());
   final ImagePicker _picker = ImagePicker();
 
   //===================> Method to Pick an image <==========================
@@ -41,6 +42,13 @@ class _UploadPhotosScreenState extends State<UploadPhotosScreen> {
     setState(() {
       _galleryController.imagePaths[index] = '';
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // _profileController.getProfileData();
   }
 
   @override
@@ -103,8 +111,10 @@ class _UploadPhotosScreenState extends State<UploadPhotosScreen> {
                                   )
                                 : Align(
                                     alignment: Alignment.bottomRight,
-                                    child: SvgPicture.asset(AppIcons.add,
-                                        width: 31.w, height: 31.h),
+                                    child: SvgPicture.asset(
+                                        AppIcons.add,
+                                        width: 31.w, height: 31.h
+                                    ),
                                   ),
                           ),
                         ),
@@ -127,7 +137,7 @@ class _UploadPhotosScreenState extends State<UploadPhotosScreen> {
               Obx(()=> CustomButton(
                   loading: _galleryController.uploadGalleryLoading.value,
                     onTap: () {
-                    _galleryController.uploadGalleryImages();
+                    _galleryController.uploadGalleryImages(isUpdate: Get.arguments as bool);
                     },
                     text: AppStrings.next.tr),
               ),

@@ -12,7 +12,7 @@ class UpdateGalleryController extends GetxController {
   var imagePaths = List<String>.filled(6, '').obs; // This is an RxList
   var uploadGalleryLoading = false.obs;
 
-  uploadGalleryImages() async {
+  uploadGalleryImages({bool isUpdate = false}) async {
     if (imagePaths.isEmpty) {
       print("No images selected for upload.");
       return;
@@ -33,7 +33,7 @@ class UpdateGalleryController extends GetxController {
     if (response.statusCode == 200 || response.statusCode == 201) {
       imagePaths.assignAll(List.filled(6, ''));
       Future.delayed(const Duration(milliseconds: 500), () {
-        if (isFirstTimeUpdateGallery == false ||isFirstTimeUpdateGallery == null) {
+        if (!isUpdate) {
           Get.offAllNamed(AppRoutes.locationScreen);
         } else {
           Get.back();

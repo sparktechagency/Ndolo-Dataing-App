@@ -2,7 +2,7 @@ class ApiConstants {
   //==================> Live API <=================
 
   static const String socketBaseUrl = "https://ws.ndolomeet.com";
-  static const String baseUrl = "https://api.ndolomeet.com/api/v1";
+  static const String baseUrl = "https://api.ndolomeet.com/api/v1/";
   static const String imageBaseUrl = "https://api.ndolomeet.com";
    //==================> Local API <=================
 

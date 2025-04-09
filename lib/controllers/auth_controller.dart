@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:country_picker/country_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -45,6 +46,7 @@ class AuthController extends GetxController {
   final TextEditingController confirmPassCTR = TextEditingController();
   final TextEditingController birthDateCTRL = TextEditingController();
   final TextEditingController addressCTRL = TextEditingController();
+  final TextEditingController countryCTRL = TextEditingController();
   final TextEditingController bioCTRL = TextEditingController();
   String? selectedGender;
   var signUpLoading = false.obs;
@@ -59,8 +61,8 @@ class AuthController extends GetxController {
       "password": passCTR.text,
       "dateOfBirth": birthDateCTRL.text,
       "gender": selectedGender,
-      "address": addressCTRL.text,
       "bio": bioCTRL.text,
+      "country": countryCTRL.text,
       //  "fcmToken": "fcmToken..",
     };
 
@@ -79,6 +81,7 @@ class AuthController extends GetxController {
       passCTR.clear();
       birthDateCTRL.clear();
       addressCTRL.clear();
+      countryCTRL.clear();
       bioCTRL.clear();
       selectedGender = '';
       signUpLoading(false);
@@ -88,6 +91,28 @@ class AuthController extends GetxController {
       signUpLoading(false);
       update();
     }
+  }
+
+
+  //======================================> Pick Country Name <========================================
+  pickCountry(BuildContext context) async {
+    showCountryPicker(
+      context: context,
+      onSelect: (Country country) {
+        countryCTRL.text = country.name;
+        update();
+      },
+      countryListTheme: CountryListThemeData(
+        backgroundColor: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        inputDecoration: InputDecoration(
+          hintText: 'Search Countries',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      ),
+    );
   }
 
   //===================> Otp very <=======================
@@ -115,7 +140,8 @@ class AuthController extends GetxController {
           Get.offAllNamed(AppRoutes.resetPasswordScreen,
               parameters: {"email": email});
         } else {
-          Get.offAllNamed(AppRoutes.signInScreen, parameters: {"email": email});
+          Get.offAllNamed(AppRoutes.signUpSuccessScreen, parameters: {"email": email});
+          // Get.offAllNamed(AppRoutes.signInScreen, parameters: {"email": email});
         }
       } else {
         ApiChecker.checkApi(response);
@@ -172,9 +198,9 @@ class AuthController extends GetxController {
       await PrefsHelper.setString(AppConstants.userId, response.body['data']['attributes']['user']['id']);
       await PrefsHelper.setString(AppConstants.userName, response.body['data']['attributes']['user']['firstName']);
       await PrefsHelper.setBool(AppConstants.isLogged, true);
-      var condition = response.body['data']['attributes']['user']['gallery'];
-      if( condition.isEmpty){
-        Get.offAllNamed(AppRoutes.uploadPhotosScreen);
+      bool condition = response.body['data']['attributes']['user']['isProfileCompleted'];
+      if(!condition){
+        Get.offAllNamed(AppRoutes.uploadPhotosScreen, arguments: false);
       } else {
         Get.offAllNamed(AppRoutes.homeScreen);
       }
@@ -346,9 +372,10 @@ class AuthController extends GetxController {
            await PrefsHelper.setString(AppConstants.bearerToken, response.body['data']['attributes']['tokens']['access']['token']);
            await PrefsHelper.setString(AppConstants.userId, response.body['data']['attributes']['user']['id']);
            await PrefsHelper.setString(AppConstants.userName, response.body['data']['attributes']['user']['fullName']);
-           var condition = response.body['data']['attributes']['user']['gallery'];
-           if( condition.isEmpty){
-             Get.offAllNamed(AppRoutes.uploadPhotosScreen);
+           bool condition = response.body['data']['attributes']['user']['isProfileCompleted'];
+
+           if(!condition){
+             Get.offAllNamed(AppRoutes.completeProfileSignInScreen);
            } else {
              await PrefsHelper.setBool(AppConstants.isLogged, true);
              Get.offAllNamed(AppRoutes.homeScreen);

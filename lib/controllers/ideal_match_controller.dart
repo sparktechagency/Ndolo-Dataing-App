@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:ndolo_dating/helpers/route.dart';
@@ -27,6 +29,23 @@ class IdealMatchController extends GetxController {
     }
   }
 
+  Future<void> markAsCompleteProfile() async {
+
+    Map<String, bool> body ={
+     'isProfileCompleted': true,
+    };
+
+    var response = await ApiClient.patchData(ApiConstants.updateProfileEndPoint, jsonEncode(body) );
+    if(response.statusCode == 200 || response.statusCode == 201){
+      Get.offAllNamed(AppRoutes.homeScreen);
+      postMatchLoading(false);
+    } else{
+      ApiChecker.checkApi(response);
+      postMatchLoading(false);
+    }
+
+  }
+
 //==========================> Post Ideal Match Method <============================
   var postMatchLoading = false.obs;
   postIdealMatch(String idealMatch) async {
@@ -39,8 +58,7 @@ class IdealMatchController extends GetxController {
     Response response =
     await ApiClient.postData(ApiConstants.userMatchingEndPoint, body);
     if (response.statusCode == 200) {
-      Get.offAllNamed(AppRoutes.homeScreen);
-      postMatchLoading(false);
+      markAsCompleteProfile();
       update();
     } else {
       ApiChecker.checkApi(response);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:ndolo_dating/utils/app_colors.dart';
 import 'package:ndolo_dating/utils/app_icons.dart';
@@ -95,22 +96,25 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                   ),
                   _genderRadioButton(),
                   SizedBox(height: 16.h),
-                  //==========================> Address Text Field <======================
+
+
+                  //==========================> Country Text Field <======================
                   CustomText(
-                    text: AppStrings.address.tr,
+                    text: AppStrings.country.tr,
                     fontWeight: FontWeight.bold,
                     fontSize: 16.sp,
                     bottom: 8.h,
                   ),
                   CustomTextField(
-                    controller: _authController.addressCTRL,
-                    hintText: AppStrings.enterYourAddress.tr,
-                    suffixIcons: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w),
-                        child: SvgPicture.asset(AppIcons.location)),
+                    onTab: () {
+                      _authController.pickCountry(context);
+                    },
+                    readOnly: true,
+                    controller: _authController.countryCTRL,
+                    hintText: AppStrings.country.tr,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Please enter your address";
+                        return "Please enter your country";
                       }
                       return null;
                     },
@@ -126,6 +130,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                   CustomTextField(
                     controller: _authController.bioCTRL,
                     hintText: AppStrings.writeShortBio.tr,
+                    maxLines: 5,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Please enter your bio";
@@ -167,7 +172,15 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                       loading: _authController.signUpLoading.value,
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
-                            _authController.handleSignUp();
+                            if(_authController.selectedGender == null){
+                              Fluttertoast.showToast(msg: "Select Gender");
+                            }
+                            else if(_authController.bioCTRL.text.length < 50){
+                              Fluttertoast.showToast(msg: "Bio should contain at least 50 characters");
+                            }
+                            else{
+                              _authController.handleSignUp();
+                            }
                           }
                         },
                         text: AppStrings.completeProfile.tr),
@@ -188,7 +201,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
       children: [
         InkWell(
           onTap: () => setState(() {
-            _authController.selectedGender = 'Male';
+            _authController.selectedGender = 'male';
           }),
           child: Row(
             children: [
@@ -216,7 +229,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
         ),
         InkWell(
           onTap: () => setState(() {
-            _authController.selectedGender = 'Female';
+            _authController.selectedGender = 'female';
           }),
           child: Row(
             children: [
@@ -249,7 +262,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
 //=========================> Interest Multi-Select Drop Down Button <================
   _interestDropDown() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.h),
       decoration: BoxDecoration(
         color: AppColors.fillColor,
         borderRadius: BorderRadius.circular(16.r),
@@ -337,10 +350,22 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
     );
 
     if (pickedDate != null) {
-      setState(() {
-        _authController.birthDateCTRL.text = "${_getMonthName(pickedDate.month)} ${pickedDate.day}, ${pickedDate.year}";
-      });
+      if(isDateValid(pickedDate)){
+        setState(() {
+          _authController.birthDateCTRL.text = "${_getMonthName(pickedDate.month)} ${pickedDate.day}, ${pickedDate.year}";
+        });
+      }
+      else{
+        Fluttertoast.showToast(msg: "The user is younger than 18 years.");
+      }
     }
+  }
+
+  bool isDateValid(DateTime selectedDate) {
+    DateTime today = DateTime.now();
+    DateTime eighteenYearsAgo = today.subtract(const Duration(days: 365 * 18)); // 18 years ago
+
+    return selectedDate.isBefore(eighteenYearsAgo);
   }
   // Helper function to convert month number to name
   String _getMonthName(int month) {

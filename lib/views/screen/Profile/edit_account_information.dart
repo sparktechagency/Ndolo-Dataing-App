@@ -3,6 +3,7 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -80,7 +81,7 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                             )
                           : CustomNetworkImage(
                               imageUrl:
-                                  '${ApiConstants.imageBaseUrl}${Get.parameters['image']}',
+                                  '${ApiConstants.imageBaseUrl}${_profileController.profileModel.value.profileImage}',
                               width: 134.w,
                               height: 134.h,
                               boxShape: BoxShape.circle,
@@ -124,7 +125,7 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                             )
                           : CustomNetworkImage(
                               imageUrl:
-                                  '${ApiConstants.imageBaseUrl}${Get.parameters['coverImage']}',
+                                  '${ApiConstants.imageBaseUrl}${_profileController.profileModel.value.coverImage}',
                               width: 345.w,
                               height: 134.h,
                               borderRadius: BorderRadius.circular(8.r),
@@ -266,17 +267,17 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                 ),
                 SizedBox(height: 16.h),
                 //======================> Address Text Field <========================
-                CustomText(
-                  text: AppStrings.address.tr,
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
-                  bottom: 8.h,
-                ),
-                CustomTextField(
-                  controller: _profileController.addressCTRL,
-                  hintText: 'Your address'.tr,
-                ),
-                SizedBox(height: 16.h),
+                // CustomText(
+                //   text: AppStrings.address.tr,
+                //   fontSize: 16.sp,
+                //   fontWeight: FontWeight.bold,
+                //   bottom: 8.h,
+                // ),
+                // CustomTextField(
+                //   controller: _profileController.addressCTRL,
+                //   hintText: 'Your address'.tr,
+                // ),
+                // SizedBox(height: 16.h),
                 //======================> Bio Text Field <========================
                 CustomText(
                   text: AppStrings.bio.tr,
@@ -295,7 +296,12 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                   () => CustomButton(
                       loading: _profileController.updateProfileLoading.value,
                       onTap: () {
-                        _profileController.updateProfile();
+                        if(_profileController.bioCTRL.text.length < 50){
+                          Fluttertoast.showToast(msg: "Bio should contain at least 50 characters");
+                        }
+                        else {
+                          _profileController.updateProfile();
+                        }
                       },
                       text: 'Update'.tr),
                 ),

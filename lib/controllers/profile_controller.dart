@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ndolo_dating/helpers/route.dart';
 import '../helpers/toast_message_helper.dart';
 import '../models/profile_model.dart';
 import '../service/api_checker.dart';
@@ -19,8 +21,16 @@ class ProfileController extends GetxController {
   getProfileData() async {
     profileLoading(true);
     var response = await ApiClient.getData(ApiConstants.getProfileEndPoint);
+    print("my response : ${response.body}");
     if (response.statusCode == 200) {
       profileModel.value = ProfileModel.fromJson(response.body['data']['attributes']);
+      phoneNumberCTRL.text = profileModel.value.phoneNumber != null ? profileModel.value.phoneNumber.toString() : '';
+      firstNameCTRL.text = profileModel.value.firstName != null ? profileModel.value.firstName.toString() : '';
+      lastNameCTRL.text = profileModel.value.lastName != null ? profileModel.value.lastName.toString() : '';
+      dateBirthCTRL.text =  profileModel.value.dateOfBirth != null ? profileModel.value.country.toString() : '';
+      stateCTRL.text = profileModel.value.state != null ? profileModel.value.state.toString() : '';
+      cityCTRL.text = profileModel.value.city != null ? profileModel.value.city.toString() : '';
+      bioCTRL.text = profileModel.value.bio != null ? profileModel.value.bio.toString() : '' ;
       profileLoading(false);
       update();
     } else {
@@ -53,7 +63,7 @@ updateProfile() async {
     'country' : countryCTRL.text,
     'state' : stateCTRL.text,
     'city' : cityCTRL.text,
-    'address' : addressCTRL.text,
+    // 'address' : addressCTRL.text,
     'bio' : bioCTRL.text,
   };
   List<MultipartBody> multipartBody=[
@@ -83,6 +93,83 @@ updateProfile() async {
     update();
   }
 }
+
+
+RxBool updateProfileImagesLoading = false.obs;
+  updateProfileImages() async {
+    updateProfileImagesLoading(true);
+
+
+    List<MultipartBody> multipartBody= [
+
+
+    ];
+
+    if(profileImagePath.value.isNotEmpty){
+      multipartBody.add(MultipartBody('profileImage',File(profileImagePath.value)));
+    }
+
+    if(coverImagePath.value.isNotEmpty){
+      multipartBody.add(MultipartBody('coverImage',File(coverImagePath.value)));
+    }
+
+
+    var response = await ApiClient.patchMultipartData(ApiConstants.updateProfileEndPoint, {}, multipartBody: multipartBody);
+    if(response.statusCode == 200 || response.statusCode == 201){
+      profileImagePath.value = '';
+      coverImagePath.value = '';
+      updateProfileImagesLoading(false);
+      Get.back();
+      getProfileData();
+    } else{
+      ApiChecker.checkApi(response);
+      updateProfileImagesLoading(false);
+      update();
+    }
+  }
+
+  String selectedGender = '';
+
+  var updateProfileAfterGoogleSignInLoading = false.obs;
+  Future<void> updateProfileAfterGoogleSignIn() async {
+
+    updateProfileAfterGoogleSignInLoading.value = true;
+    Map<String, String> body ={
+      'firstName' : firstNameCTRL.text,
+      'lastName' : lastNameCTRL.text,
+      'dateOfBirth' : dateBirthCTRL.text,
+      'country' : countryCTRL.text,
+      'state' : stateCTRL.text,
+      'city' : cityCTRL.text,
+      'gender': selectedGender,
+      'bio' : bioCTRL.text,
+    };
+
+    var response = await ApiClient.patchData(ApiConstants.updateProfileEndPoint, jsonEncode(body) );
+    if(response.statusCode == 200 || response.statusCode == 201){
+      firstNameCTRL.clear();
+      lastNameCTRL.clear();
+      phoneNumberCTRL.clear();
+      dateBirthCTRL.clear();
+      countryCTRL.clear();
+      stateCTRL.clear();
+      cityCTRL.clear();
+      addressCTRL.clear();
+      bioCTRL.clear();
+      profileImagePath.value = '';
+      coverImagePath.value = '';
+      getProfileData();
+      updateProfileAfterGoogleSignInLoading(false);
+      Get.toNamed(AppRoutes.uploadPhotosScreen, arguments: false);
+    } else{
+      ApiChecker.checkApi(response);
+      updateProfileAfterGoogleSignInLoading(false);
+      update();
+    }
+
+  }
+
+
 
   //===============================> Pick Image Function <=============================
   Future<void> pickImage(ImageSource source, bool isProfileImage) async {
@@ -120,9 +207,22 @@ updateProfile() async {
     );
 
     if (pickedDate != null) {
-      dateBirthCTRL.text = "${_getMonthName(pickedDate.month)} ${pickedDate.day}, ${pickedDate.year}";
-      update();
+
+      if(isDateValid(pickedDate)){
+        dateBirthCTRL.text = "${_getMonthName(pickedDate.month)} ${pickedDate.day}, ${pickedDate.year}";
+        update();
+      }
+      else{
+        Fluttertoast.showToast(msg: "The user is younger than 18 years.");
+      }
     }
+  }
+
+  bool isDateValid(DateTime selectedDate) {
+    DateTime today = DateTime.now();
+    DateTime eighteenYearsAgo = today.subtract(const Duration(days: 365 * 18)); // 18 years ago
+
+    return selectedDate.isBefore(eighteenYearsAgo);
   }
 
   // Helper function to convert month number to name

@@ -111,11 +111,15 @@ class HomeController extends GetxController implements GetxService {
     required double minAge,
     required double maxAge,
     String? gender,
+    String? country,
+    String? city,
     String? matchPreference,
   }) async {
     filterLoading(true);
     String queryParams = '?maxDistance=$maxDistance&minAge=$minAge&maxAge=$maxAge';
     if (gender != null) queryParams += '&gender=$gender';
+    if (country != null && country.isNotEmpty) queryParams += '&country=$country';
+    if (city != null && city.isNotEmpty) queryParams += '&city=$city';
     if (matchPreference != null) queryParams += '&idealMatch=$matchPreference';
     var response = await ApiClient.getData('${ApiConstants.getHomeAllUserEndPoint}$queryParams');
 
