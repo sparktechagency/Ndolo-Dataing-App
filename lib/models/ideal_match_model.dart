@@ -1,5 +1,6 @@
 class IdealMatchModel {
   final String? title;
+  final String? name;
   final String? subTitle;
   final String? icon;
   final bool? isDeleted;
@@ -8,6 +9,7 @@ class IdealMatchModel {
 
   IdealMatchModel({
     this.title,
+    this.name,
     this.subTitle,
     this.icon,
     this.isDeleted,
@@ -17,6 +19,7 @@ class IdealMatchModel {
 
   factory IdealMatchModel.fromJson(Map<String, dynamic> json) => IdealMatchModel(
     title: json["title"],
+    name: json["name"],
     subTitle: json["subTitle"],
     icon: json["icon"],
     isDeleted: json["isDeleted"],
@@ -26,6 +29,7 @@ class IdealMatchModel {
 
   Map<String, dynamic> toJson() => {
     "title": title,
+    "name": name,
     "subTitle": subTitle,
     "icon": icon,
     "isDeleted": isDeleted,

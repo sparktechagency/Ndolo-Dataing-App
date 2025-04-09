@@ -151,6 +151,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   },
                 ),
                 SizedBox(height: 16.h),
+                //=======================> Confirm Password Text Field <=====================
+                CustomText(
+                  text: AppStrings.confirmPassword.tr,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16.sp,
+                  bottom: 8.h,
+                ),
                 CustomTextField(
                   isPassword: true,
                   controller: _authController.confirmPassCTR,

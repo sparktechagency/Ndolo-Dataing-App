@@ -127,7 +127,7 @@ class _MatchesScreenState extends State<MatchesScreen> {
                                           SizedBox(width: 4.w),
                                           Flexible(
                                             child: CustomText(
-                                              text: user.location!.locationName ?? "",
+                                              text: user.country ?? "",
                                               fontWeight: FontWeight.w700,
                                               maxLine: 3,
                                               textAlign: TextAlign.start,
@@ -153,17 +153,6 @@ class _MatchesScreenState extends State<MatchesScreen> {
                                 ),
                               ],
                             ),
-                          ),
-                        ),
-                        // Love button
-                        Positioned(
-                          right: 10.w,
-                          top: 5.h,
-                          child: SvgPicture.asset(
-                            AppIcons.like,
-                            color: AppColors.primaryColor,
-                            width: 28.w,
-                            height: 28.h,
                           ),
                         ),
                       ],

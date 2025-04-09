@@ -3,7 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:ndolo_dating/controllers/home_controller.dart';
 import 'package:ndolo_dating/helpers/route.dart';
+import 'package:ndolo_dating/utils/app_strings.dart';
 import 'package:ndolo_dating/views/base/custom_page_loading.dart';
+import 'package:ndolo_dating/views/base/custom_text_field.dart';
 import '../../../controllers/ideal_match_controller.dart';
 import '../../../utils/app_colors.dart';
 import '../../base/custom_app_bar.dart';
@@ -20,6 +22,8 @@ class FilterScreen extends StatefulWidget {
 class _FilterScreenState extends State<FilterScreen> {
   final HomeController homeController = Get.find();
   final IdealMatchController _idealMatchController = Get.put(IdealMatchController());
+  final TextEditingController countryCtrl = TextEditingController();
+  final TextEditingController cityCtrl = TextEditingController();
 
   double _minDistance = 0;
   double _maxDistance = 200;
@@ -39,6 +43,8 @@ class _FilterScreenState extends State<FilterScreen> {
       minAge: _minAge,
       maxAge: _maxAge,
       gender: selectedGender,
+      country: countryCtrl.text,
+      city: cityCtrl.text,
       matchPreference: idealMatchId,
     );
     Get.toNamed(AppRoutes.searchResultScreen, arguments: homeController.filteredUsers);
@@ -46,16 +52,20 @@ class _FilterScreenState extends State<FilterScreen> {
 
   @override
   void initState() {
+    super.initState();
     _idealMatchController.getAllIdealMatch().then((_) {
       setState(() {
-        matchOptions = _idealMatchController.idealMatchModel
-            .map((e) => e.title ?? 'Unknown')
-            .toList();
-        matchIdMap = Map.fromIterable(
-          _idealMatchController.idealMatchModel,
-          key: (item) => item.name ?? 'Unknown',
-          value: (item) => item.id ?? '',
-        );
+        if (_idealMatchController.idealMatchModel.isNotEmpty) {
+          matchOptions = _idealMatchController.idealMatchModel
+              .map((e) => e.title ?? 'Unknown') // Handle null titles
+              .toList();
+          matchIdMap = {
+            for (var item in _idealMatchController.idealMatchModel) item.name ?? 'Unknown' : item.id ?? '' };
+        } else {
+          // Handle the case where the idealMatchModel is still null
+          matchOptions = [];
+          matchIdMap = {};
+        }
       });
     });
 
@@ -93,7 +103,35 @@ class _FilterScreenState extends State<FilterScreen> {
               _ageSlider(),
               _rangeLabels('Minimum', _minAge, 'Maximum', _maxAge),
 
+              //=======================> Country  <==================
+
               SizedBox(height: 24.h),
+              CustomText(
+                text: AppStrings.country.tr,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
+                bottom: 8.h,
+              ),
+              CustomTextField(
+                controller: TextEditingController(),
+                hintText: 'Enter Country'.tr,
+              ),
+              SizedBox(height: 16.h),
+
+              //=======================> City  <==================
+
+              SizedBox(height: 24.h),
+              CustomText(
+                text: AppStrings.city.tr,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
+                bottom: 8.h,
+              ),
+              CustomTextField(
+                controller: TextEditingController(),
+                hintText: 'Enter City'.tr,
+              ),
+              SizedBox(height: 16.h),
 
               //=======================> Gender Dropdown <==================
               CustomText(

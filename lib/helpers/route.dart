@@ -1,5 +1,8 @@
 import 'package:get/get.dart';
+import 'package:ndolo_dating/views/screen/Auth/CompleteProfile/complete_profile_sign_in_screen.dart';
+import 'package:ndolo_dating/views/screen/Auth/success/sign_up_success.dart';
 import 'package:ndolo_dating/views/screen/Location/set_distance_screen.dart';
+import 'package:ndolo_dating/views/screen/Profile/update_profile.dart';
 import '../views/screen/AboutUs/about_us_screen.dart';
 import '../views/screen/Auth/ChangePass/change_password_screen.dart';
 import '../views/screen/Auth/CompleteProfile/complete_profile_screen.dart';
@@ -36,10 +39,12 @@ class AppRoutes {
   static String signUpScreen = "/sign-up_screen";
   static String forgotPasswordScreen = "/forgot_password_screen";
   static String otpScreen = "/otp_screen";
+  static String updateProfileScreen = "/update_profile_screen";
   static String resetPasswordScreen = "/reset_password_screen";
   static String uploadPhotosScreen = "/upload_photos_screen";
   static String changePasswordScreen = "/change_password_screen";
   static String completeProfileScreen = "/complete_profile_screen";
+  static String completeProfileSignInScreen = "/complete_profile_sign_in_screen";
   static String idealMatchScreen = "/ideal_match_screen";
   static String homeScreen = "/home_screen";
   static String profileDetailsScreen = "/profile_details_screen_screen";
@@ -59,6 +64,7 @@ class AppRoutes {
   static String locationPickerScreen = "/location_picker_screen";
   static String locationScreen = "/location_screen";
   static String setDistanceScreen = "/set_distance_screen";
+  static String signUpSuccessScreen = "/sign_up_success_screen";
   static List<GetPage> page = [
     GetPage(name: splashScreen, page: () => const SplashScreen()),
     GetPage(
@@ -76,6 +82,8 @@ class AppRoutes {
     GetPage(name: uploadPhotosScreen, page: () => const UploadPhotosScreen()),
     GetPage(
         name: completeProfileScreen, page: () => const CompleteProfileScreen()),
+    GetPage(
+        name: completeProfileSignInScreen, page: () => const CompleteProfileSignInScreen()),
     GetPage(name: idealMatchScreen, page: () => const IdealMatchScreen()),
     GetPage(
         name: homeScreen,
@@ -92,10 +100,15 @@ class AppRoutes {
         page: () => MessageScreen(),
         transition: Transition.noTransition),
     GetPage(
+        name: signUpSuccessScreen,
+        page: () => const SignUpSuccess(),
+        transition: Transition.noTransition),
+    GetPage(
         name: profileScreen,
         page: () => ProfileScreen(),
         transition: Transition.noTransition),
     GetPage(name: chatScreen, page: () => ChatScreen()),
+    GetPage(name: updateProfileScreen, page: () => UpdateProfile()),
     GetPage(name: settingsScreen, page: () => SettingsScreen()),
     GetPage(name: setDistanceScreen, page: () => SetDistanceScreen()),
     GetPage(

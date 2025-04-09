@@ -122,7 +122,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 color: AppColors.primaryColor,
               )),*/
               //======================> Didn’t receive code Section <===================
-              Row(
+              Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CustomText(

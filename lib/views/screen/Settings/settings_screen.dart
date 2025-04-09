@@ -38,12 +38,12 @@ class SettingsScreen extends StatelessWidget {
                 suffixIcon: SvgPicture.asset(AppIcons.rightArrow),
               ),
               //=====================> Set a distance  List Tile <===================
-              CustomListTile(
-                onTap: () {Get.toNamed(AppRoutes.setDistanceScreen);},
-                title: AppStrings.setDistance.tr,
-                prefixIcon: SvgPicture.asset(AppIcons.location),
-                suffixIcon: SvgPicture.asset(AppIcons.rightArrow),
-              ),
+              // CustomListTile(
+              //   onTap: () {Get.toNamed(AppRoutes.setDistanceScreen);},
+              //   title: AppStrings.setDistance.tr,
+              //   prefixIcon: SvgPicture.asset(AppIcons.location),
+              //   suffixIcon: SvgPicture.asset(AppIcons.rightArrow),
+              // ),
               //=====================> Language List Tile <===================
               CustomListTile(
                 onTap: () {
@@ -198,61 +198,64 @@ class SettingsScreen extends StatelessWidget {
             ),
             color: AppColors.cardColor,
           ),
-          height: 265,
           padding: EdgeInsets.all(16.w),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomText(
-                text: AppStrings.language.tr,
-                fontWeight: FontWeight.bold,
-                fontSize: 24.sp,
-                color: AppColors.primaryColor,
-              ),
-              SizedBox(height: 20.h),
-              Divider(
-                thickness: 1,
-                color: AppColors.primaryColor,
-                indent: 15.w,
-              ),
-              SizedBox(height: 20.h),
-              CustomText(
-                text: AppStrings.chooseYourLanguage.tr,
-                maxLine: 2,
-                fontSize: 16.sp,
-              ),
-              SizedBox(height: 20.h),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CustomButton(
-                    width: 120.w,
-                    onTap: () {
-                      localizationController.setLanguage(const Locale('fr', 'FR'));
-                      if (kDebugMode) {
-                        print('==============> Select French Language');
-                      }
-                      Get.back();
-                    },
-                    text: "French",
-                    color: Colors.white,
-                    textColor: AppColors.primaryColor,
-                  ),
-                  SizedBox(width: 16.w),
-                  CustomButton(
+          child: IntrinsicHeight(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CustomText(
+                  text: AppStrings.language.tr,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24.sp,
+                  color: AppColors.primaryColor,
+                ),
+                SizedBox(height: 20.h),
+                Divider(
+                  thickness: 1,
+                  color: AppColors.primaryColor,
+                  indent: 15.w,
+                ),
+                SizedBox(height: 20.h),
+                CustomText(
+                  text: AppStrings.chooseYourLanguage.tr,
+                  maxLine: 2,
+                  fontSize: 16.sp,
+                ),
+                SizedBox(height: 20.h),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomButton(
                       width: 120.w,
                       onTap: () {
-                        localizationController.setLanguage(const Locale('en', 'US'));
+                        localizationController.setLanguage(const Locale('fr', 'FR'));
                         if (kDebugMode) {
-                          print('==============> Select English Language');
+                          print('==============> Select French Language');
                         }
                         Get.back();
                       },
-                      text: "English"),
-                ],
-              ),
-            ],
+                      text: "French",
+                      color: Colors.white,
+                      textColor: AppColors.primaryColor,
+                    ),
+                    SizedBox(width: 16.w),
+                    CustomButton(
+                        width: 120.w,
+                        onTap: () {
+                          localizationController.setLanguage(const Locale('en', 'US'));
+                          if (kDebugMode) {
+                            print('==============> Select English Language');
+                          }
+                          Get.back();
+                        },
+                        text: "English"
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16.w),
+              ],
+            ),
           ),
         );
       },

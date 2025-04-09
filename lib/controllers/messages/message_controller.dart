@@ -51,25 +51,48 @@ class MessageController extends GetxController {
   }
 
   //===================================> CREATE A NEW CONVERSATION <===================================
-   createConversation(String conversationId) async {
+  createConversation(String receiverId, {bool isAddFriend = false}) async {
     var response = await ApiClient.postData(
-      ApiConstants.createConversationEndPoint(conversationId),
-      {"receiver": conversationId},
+      ApiConstants.createConversationEndPoint(receiverId),
+      {"receiver": receiverId},
     );
+
     if (response.statusCode == 200 || response.statusCode == 201) {
-      var currentUserID = await PrefsHelper.getString(AppConstants.userId);
-      var data = response.body['data']['attributes'];
-      Get.toNamed(AppRoutes.messageScreen, parameters: {
-        'conversationId': data['id'],
-        'currentUserId': currentUserID,
-        'currentUserImage': currentUserID == data['sender'] ? data['sender']['profileImage'] : data['receiver']['profileImage'],
-        "receiverName": currentUserID == data['sender'] ? data['receiver']['fullName'] : data['sender']['fullName'],
-        "receiverId": currentUserID == data['sender'] ? data['receiver'] : data['sender'],
-      });
+      if(isAddFriend){
+        Fluttertoast.showToast(msg: 'Friend Added Successfully');
+      }
+      else{
+        var currentUserID = await PrefsHelper.getString(AppConstants.userId);
+        var data = response.body['data']['attributes'];
+
+        // Get the sender and receiver data
+        var sender = data['sender'];
+        var receiver = data['receiver'];
+        var conversationId = data['id'];
+
+        // Determine who is the receiver and sender
+        var receiverId = currentUserID == sender['id'] ? receiver['id'] : sender['id'];
+        var displayImage = currentUserID == sender['id'] ? receiver['profileImage'] : sender['profileImage'];
+        var displayName = currentUserID == sender['id'] ? receiver['fullName'] : sender['fullName'];
+
+        // Pass the data to the next screen
+        Get.toNamed(AppRoutes.chatScreen, parameters: {
+          'conversationId': conversationId,
+          'currentUserId': currentUserID,
+          'receiverId': receiverId,
+          'receiverImage': displayImage,
+          'receiverName': displayName,
+        });
+      }
     } else {
+      if(isAddFriend){
+        Fluttertoast.showToast(msg: 'Can not added as a friend');
+      }
       ApiChecker.checkApi(response);
     }
   }
+
+
 
   //===================================> LOAD MESSAGES FOR CONVERSATION <===================================
   inboxFirstLoad(String conversationId) async {
