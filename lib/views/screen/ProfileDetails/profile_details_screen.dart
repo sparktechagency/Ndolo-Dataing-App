@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:ndolo_dating/controllers/home_controller.dart';
-import 'package:ndolo_dating/helpers/route.dart';
 import 'package:ndolo_dating/service/api_constants.dart';
 import 'package:ndolo_dating/utils/app_colors.dart';
 import 'package:ndolo_dating/utils/app_icons.dart';
@@ -12,10 +11,7 @@ import 'package:ndolo_dating/views/base/custom_app_bar.dart';
 import 'package:ndolo_dating/views/base/custom_network_image.dart';
 import 'package:ndolo_dating/views/base/custom_page_loading.dart';
 import 'package:ndolo_dating/views/base/custom_text.dart';
-
 import '../../../controllers/messages/message_controller.dart';
-import '../../../helpers/prefs_helpers.dart';
-import '../../../utils/app_constants.dart';
 
 class ProfileDetailsScreen extends StatefulWidget {
   const ProfileDetailsScreen({super.key});
@@ -87,7 +83,7 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
                               child: CustomText(
                                 text: user.fullName ?? "N/A",
                                 fontSize: 30.sp,
-                                maxLine: 3,
+                                maxLine: 5,
                                 textAlign: TextAlign.start,
                                 fontWeight: FontWeight.w700,
                                 color: const Color(0xff430750),
@@ -120,9 +116,21 @@ class _ProfileDetailsScreenState extends State<ProfileDetailsScreen> {
                               color: Colors.black,
                             ),
                             SizedBox(width: 8.w),
-                             CustomText(
-                              text: user.country ?? "N/A",
-                              fontSize: 18.sp,
+                             Flexible(
+                               child: CustomText(
+                                text: '${user.city}, ' ?? "N/A",
+                                fontSize: 18.sp,
+                                 maxLine: 5,
+                                 textAlign: TextAlign.start,
+                                                           ),
+                             ),
+                            Flexible(
+                              child: CustomText(
+                                text: user.country ?? "N/A",
+                                fontSize: 18.sp,
+                                maxLine: 5,
+                                textAlign: TextAlign.start,
+                              ),
                             )
                           ],
                         ),

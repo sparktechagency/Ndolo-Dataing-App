@@ -33,7 +33,6 @@ class _FilterScreenState extends State<FilterScreen> {
   String? selectedMatch;
 
   final List<String> genderOptions = ['Male', 'Female'];
- // final List<String> matchOptions = ['Love', 'Come-We-Stay', 'I\'m Free Today', 'Friends', 'Business'];
   List<String> matchOptions = [];
   Map<String, String> matchIdMap = {};
   void _applyFilters() {
@@ -113,14 +112,11 @@ class _FilterScreenState extends State<FilterScreen> {
                 bottom: 8.h,
               ),
               CustomTextField(
-                controller: TextEditingController(),
+                controller: countryCtrl,
                 hintText: 'Enter Country'.tr,
               ),
               SizedBox(height: 16.h),
-
               //=======================> City  <==================
-
-              SizedBox(height: 24.h),
               CustomText(
                 text: AppStrings.city.tr,
                 fontSize: 16.sp,
@@ -128,11 +124,10 @@ class _FilterScreenState extends State<FilterScreen> {
                 bottom: 8.h,
               ),
               CustomTextField(
-                controller: TextEditingController(),
+                controller: cityCtrl,
                 hintText: 'Enter City'.tr,
               ),
               SizedBox(height: 16.h),
-
               //=======================> Gender Dropdown <==================
               CustomText(
                 text: 'Looking For'.tr,

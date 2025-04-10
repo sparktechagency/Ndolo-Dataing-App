@@ -208,6 +208,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                         SizedBox(width: 4.w),
                                         Flexible(
                                           child: CustomText(
+                                            text: '${user.city}, ' ?? "N/A",
+                                            color: Colors.white,
+                                            maxLine: 2,
+                                            textAlign: TextAlign.start,
+                                            textOverflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        Flexible(
+                                          child: CustomText(
                                             text: user.country ?? "N/A",
                                             color: Colors.white,
                                             maxLine: 2,
@@ -222,7 +231,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-
                                         Flexible(
                                           child: GestureDetector(
                                             onTap: () {
