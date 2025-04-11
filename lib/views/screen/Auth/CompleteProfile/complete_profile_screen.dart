@@ -149,7 +149,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                   _interestDropDown(),
                   SizedBox(height: 16.h),
                   //==========================> Show Interest Options Select After Dropdown <======================
-                  Wrap(
+                  /*Wrap(
                     spacing: 8.w,
                     runSpacing: 4.h,
                     children: _authController.selectedInterests.map((interest) {
@@ -165,7 +165,25 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                         },
                       );
                     }).toList(),
+                  ),*/
+                  Wrap(
+                    spacing: 8.w,
+                    runSpacing: 4.h,
+                    children: _authController.interestsModel.where((interest) => _authController.selectedInterests.contains(interest.id)).map((interest) {
+                      return Chip(
+                        label: Text(interest.name ?? ''),
+                        backgroundColor: AppColors.primaryColor,
+                        labelStyle: const TextStyle(color: Colors.white),
+                        deleteIcon: Icon(Icons.clear, size: 18.w, color: Colors.white),
+                        onDeleted: () {
+                          setState(() {
+                            _authController.selectedInterests.remove(interest.id);
+                          });
+                        },
+                      );
+                    }).toList(),
                   ),
+
                   //=========================> Complete Profile Button <================
                   SizedBox(height: 24.h),
                   Obx(()=> CustomButton(
@@ -175,8 +193,8 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                             if(_authController.selectedGender == null){
                               Fluttertoast.showToast(msg: "Select Gender");
                             }
-                            else if(_authController.bioCTRL.text.length < 50){
-                              Fluttertoast.showToast(msg: "Bio should contain at least 50 characters");
+                            else if( _authController.bioCTRL.text.length <= 15   && _authController.bioCTRL.text.length >= 45){
+                              Fluttertoast.showToast(msg: "Bio must be between 15 and 45 characters.");
                             }
                             else{
                               _authController.handleSignUp();
@@ -272,7 +290,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
         child: DropdownButton<String>(
           value: _authController.selectedInterests.isEmpty
               ? null
-              : _authController.selectedInterests.last, // Set value
+              : _authController.selectedInterests.last, // selected ID
           dropdownColor: AppColors.fillColor,
           isExpanded: true,
           hint: CustomText(
@@ -286,7 +304,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
           ),
           items: _authController.interestsModel.map((InterestsModel interest) {
             return DropdownMenuItem<String>(
-              value: interest.name,
+              value: interest.id,
               child: StatefulBuilder(
                 builder: (context, setState) {
                   return Row(
@@ -295,15 +313,15 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                         activeColor: AppColors.primaryColor,
                         checkColor: AppColors.whiteColor,
                         side: BorderSide(color: AppColors.primaryColor),
-                        value: _authController.selectedInterests.contains(interest.name),
+                        value: _authController.selectedInterests.contains(interest.id),
                         onChanged: (bool? isSelected) {
                           setState(() {
                             if (isSelected == true) {
-                              if (!_authController.selectedInterests.contains(interest.name)) {
-                                _authController.selectedInterests.add(interest.name!);
+                              if (!_authController.selectedInterests.contains(interest.id)) {
+                                _authController.selectedInterests.add(interest.id!);
                               }
                             } else {
-                              _authController.selectedInterests.remove(interest.name!);
+                              _authController.selectedInterests.remove(interest.id!);
                             }
                           });
                         },
@@ -328,6 +346,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
       ),
     );
   }
+
   //==========================> Show Calender Function <=======================
   Future<void> _pickBirthDate(BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(

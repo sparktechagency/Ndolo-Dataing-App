@@ -480,6 +480,7 @@ import '../../../controllers/messages/message_controller.dart';
 import '../../../helpers/prefs_helpers.dart';
 import '../../../helpers/time_formate.dart';
 import '../../../models/message_model.dart';
+import '../../../service/socket_services.dart';
 import '../../../utils/app_constants.dart';
 import '../../base/custom_network_image.dart';
 import '../../base/custom_text.dart';
@@ -500,6 +501,8 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final MessageController _controller = Get.put(MessageController());
   TextEditingController messageController = TextEditingController();
+  final SocketServices _socket = SocketServices();
+
   final params = Get.parameters;
   var conversationId = "";
   var currentUserId = "";
@@ -512,7 +515,8 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    initNotifications();
+    _socket.init();
+   // initNotifications();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getUserId();
       conversationId = Get.parameters['conversationId']!;
@@ -520,11 +524,15 @@ class _ChatScreenState extends State<ChatScreen> {
       receiverImage = params['receiverImage'] ?? "";
       receiverName = params['receiverName'] ?? "";
       receiverId = params['receiverId'] ?? "";
+      _socket.emitMessagePage(receiverId);
       _controller.inboxFirstLoad(conversationId);
       _controller.listenMessage(conversationId);
     });
-    FirebaseMessaging.onMessage.listen(_onMessageReceived);
+    //FirebaseMessaging.onMessage.listen(_onMessageReceived);
   }
+
+
+/*
 
   Future<void> initNotifications() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
@@ -573,7 +581,7 @@ class _ChatScreenState extends State<ChatScreen> {
       platformDetails,
       payload: 'incoming_call',
     );
-  }
+  }*/
 
   @override
   void dispose() {
@@ -592,12 +600,12 @@ class _ChatScreenState extends State<ChatScreen> {
     _controller.listenMessage(conversationId);
   }
 
-  void _onMessageReceived(RemoteMessage message) {
+/*  void _onMessageReceived(RemoteMessage message) {
     if (message.data['type'] == 'call') {
       String callerName = message.data['callerName'] ?? 'Unknown';
       showIncomingCallNotification(callerName);
     }
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {

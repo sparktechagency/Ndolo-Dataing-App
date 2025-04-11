@@ -184,11 +184,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   loading: _authController.signInLoading.value,
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
-                      if (isChecked) {
                         _authController.handleLogIn();
-                      } else {
-                        Fluttertoast.showToast(msg: 'Please remember me'.tr);
-                      }
                     }
                   },
                   text: AppStrings.signIn.tr,

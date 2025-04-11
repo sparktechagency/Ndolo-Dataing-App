@@ -63,6 +63,7 @@ class AuthController extends GetxController {
       "gender": selectedGender,
       "bio": bioCTRL.text,
       "country": countryCTRL.text,
+      "interests": selectedInterests,
       //  "fcmToken": "fcmToken..",
     };
 
@@ -160,7 +161,7 @@ class AuthController extends GetxController {
     var body = {"email": email};
     Map<String, String> header = {'Content-Type': 'application/json'};
     var response = await ApiClient.postData(
-        ApiConstants.otpVerifyEndPoint, json.encode(body),
+        ApiConstants.forgotPassEndPoint, json.encode(body),
         headers: header);
     print("===> ${response.body}");
     if (response.statusCode == 200) {

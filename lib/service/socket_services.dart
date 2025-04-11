@@ -13,6 +13,12 @@ class SocketServices {
   IO.Socket? socket;
   String bearerToken = '';
 
+
+
+  void emitMessagePage(String userId) {
+    socket?.emit('message-page', {'userId': userId});
+  }
+
   //=================================> Socket Init <=======================
   Future<void> init() async {
     if (socket != null && socket!.connected) return;

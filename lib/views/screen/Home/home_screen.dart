@@ -83,11 +83,11 @@ class _HomeScreenState extends State<HomeScreen> {
     if (isLiked) {
       _handleLike(_currentIndex);
       _cardController.forward(
-          direction: SwipDirection.Right); // Simulate right swipe
+          direction: SwipDirection.Right);
     } else {
       _handleDislike(_currentIndex);
       _cardController.forward(
-          direction: SwipDirection.Left); // Simulate left swipe
+          direction: SwipDirection.Left);
     }
     //_moveToNextCard();
   }

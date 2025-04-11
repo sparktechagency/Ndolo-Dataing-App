@@ -46,4 +46,23 @@ class TimeFormatHelper {
       PrefsHelper.setBool(AppConstants.isFutureDate, false);
     }
   }*/
+  // static String formatDates(String dateString) {
+  //   DateTime dateTime = DateTime.parse(dateString).toLocal(); // Converts from UTC to local time
+  //
+  //   String day = dateTime.day.toString().padLeft(2, '0');
+  //   String month = dateTime.month.toString().padLeft(2, '0');
+  //   String year = dateTime.year.toString();
+  //
+  //   return "$month-$day-$year"; // MM-DD-YYYY format
+  // }
+
+  static String formatDates(String dateString) {
+    DateTime date = DateTime.parse(dateString).toLocal();
+    String day = date.day.toString().padLeft(2, '0');
+    String month = date.month.toString().padLeft(2, '0');
+    String year = date.year.toString();
+    return "$month-$day-$year"; // MM-DD-YYYY
+  }
+
+
 }
