@@ -1,14 +1,15 @@
 class ApiConstants {
   //==================> Live API <=================
-
+  /*
   static const String socketBaseUrl = "https://ws.ndolomeet.com";
   static const String baseUrl = "https://api.ndolomeet.com/api/v1/";
   static const String imageBaseUrl = "https://api.ndolomeet.com";
-   //==================> Local API <=================
+  */
 
- /* static const String socketBaseUrl = "http://10.0.60.206:9091";
+   //==================> Local API <=================
+  static const String socketBaseUrl = "http://10.0.60.206:9091";
   static const String baseUrl = "http://10.0.60.206:9090/api/v1";
-  static const String imageBaseUrl = "http://10.0.60.206:9090";*/
+  static const String imageBaseUrl = "http://10.0.60.206:9090";
 
   static const String signUpEndPoint = "/auth/register";
   static const String otpVerifyEndPoint = "/auth/verify-email";

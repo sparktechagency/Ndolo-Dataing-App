@@ -27,12 +27,12 @@ class _CompleteProfileScreenState extends State<CompleteProfileSignInScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? selectedGender;
 
-/*  @override
+  @override
   void initState() {
-    _authController.getAllInterest();
+    _profileController.getAllInterest();
     // TODO: implement initState
     super.initState();
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +90,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileSignInScreen> {
                 SizedBox(height: 16.h),
 
 
-                //==========================> First Text Field <======================
+                //==========================> First Name Text Field <======================
                 CustomText(
                   text: AppStrings.firstName.tr,
                   fontWeight: FontWeight.bold,
@@ -109,7 +109,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileSignInScreen> {
                 ),
                 SizedBox(height: 16.h),
 
-                //==========================> Second Text Field <======================
+                //==========================> Last Name Text Field <======================
                 CustomText(
                   text: AppStrings.lastName.tr,
                   fontWeight: FontWeight.bold,
@@ -135,6 +135,10 @@ class _CompleteProfileScreenState extends State<CompleteProfileSignInScreen> {
                   bottom: 8.h,
                 ),
                 CustomTextField(
+                  onTab: (){
+                    _profileController.pickCountry(context);
+                  },
+                  readOnly: true,
                   controller: _profileController.countryCTRL,
                   hintText: AppStrings.country.tr,
                   validator: (value) {
@@ -164,6 +168,33 @@ class _CompleteProfileScreenState extends State<CompleteProfileSignInScreen> {
                   },
                 ),
                 SizedBox(height: 16.h),
+                //==========================> Interest Dropdown <====================
+                CustomText(
+                  text: AppStrings.interest.tr,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.sp,
+                  bottom: 8.h,
+                ),
+                _interestDropDown(),
+                SizedBox(height: 16.h),
+                //==========================> Show Interest Options Select After Dropdown <======================
+                Wrap(
+                  spacing: 8.w,
+                  runSpacing: 4.h,
+                  children: _profileController.selectedInterests.map((interest) {
+                    return Chip(
+                      label: Text(interest),
+                      backgroundColor: AppColors.primaryColor,
+                      labelStyle: const TextStyle(color: Colors.white),
+                      deleteIcon: Icon(Icons.clear, size: 18.w, color: Colors.white),
+                      onDeleted: () {
+                        setState(() {
+                          _profileController.selectedInterests.remove(interest);
+                        });
+                      },
+                    );
+                  }).toList(),
+                ),
                 //=========================> Complete Profile Button <================
                 SizedBox(height: 24.h),
                 Obx(()=> CustomButton(
@@ -173,8 +204,8 @@ class _CompleteProfileScreenState extends State<CompleteProfileSignInScreen> {
                         if(_profileController.selectedGender.isEmpty){
                           Fluttertoast.showToast(msg: "Select Gender");
                         }
-                        else if(_profileController.bioCTRL.text.length < 50){
-                          Fluttertoast.showToast(msg: "Bio should contain at least 50 characters");
+                        else if(_profileController.bioCTRL.text.length <= 15 && _profileController.bioCTRL.text.length >= 45  ){
+                          Fluttertoast.showToast(msg: "Bio must be between 15 and 45 characters.");
                         }
                         else{
                           _profileController.updateProfileAfterGoogleSignIn();
@@ -198,7 +229,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileSignInScreen> {
       children: [
         InkWell(
           onTap: () => setState(() {
-            _profileController.selectedGender = 'Male';
+            _profileController.selectedGender = 'male';
           }),
           child: Row(
             children: [
@@ -226,7 +257,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileSignInScreen> {
         ),
         InkWell(
           onTap: () => setState(() {
-            _profileController.selectedGender = 'Female';
+            _profileController.selectedGender = 'female';
           }),
           child: Row(
             children: [
@@ -255,6 +286,79 @@ class _CompleteProfileScreenState extends State<CompleteProfileSignInScreen> {
       ],
     );
   }
+
+  //=========================> Interest Multi-Select Drop Down Button <================
+  _interestDropDown() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.h),
+      decoration: BoxDecoration(
+        color: AppColors.fillColor,
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(color: AppColors.primaryColor, width: 1),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: _profileController.selectedInterests.isEmpty
+              ? null
+              : _profileController.selectedInterests.last, // Set value
+          dropdownColor: AppColors.fillColor,
+          isExpanded: true,
+          hint: CustomText(
+            text: AppStrings.selectInterest.tr,
+            color: AppColors.greyColor,
+            fontSize: 18.sp,
+          ),
+          icon: SvgPicture.asset(
+            AppIcons.downArrow,
+            width: 24.w,
+          ),
+          items: _profileController.interestsModel.map((InterestsModel interest) {
+            return DropdownMenuItem<String>(
+              value: interest.id,
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  return Row(
+                    children: [
+                      Checkbox(
+                        activeColor: AppColors.primaryColor,
+                        checkColor: AppColors.whiteColor,
+                        side: BorderSide(color: AppColors.primaryColor),
+                        value: _profileController.selectedInterests.contains(interest.name),
+                        onChanged: (bool? isSelected) {
+                          setState(() {
+                            if (isSelected == true) {
+                              if (!_profileController.selectedInterests.contains(interest.name)) {
+                                _profileController.selectedInterests.add(interest.name!);
+                              }
+                            } else {
+                              _profileController.selectedInterests.remove(interest.name!);
+                            }
+                          });
+                        },
+                      ),
+                      Text(interest.name!, style: const TextStyle(color: Colors.black)),
+                    ],
+                  );
+                },
+              ),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              if (!_profileController.selectedInterests.contains(value)) {
+                _profileController.selectedInterests.add(value!);
+              } else {
+                _profileController.selectedInterests.remove(value);
+              }
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+
+
   //==========================> Show Calender Function <=======================
   Future<void> _pickBirthDate(BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(

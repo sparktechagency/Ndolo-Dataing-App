@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ndolo_dating/helpers/route.dart';
 import '../helpers/toast_message_helper.dart';
+import '../models/interests_model.dart';
 import '../models/profile_model.dart';
 import '../service/api_checker.dart';
 import '../service/api_client.dart';
@@ -24,13 +25,13 @@ class ProfileController extends GetxController {
     print("my response : ${response.body}");
     if (response.statusCode == 200) {
       profileModel.value = ProfileModel.fromJson(response.body['data']['attributes']);
-      phoneNumberCTRL.text = profileModel.value.phoneNumber != null ? profileModel.value.phoneNumber.toString() : '';
-      firstNameCTRL.text = profileModel.value.firstName != null ? profileModel.value.firstName.toString() : '';
-      lastNameCTRL.text = profileModel.value.lastName != null ? profileModel.value.lastName.toString() : '';
-      dateBirthCTRL.text =  profileModel.value.dateOfBirth != null ? profileModel.value.country.toString() : '';
-      stateCTRL.text = profileModel.value.state != null ? profileModel.value.state.toString() : '';
-      cityCTRL.text = profileModel.value.city != null ? profileModel.value.city.toString() : '';
-      bioCTRL.text = profileModel.value.bio != null ? profileModel.value.bio.toString() : '' ;
+      // phoneNumberCTRL.text = profileModel.value.phoneNumber != null ? profileModel.value.phoneNumber.toString() : '';
+      // firstNameCTRL.text = profileModel.value.firstName != null ? profileModel.value.firstName.toString() : '';
+      // lastNameCTRL.text = profileModel.value.lastName != null ? profileModel.value.lastName.toString() : '';
+      // dateBirthCTRL.text =  profileModel.value.dateOfBirth != null ? profileModel.value.dateOfBirth.toString() : '';
+      // stateCTRL.text = profileModel.value.state != null ? profileModel.value.state.toString() : '';
+      // cityCTRL.text = profileModel.value.city != null ? profileModel.value.city.toString() : '';
+      // bioCTRL.text = profileModel.value.bio != null ? profileModel.value.bio.toString() : '' ;
       profileLoading(false);
       update();
     } else {
@@ -45,6 +46,7 @@ class ProfileController extends GetxController {
   TextEditingController firstNameCTRL = TextEditingController();
   TextEditingController lastNameCTRL = TextEditingController();
   TextEditingController phoneNumberCTRL = TextEditingController();
+  final completePhoneNumberController = TextEditingController();
   TextEditingController dateBirthCTRL = TextEditingController();
   TextEditingController countryCTRL = TextEditingController();
   TextEditingController stateCTRL = TextEditingController();
@@ -59,6 +61,7 @@ updateProfile() async {
     'firstName' : firstNameCTRL.text,
     'lastName' : lastNameCTRL.text,
     'phoneNumber' : phoneNumberCTRL.text,
+    'callingCode' : completePhoneNumberController.text,
     'dateOfBirth' : dateBirthCTRL.text,
     'country' : countryCTRL.text,
     'state' : stateCTRL.text,
@@ -128,13 +131,34 @@ RxBool updateProfileImagesLoading = false.obs;
     }
   }
 
-  String selectedGender = '';
 
+  //==========================> Get All Interest Method <============================
+  RxList<InterestsModel> interestsModel = <InterestsModel>[].obs;
+  RxList selectedInterests = [].obs;
+  var interestsLoading = false.obs;
+  getAllInterest() async {
+    interestsLoading(true);
+    var response = await ApiClient.getData(ApiConstants.interestEndPoint);
+    if (response.statusCode == 200) {
+      interestsModel.value = List<InterestsModel>.from(response.body['data']
+      ['attributes']['results']
+          .map((x) => InterestsModel.fromJson(x)));
+      interestsModel.refresh();
+      interestsLoading(false);
+      update();
+    } else {
+      ApiChecker.checkApi(response);
+      interestsLoading(false);
+      update();
+    }
+  }
+
+  //==========================> Update Profile After Google Sign In Loading Method <============================
+  String selectedGender = '';
   var updateProfileAfterGoogleSignInLoading = false.obs;
   Future<void> updateProfileAfterGoogleSignIn() async {
-
     updateProfileAfterGoogleSignInLoading.value = true;
-    Map<String, String> body ={
+    Map<String, dynamic> body ={
       'firstName' : firstNameCTRL.text,
       'lastName' : lastNameCTRL.text,
       'dateOfBirth' : dateBirthCTRL.text,
@@ -143,6 +167,7 @@ RxBool updateProfileImagesLoading = false.obs;
       'city' : cityCTRL.text,
       'gender': selectedGender,
       'bio' : bioCTRL.text,
+      "interests": selectedInterests
     };
 
     var response = await ApiClient.patchData(ApiConstants.updateProfileEndPoint, jsonEncode(body) );

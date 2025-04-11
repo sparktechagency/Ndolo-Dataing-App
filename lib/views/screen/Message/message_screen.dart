@@ -24,6 +24,7 @@ class _MessageScreenState extends State<MessageScreen> {
   final MessageController controller = Get.put(MessageController());
   final SocketServices _socket = SocketServices();
   var currentUserId ='';
+
   @override
   void initState() {
     super.initState();

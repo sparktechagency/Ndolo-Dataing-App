@@ -76,7 +76,7 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
               _profileDetail(AppStrings.firstName.tr, data.firstName),
               _profileDetail(AppStrings.lastName.tr, data.lastName),
               _profileDetail(AppStrings.email.tr, data.email),
-              _profileDetail(AppStrings.phoneNumber.tr, "${data.callingCode ?? ''} ${data.phoneNumber ?? ''}"),
+              _profileDetail(AppStrings.phoneNumber.tr, "+${data.callingCode ?? ''}${data.phoneNumber ?? ''}"),
               _profileDetail(AppStrings.dateOfBirth.tr, _formatDateOfBirth('${data.dateOfBirth}' ?? '')),
               _profileDetail(AppStrings.country.tr, data.country),
               _profileDetail(AppStrings.state.tr, data.state),
@@ -90,6 +90,8 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                   Get.toNamed(AppRoutes.editAccountInformation, parameters: {
                     'firstName': data.firstName ?? '',
                     'lastName': data.lastName ?? '',
+                    'dateOfBirth': '${data.dateOfBirth}' ?? '',
+                    'phoneNumber': '${data.phoneNumber}' ?? '',
                     'country': data.country ?? '',
                     'state': data.state ?? '',
                     'city': data.city ?? '',

@@ -36,6 +36,8 @@ class MessageController extends GetxController {
     _socket.init();
   }
 
+
+
   //===================================> GET CONVERSATIONS <===================================
   Future<void> getConversation() async {
     conversationLoading(true);
