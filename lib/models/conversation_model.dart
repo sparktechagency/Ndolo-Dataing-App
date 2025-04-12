@@ -1,107 +1,112 @@
-class ConversationModel {
-  final String? id;
-  final Resiver? resiver;
-  final LastMessage? lastMessage;
-  final DateTime? updatedAt;
+class Sender {
+  final String id;
+  final String firstName;
+  final String lastName;
+  final String fullName;
+  final String email;
+  final String profileImage;
+  final String coverImage;
+  final String address;
+  final String bio;
 
-  ConversationModel({
-    this.id,
-    this.resiver,
-    this.lastMessage,
-    this.updatedAt,
+  Sender({
+    required this.id,
+    required this.firstName,
+    required this.lastName,
+    required this.fullName,
+    required this.email,
+    required this.profileImage,
+    required this.coverImage,
+    required this.address,
+    required this.bio,
   });
 
-  factory ConversationModel.fromJson(Map<String, dynamic> json) => ConversationModel(
-    id: json["_id"],
-    resiver: json["resiver"] == null ? null : Resiver.fromJson(json["resiver"]),
-    lastMessage: json["lastMessage"] == null ? null : LastMessage.fromJson(json["lastMessage"]),
-    updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
-  );
+  factory Sender.fromJson(Map<String, dynamic> json) {
+    return Sender(
+      id: json['id'],
+      firstName: json['firstName'],
+      lastName: json['lastName'],
+      fullName: json['fullName'],
+      email: json['email'],
+      profileImage: json['profileImage'],
+      coverImage: json['coverImage'],
+      address: json['address'],
+      bio: json['bio'],
+    );
+  }
+}
 
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "resiver": resiver?.toJson(),
-    "lastMessage": lastMessage?.toJson(),
-    "updatedAt": updatedAt?.toIso8601String(),
-  };
+class Receiver {
+  final String id;
+  final String fullName;
+  final String email;
+  final String profileImage;
+
+  Receiver({
+    required this.id,
+    required this.fullName,
+    required this.email,
+    required this.profileImage,
+  });
+
+  factory Receiver.fromJson(Map<String, dynamic> json) {
+    return Receiver(
+      id: json['id'],
+      fullName: json['fullName'],
+      email: json['email'],
+      profileImage: json['profileImage'],
+    );
+  }
 }
 
 class LastMessage {
-  final String? conversationId;
-  final String? text;
-  final String? imageUrl;
-  final String? videoUrl;
-  final String? fileUrl;
-  final String? type;
-  final bool? seen;
-  final String? msgByUserId;
-  final DateTime? createdAt;
-  final String? id;
+  final String conversationId;
+  final String text;
+  final String type;
+  final bool seen;
+  final String createdAt;
 
   LastMessage({
-    this.conversationId,
-    this.text,
-    this.imageUrl,
-    this.videoUrl,
-    this.fileUrl,
-    this.type,
-    this.seen,
-    this.msgByUserId,
-    this.createdAt,
-    this.id,
+    required this.conversationId,
+    required this.text,
+    required this.type,
+    required this.seen,
+    required this.createdAt,
   });
 
-  factory LastMessage.fromJson(Map<String, dynamic> json) => LastMessage(
-    conversationId: json["conversationId"],
-    text: json["text"],
-    imageUrl: json["imageUrl"],
-    videoUrl: json["videoUrl"],
-    fileUrl: json["fileUrl"],
-    type: json["type"],
-    seen: json["seen"],
-    msgByUserId: json["msgByUserId"],
-    createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-    id: json["id"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "conversationId": conversationId,
-    "text": text,
-    "imageUrl": imageUrl,
-    "videoUrl": videoUrl,
-    "fileUrl": fileUrl,
-    "type": type,
-    "seen": seen,
-    "msgByUserId": msgByUserId,
-    "createdAt": createdAt?.toIso8601String(),
-    "id": id,
-  };
+  factory LastMessage.fromJson(Map<String, dynamic> json) {
+    return LastMessage(
+      conversationId: json['conversationId'],
+      text: json['text'],
+      type: json['type'],
+      seen: json['seen'],
+      createdAt: json['createdAt'],
+    );
+  }
 }
 
-class Resiver {
-  final String? id;
-  final String? fullName;
-  final String? role;
-  final String? profileImage;
+class ConversationModel {
+  final String id;
+  final Sender sender;
+  final Receiver receiver;
+  final int unseenMsg;
+  final LastMessage lastMessage;
 
-  Resiver({
-    this.id,
-    this.fullName,
-    this.role,
-    this.profileImage,
+  ConversationModel({
+    required this.id,
+    required this.sender,
+    required this.receiver,
+    required this.unseenMsg,
+    required this.lastMessage,
   });
 
-  factory Resiver.fromJson(Map<String, dynamic> json) => Resiver(
-    id: json["_id"],
-    fullName: json["fullName"],
-    role: json["role"],
-    profileImage: json["profileImage"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "fullName": fullName,
-    "role": role,
-    "profileImage": profileImage,
-  };
+  factory ConversationModel.fromJson(Map<String, dynamic> json) {
+    return ConversationModel(
+      id: json['_id'],
+      sender: Sender.fromJson(json['sender']),
+      receiver: Receiver.fromJson(json['receiver']),
+      unseenMsg: json['unseenMsg'],
+      lastMessage: LastMessage.fromJson(json['lastMsg']),
+    );
+  }
 }

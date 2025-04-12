@@ -1,9 +1,7 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import '../../helpers/prefs_helpers.dart';
 import '../../helpers/route.dart';
 import '../../service/api_checker.dart';
@@ -30,26 +28,71 @@ class MessageController extends GetxController {
   File? selectedImage;
   final TextEditingController sentMsgCtrl = TextEditingController();
   final SocketServices _socket = SocketServices();
+
   @override
   void onInit() {
     super.onInit();
     _socket.init();
+    conversation();
+    message();
   }
 
-
+  updateMessageScreen(param) async {
+    var aa = await Get.toNamed(AppRoutes.chatScreen, parameters: param);
+    update();
+  }
 
   //===================================> GET CONVERSATIONS <===================================
+  Future<void> conversation() async {
+    print('Requesting conversations from the socket...');
+    _socket.socket!.on('conversation', (data) {
+      if (data != null && data.isNotEmpty) {
+        conversationModel.value = List<ConversationModel>.from(data.map((x) {
+          ConversationModel conversation = ConversationModel.fromJson(x);
+          if (conversation.sender.id == PrefsHelper.userId ||
+              conversation.receiver.id == PrefsHelper.userId) {
+            return conversation;
+          } else {
+            return null;
+          }
+        }).where((conversation) => conversation != null));
+
+        update();
+      } else {
+        print('No new conversations');
+      }
+    });
+  }
   Future<void> getConversation() async {
-    conversationLoading(true);
-    var response = await ApiClient.getData(ApiConstants.getAllConversationEndPoint);
-    if (response.statusCode == 200) {
-      var data = response.body["data"]['attributes'];
-      conversationModel.value = List<ConversationModel>.from(
-          data.map((x) => ConversationModel.fromJson(x)));
-    } else {
-      ApiChecker.checkApi(response);
-    }
-    conversationLoading(false);
+    print(PrefsHelper.userId);
+    print(AppConstants.bearerToken);
+    print('Requesting conversations from the socket...');
+    _socket.socket!.emit('conversation-page', {"currentUserId": PrefsHelper.userId});
+  }
+
+  //===================================> GET Messages <===================================
+  Future<void> getMessage(String receiverID) async {
+    print(receiverID);
+    print('Requesting messages from the socket...');
+    await _socket.init();
+    _socket.socket!.emit('message-page', {"receiver": receiverID});
+  }
+
+  Future<void> message() async {
+    print('Requesting messages from the socket...');
+    _socket.socket!.on(
+      'message',
+          (data) {
+        print('Update Message');
+        print('=============================> $data');
+        if (data != null && data.isNotEmpty) {
+          messageModel.value = List<MessageModel>.from(data.map((x) => MessageModel.fromJson(x)));
+          update();
+        } else {
+          print('No new messages or invalid data');
+        }
+      },
+    );
   }
 
   //===================================> CREATE A NEW CONVERSATION <===================================
@@ -60,24 +103,22 @@ class MessageController extends GetxController {
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      if(isAddFriend){
+      if (isAddFriend) {
         Fluttertoast.showToast(msg: 'Friend Added Successfully');
-      }
-      else{
+      } else {
         var currentUserID = await PrefsHelper.getString(AppConstants.userId);
         var data = response.body['data']['attributes'];
-
-        // Get the sender and receiver data
         var sender = data['sender'];
         var receiver = data['receiver'];
         var conversationId = data['id'];
-
-        // Determine who is the receiver and sender
-        var receiverId = currentUserID == sender['id'] ? receiver['id'] : sender['id'];
-        var displayImage = currentUserID == sender['id'] ? receiver['profileImage'] : sender['profileImage'];
-        var displayName = currentUserID == sender['id'] ? receiver['fullName'] : sender['fullName'];
-
-        // Pass the data to the next screen
+        var receiverId =
+        currentUserID == sender['id'] ? receiver['id'] : sender['id'];
+        var displayImage = currentUserID == sender['id']
+            ? receiver['profileImage']
+            : sender['profileImage'];
+        var displayName = currentUserID == sender['id']
+            ? receiver['fullName']
+            : sender['fullName'];
         Get.toNamed(AppRoutes.chatScreen, parameters: {
           'conversationId': conversationId,
           'currentUserId': currentUserID,
@@ -87,24 +128,23 @@ class MessageController extends GetxController {
         });
       }
     } else {
-      if(isAddFriend){
+      if (isAddFriend) {
         Fluttertoast.showToast(msg: 'Can not added as a friend');
       }
       ApiChecker.checkApi(response);
     }
   }
 
-
-
   //===================================> LOAD MESSAGES FOR CONVERSATION <===================================
-  inboxFirstLoad(String conversationId) async {
+  inboxFirstLoad(String receiverId) async {
     inboxFirstLoading(true);
     var response = await ApiClient.getData(
-        ApiConstants.getAllSingleMessageEndPoint(conversationId));
+        ApiConstants.getAllSingleMessageEndPoint(receiverId));
     if (response.statusCode == 200) {
       inboxFirstLoading(false);
       var data = response.body['data']['attributes']['data'];
-      messageModel.value = List<MessageModel>.from(data.map((x) => MessageModel.fromJson(x)));
+      messageModel.value =
+      List<MessageModel>.from(data.map((x) => MessageModel.fromJson(x)));
     } else {
       ApiChecker.checkApi(response);
     }
@@ -113,83 +153,79 @@ class MessageController extends GetxController {
 
   //===================================> LISTEN FOR NEW MESSAGES VIA SOCKET <===================================
   bool isListening = false;
-  listenMessage(String conversationId) {
-    if (isListening) return;
-    isListening = true;
-    SocketServices().socket?.on("new-message:$conversationId", (data) {
-      debugPrint("🔵 Live Message Received: $data");
-      MessageModel receivedMessage = MessageModel.fromJson(data);
-      if (!messageModel.any((msg) => msg.id == receivedMessage.id)) {
-        messageModel.add(receivedMessage);
-        messageModel.refresh();
-        Future.delayed(const Duration(milliseconds: 100));
-        if (scrollController.hasClients) {
-          scrollController.animateTo(
-            scrollController.position.minScrollExtent,
-            duration: const Duration(milliseconds: 100),
-            curve: Curves.easeInOut,
-          );
+  MessageModel newMessage = MessageModel.fromJson({});
+  listenMessage(String receiverId) {
+    if (_socket.socket == null) return;
+    _socket.socket!.off('message');
+    _socket.socket!.on("message", (data) {
+      final messages = List<Map<String, dynamic>>.from(data);
+      debugPrint("🔵 Live Message Received: $messages ");
+
+      for (var item in data) {
+        MessageModel receivedMessage = MessageModel.fromJson(item);
+
+        if (!messageModel.any((msg) => msg.id == receivedMessage.id)) {
+          messageModel.add(receivedMessage);
+          messageModel.refresh();
+          Future.delayed(const Duration(milliseconds: 100));
+          if (scrollController.hasClients) {
+            scrollController.animateTo(
+              scrollController.position.minScrollExtent,
+              duration: const Duration(milliseconds: 100),
+              curve: Curves.easeInOut,
+            );
+          }
         }
       }
+      update();
     });
   }
 
+
   //===================================> SEND A TEXT MESSAGE <===================================
-  void sentMessage(String conversationId, String type, String text) async {
+  void sentMessage(String receiverId, String senderId, String text, String msgById) async {
     if (text.isEmpty || sentMessageLoading.value) return;
+    if (sentMessageLoading.value) return;
     sentMessageLoading(true);
-    update();
-    String currentUserID = await PrefsHelper.getString(AppConstants.userId);
-    MessageModel newMessage = MessageModel(
-      text: text,
-      type: type,
-      msgByUserId: MsgByUserId(id: currentUserID),
-      createdAt: DateTime.now(),
-    );
-    messageModel.add(newMessage);
-    messageModel.refresh();
-    update();
     try {
-      if (_socket != null) {
-        _socket.emit("send-message", {
-          "conversationId": conversationId,
-          "type": type,
+      if (_socket.socket != null) {
+        _socket.socket?.emit("new-message", {
+          "sender": senderId,
+          "receiver": receiverId,
           "text": text,
+          "msgByUserId": msgById
+        });
+        final newMessage = MessageModel(
+          text: text,
+          msgByUserId: senderId,
+          createdAt: DateTime.now(),
+          type: 'text',
+          id: UniqueKey().toString(),
+        );
+        messageModel.insert(0, newMessage);
+        messageModel.refresh();
+        update();
+        Future.delayed(const Duration(milliseconds: 100), () {
+          if (scrollController.hasClients) {
+            scrollController.animateTo(
+              scrollController.position.minScrollExtent,
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeInOut,
+            );
+          }
         });
       } else {
         Fluttertoast.showToast(msg: "WebSocket not connected!");
       }
     } catch (e) {
       Fluttertoast.showToast(msg: "Socket Error: ${e.toString()}");
+    } finally {
       sentMessageLoading(false);
-      return;
-    }
-    try {
-      var response = await ApiClient.postData(ApiConstants.sentMessageEndPoint, {
-        "conversationId": conversationId,
-        "type": type,
-        "text": text,
-      });
-      if (response.statusCode != 200 && response.statusCode != 201) {
-        throw Exception("Failed to save message!");
-      }
-    } catch (e) {
-      Fluttertoast.showToast(msg: "API Error: ${e.toString()}");
-    }
-    sentMessageLoading(false);
-    update();
-    Future.delayed(const Duration(milliseconds: 100));
-    if (scrollController.hasClients) {
-      scrollController.animateTo(
-        scrollController.position.minScrollExtent,
-        duration: const Duration(milliseconds: 100),
-        curve: Curves.easeInOut,
-      );
     }
   }
 
-
   //===================================> SEND AN IMAGE MESSAGE <===================================
+/*
   Future<void> sentImage(String conversationId, String type) async {
     if (imagesPath.value.isEmpty) {
       Fluttertoast.showToast(msg: "No image selected!");
@@ -204,14 +240,14 @@ class MessageController extends GetxController {
     List<MultipartBody> multipartList = [
       MultipartBody("image", File(imagesPath.value))
     ];
-    SocketServices().emit("send-message", {
+    SocketServices().emit("new-message", {
       "conversationId": conversationId,
       "type": type,
       "imageUrl": imagesPath.value,
     });
     messageModel.add(MessageModel(
       type: type,
-      msgByUserId: MsgByUserId(id: await PrefsHelper.getString(AppConstants.userId)),
+      msgByUserId: await PrefsHelper.getString(AppConstants.userId),
       imageUrl: imagesPath.value,
       createdAt: DateTime.now(),
     ));
@@ -234,12 +270,5 @@ class MessageController extends GetxController {
       update();
     }
   }
-
-  //=================================> PICK IMAGE FROM GALLERY <===================================
-  Future<void> pickImages(ImageSource source) async {
-    final returnImage = await ImagePicker().pickImage(source: source);
-    if (returnImage == null) return;
-    imagesPath.value = returnImage.path;
-    update();
-  }
+*/
 }

@@ -185,6 +185,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 //=======================> Sign Up Button <=====================
                 CustomButton(
+                  loading: _authController.signInLoading.value,
                     onTap: () {
                       if (_formKey.currentState!.validate()) {
                         if (isChecked && isCheckedYears) {

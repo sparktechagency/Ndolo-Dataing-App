@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:ndolo_dating/helpers/prefs_helpers.dart';
 import 'package:ndolo_dating/themes/light_theme.dart';
 import 'package:ndolo_dating/utils/app_constants.dart';
 import 'package:ndolo_dating/utils/message.dart';
@@ -22,6 +23,7 @@ void main() async {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await  di.init();
+  await  PrefsHelper.getAllPrefData();
   try {
     if (GetPlatform.isMobile) {
       final RemoteMessage? remoteMessage = await FirebaseMessaging.instance.getInitialMessage();

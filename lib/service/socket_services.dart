@@ -62,6 +62,8 @@ class SocketServices {
     }
   }
 
+
+
   //===================================> Disconnect socket properly <============================================
   void disconnect() {
     socket?.dispose();
