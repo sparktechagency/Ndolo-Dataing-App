@@ -4,7 +4,7 @@ import '../utils/app_constants.dart';
 
 class PrefsHelper extends GetxController {
   static String token = "";
-  static String clientId = "";
+  static String userId = "";
   static String? myImage = "";
   static String myName = "";
   static String myPhone = "";
@@ -17,8 +17,8 @@ class PrefsHelper extends GetxController {
 
   static Future<void> getAllPrefData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    // token = preferences.getString(AppConstants.bearerToken) ?? "";
-    clientId = preferences.getString("") ?? "";
+     token = preferences.getString(AppConstants.bearerToken) ?? "";
+    userId = preferences.getString(AppConstants.userId) ?? "";
     myImage = preferences.getString("") ?? "";
     myName = preferences.getString("") ?? "";
     myPhone = preferences.getString("") ?? "";
@@ -80,7 +80,7 @@ class PrefsHelper extends GetxController {
     preferences.setString("myEmail", "");
     preferences.setBool("isProvider", false);
     token = "";
-    clientId = "";
+    userId = "";
     isProvider = false;
     myName = "";
     myPhone = "";

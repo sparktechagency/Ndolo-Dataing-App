@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:ndolo_dating/controllers/home_controller.dart';
+import 'package:ndolo_dating/controllers/filter_controller.dart';
 import 'package:ndolo_dating/helpers/route.dart';
 import 'package:ndolo_dating/utils/app_strings.dart';
 import 'package:ndolo_dating/views/base/custom_page_loading.dart';
@@ -20,12 +20,11 @@ class FilterScreen extends StatefulWidget {
 }
 
 class _FilterScreenState extends State<FilterScreen> {
-  final HomeController homeController = Get.find();
-  final IdealMatchController _idealMatchController = Get.put(IdealMatchController());
-  final TextEditingController countryCtrl = TextEditingController();
-  final TextEditingController cityCtrl = TextEditingController();
+  final FilterController _filterController = Get.put(FilterController());
+  final IdealMatchController _idealMatchController =
+      Get.put(IdealMatchController());
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  double _minDistance = 0;
   double _maxDistance = 200;
   double _minAge = 18;
   double _maxAge = 80;
@@ -35,19 +34,20 @@ class _FilterScreenState extends State<FilterScreen> {
   final List<String> genderOptions = ['Male', 'Female'];
   List<String> matchOptions = [];
   Map<String, String> matchIdMap = {};
-  void _applyFilters() {
+
+/*  void _applyFilters() {
     String idealMatchId = matchIdMap[selectedMatch ?? ''] ?? '';
-    homeController.getFilteredUsers(
+    _filterController.getFilteredUsers(
       maxDistance: _maxDistance,
       minAge: _minAge,
       maxAge: _maxAge,
       gender: selectedGender,
-      country: countryCtrl.text,
-      city: cityCtrl.text,
+      country: _filterController.countryCtrl.text,
       matchPreference: idealMatchId,
     );
-    Get.toNamed(AppRoutes.searchResultScreen, arguments: homeController.filteredUsers);
-  }
+    Get.toNamed(AppRoutes.searchResultScreen,
+        arguments: _filterController.filteredUsers);
+  }*/
 
   @override
   void initState() {
@@ -59,15 +59,15 @@ class _FilterScreenState extends State<FilterScreen> {
               .map((e) => e.title ?? 'Unknown') // Handle null titles
               .toList();
           matchIdMap = {
-            for (var item in _idealMatchController.idealMatchModel) item.name ?? 'Unknown' : item.id ?? '' };
+            for (var item in _idealMatchController.idealMatchModel)
+              item.name ?? 'Unknown': item.id ?? ''
+          };
         } else {
-          // Handle the case where the idealMatchModel is still null
           matchOptions = [];
           matchIdMap = {};
         }
       });
     });
-
   }
 
   @override
@@ -77,96 +77,123 @@ class _FilterScreenState extends State<FilterScreen> {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              //=======================> Distance Slider <==================
-              CustomText(
-                text: 'Distance (Mi)'.tr,
-                fontWeight: FontWeight.w700,
-                fontSize: 18.sp,
-                bottom: 8.h,
-              ),
-              _distanceSlider(),
-              _rangeLabels('Minimum'.tr, _minDistance, 'Maximum'.tr, _maxDistance),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //=======================> Distance Slider <==================
+                CustomText(
+                  text: 'Distance (Mi)'.tr,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18.sp,
+                  bottom: 8.h,
+                ),
+                _distanceSlider(),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Total Distance'.tr,
+                        style: TextStyle(fontSize: 12.sp)),
+                    SizedBox(height: 4.h),
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8.r),
+                        border: Border.all(color: Colors.blue, width: 1.w),
+                      ),
+                      child: Text(_maxDistance.toStringAsFixed(0),
+                          style:
+                              TextStyle(fontSize: 14.sp, color: Colors.blue)),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 24.h),
+                //=======================> Age Range Slider <==================
+                CustomText(
+                  text: 'Age'.tr,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18.sp,
+                  bottom: 8.h,
+                ),
+                _ageSlider(),
+                _rangeLabels('Minimum', _minAge, 'Maximum', _maxAge),
+                //=======================> Country  <==================
+                SizedBox(height: 24.h),
+                CustomText(
+                  text: AppStrings.country.tr,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.bold,
+                  bottom: 8.h,
+                ),
+                CustomTextField(
+                  onTab: () {
+                    _filterController.pickCountry(context);
+                  },
+                  readOnly: true,
+                  controller: _filterController.countryCtrl,
+                  hintText: 'Enter Country'.tr,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please select your country".tr;
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 16.h),
+                //=======================> Gender Dropdown <==================
+                CustomText(
+                  text: 'Looking For'.tr,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18.sp,
+                  bottom: 8.h,
+                ),
+                _dropdownField(genderOptions, selectedGender, (value) {
+                  setState(() {
+                    selectedGender = value;
+                  });
+                }, 'Select Gender'),
 
-              SizedBox(height: 24.h),
+                SizedBox(height: 24.h),
 
-              //=======================> Age Range Slider <==================
-              CustomText(
-                text: 'Age'.tr,
-                fontWeight: FontWeight.w700,
-                fontSize: 18.sp,
-                bottom: 8.h,
-              ),
-              _ageSlider(),
-              _rangeLabels('Minimum', _minAge, 'Maximum', _maxAge),
+                //=======================> Match Dropdown <==================
+                CustomText(
+                  text: 'Match'.tr,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18.sp,
+                  bottom: 8.h,
+                ),
+                matchOptions.isEmpty
+                    ? const CustomPageLoading()
+                    : _dropdownField(matchOptions, selectedMatch, (value) {
+                        setState(() {
+                          selectedMatch = value;
+                        });
+                      }, 'Select Match'),
 
-              //=======================> Country  <==================
+                SizedBox(height: 32.h),
 
-              SizedBox(height: 24.h),
-              CustomText(
-                text: AppStrings.country.tr,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.bold,
-                bottom: 8.h,
-              ),
-              CustomTextField(
-                controller: countryCtrl,
-                hintText: 'Enter Country'.tr,
-              ),
-              SizedBox(height: 16.h),
-              //=======================> City  <==================
-              CustomText(
-                text: AppStrings.city.tr,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.bold,
-                bottom: 8.h,
-              ),
-              CustomTextField(
-                controller: cityCtrl,
-                hintText: 'Enter City'.tr,
-              ),
-              SizedBox(height: 16.h),
-              //=======================> Gender Dropdown <==================
-              CustomText(
-                text: 'Looking For'.tr,
-                fontWeight: FontWeight.w700,
-                fontSize: 18.sp,
-                bottom: 8.h,
-              ),
-              _dropdownField(genderOptions, selectedGender, (value) {
-                setState(() {
-                  selectedGender = value;
-                });
-              }, 'Select Gender'),
-
-              SizedBox(height: 24.h),
-
-              //=======================> Match Dropdown <==================
-              CustomText(
-                text: 'Match'.tr,
-                fontWeight: FontWeight.w700,
-                fontSize: 18.sp,
-                bottom: 8.h,
-              ),
-              matchOptions.isEmpty
-                  ? const CustomPageLoading()
-                  : _dropdownField(matchOptions, selectedMatch, (value) {
-                setState(() {
-                  selectedMatch = value;
-                });
-              }, 'Select Match'),
-
-              SizedBox(height: 32.h),
-
-              //====================> Find Friends Button <=====================
-              CustomButton(
-                onTap: _applyFilters,
-                text: 'Find Friends'.tr,
-              ),
-              SizedBox(height: 16.h),
-            ],
+                //====================> Find Friends Button <=====================
+                CustomButton(
+                  loading: _filterController.filterLoading.value,
+                  onTap: () {
+                    if (_formKey.currentState!.validate()) {
+                      _filterController.getFilteredUsers(
+                          maxDistance: _maxDistance,
+                          minAge: _minAge,
+                          maxAge: _maxAge,
+                          gender: selectedGender,
+                          country: _filterController.countryCtrl.text,
+                          matchPreference: selectedMatch);
+                    }
+                  },
+                  text: 'Find Friends'.tr,
+                ),
+                SizedBox(height: 16.h),
+              ],
+            ),
           ),
         ),
       ),
@@ -175,18 +202,17 @@ class _FilterScreenState extends State<FilterScreen> {
 
   //============================> Distance Slider <===============================
   Widget _distanceSlider() {
-    return RangeSlider(
+    return Slider(
       activeColor: AppColors.primaryColor,
       inactiveColor: AppColors.greyColor,
-      values: RangeValues(_minDistance, _maxDistance),
+      value: _maxDistance,
       min: 0,
       max: 200,
       divisions: 200,
-      labels: RangeLabels(_minDistance.toStringAsFixed(0), _maxDistance.toStringAsFixed(0)),
-      onChanged: (values) {
+      label: _maxDistance.toStringAsFixed(0),
+      onChanged: (value) {
         setState(() {
-          _minDistance = values.start;
-          _maxDistance = values.end;
+          _maxDistance = value;
         });
       },
     );
@@ -201,7 +227,8 @@ class _FilterScreenState extends State<FilterScreen> {
       min: 18,
       max: 80,
       divisions: 80,
-      labels: RangeLabels(_minAge.toStringAsFixed(0), _maxAge.toStringAsFixed(0)),
+      labels:
+          RangeLabels(_minAge.toStringAsFixed(0), _maxAge.toStringAsFixed(0)),
       onChanged: (values) {
         setState(() {
           _minAge = values.start;
@@ -212,10 +239,11 @@ class _FilterScreenState extends State<FilterScreen> {
   }
 
   //============================> Dropdown Field <===============================
-  Widget _dropdownField(List<String> options, String? selectedValue, Function(String?) onChanged, String hint) {
+  Widget _dropdownField(List<String> options, String? selectedValue,
+      Function(String?) onChanged, String hint) {
     return DropdownButtonFormField<String>(
-      dropdownColor: Colors.white, // Dropdown background color
-      icon: const Icon(Icons.arrow_drop_down, color: Colors.black), // Dropdown icon color
+      dropdownColor: Colors.white,
+      icon: const Icon(Icons.arrow_drop_down, color: Colors.black),
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.r),
@@ -229,25 +257,26 @@ class _FilterScreenState extends State<FilterScreen> {
       items: options
           .map(
             (e) => DropdownMenuItem(
-          value: e,
-          child: Text(
-            e,
-            style: const TextStyle(color: Colors.black), // Selected item text color
-          ),
-        ),
-      )
+              value: e,
+              child: Text(
+                e,
+                style: const TextStyle(color: Colors.black),
+              ),
+            ),
+          )
           .toList(),
       onChanged: onChanged,
       hint: Text(
         hint,
-        style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400, color: Colors.black), // Hint text color
+        style: TextStyle(
+            fontSize: 16.sp, fontWeight: FontWeight.w400, color: Colors.black),
       ),
     );
   }
 
-
   //============================> Range Labels <===============================
-  Widget _rangeLabels(String label1, double value1, String label2, double value2) {
+  Widget _rangeLabels(
+      String label1, double value1, String label2, double value2) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -269,7 +298,8 @@ class _FilterScreenState extends State<FilterScreen> {
             borderRadius: BorderRadius.circular(8.r),
             border: Border.all(color: Colors.blue, width: 1.w),
           ),
-          child: Text(value.toStringAsFixed(0), style: TextStyle(fontSize: 14.sp, color: Colors.blue)),
+          child: Text(value.toStringAsFixed(0),
+              style: TextStyle(fontSize: 14.sp, color: Colors.blue)),
         ),
       ],
     );

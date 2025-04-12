@@ -100,43 +100,4 @@ class HomeController extends GetxController implements GetxService {
     postLoading(false);
     update();
   }
-
-  //=============================> Get Filtered Users <===============================
-  RxList<HomeUserModel> filteredUsers = <HomeUserModel>[].obs;
-  RxBool filterLoading = false.obs;
-
-  getFilteredUsers({
-    required double maxDistance,
-    required double minAge,
-    required double maxAge,
-    String? gender,
-    String? country,
-    String? city,
-    String? matchPreference,
-  }) async {
-    filterLoading(true);
-    String queryParams = '?maxDistance=$maxDistance&minAge=$minAge&maxAge=$maxAge';
-    if (gender != null) queryParams += '&gender=$gender';
-    if (country != null && country.isNotEmpty) queryParams += '&country=$country';
-    if (city != null && city.isNotEmpty) queryParams += '&city=$city';
-    if (matchPreference != null) queryParams += '&idealMatch=$matchPreference';
-    var response = await ApiClient.getData('${ApiConstants.getHomeAllUserEndPoint}$queryParams');
-
-    if (response.statusCode == 200) {
-      filterLoading(false);
-      var responseData = response.body['data']['attributes'];
-      print("==========================> Filtered User Data: $responseData");
-      if (responseData is List) {
-        filteredUsers.assignAll(
-            responseData.map((e) => HomeUserModel.fromJson(e)).toList());
-      } else {
-        filteredUsers.assignAll([HomeUserModel.fromJson(responseData)]);
-      }
-    } else {
-      ApiChecker.checkApi(response);
-    }
-
-    filterLoading(false);
-    update();
-  }
 }

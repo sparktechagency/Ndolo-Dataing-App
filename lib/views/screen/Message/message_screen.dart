@@ -23,13 +23,13 @@ class MessageScreen extends StatefulWidget {
 class _MessageScreenState extends State<MessageScreen> {
   final MessageController controller = Get.put(MessageController());
   final SocketServices _socket = SocketServices();
-  var currentUserId ='';
+  var currentUserId = '';
 
   @override
   void initState() {
     super.initState();
-    controller.getConversation();
     _socket.init();
+    controller.getConversation();
   }
 
   @override
@@ -46,9 +46,6 @@ class _MessageScreenState extends State<MessageScreen> {
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
         child: Obx(() {
-          if (controller.conversationLoading.value) {
-            return const Center(child: CustomPageLoading());
-          }
           if (controller.conversationModel.isEmpty) {
             return Center(child: CustomText(text: 'No conversations found'.tr));
           }
@@ -56,24 +53,21 @@ class _MessageScreenState extends State<MessageScreen> {
             itemCount: controller.conversationModel.length,
             itemBuilder: (context, index) {
               final conversation = controller.conversationModel[index];
-              String conversationId = conversation.id ?? '';
-          //    bool isCurrentUser = conversation.resiver!.id == currentUserId;
-              String displayName = conversation.resiver?.fullName ?? 'Unknown';
-              String displayImage = conversation.resiver?.profileImage ?? '';
-              String receiverId =  conversation.resiver!.id!;
+              String conversationId = conversation.id;
+              String displayName = conversation.receiver.fullName;
+              String displayImage = conversation.receiver.profileImage;
+              String receiverId = conversation.receiver.id;
 
               return Padding(
                 padding: EdgeInsets.only(bottom: 16.h),
                 child: GestureDetector(
-                  onTap: () {
-                    Get.toNamed(AppRoutes.chatScreen, parameters: {
-                      "conversationId": conversationId,
-                      "currentUserId": currentUserId,
-                      "receiverId": receiverId,
-                      "receiverImage": displayImage,
-                      "receiverName": displayName,
-                    });
-                  },
+                  onTap: () => controller.updateMessageScreen({
+                    "conversationId": conversationId,
+                    "currentUserId": conversation.sender.id,
+                    "receiverId": receiverId,
+                    "receiverImage": displayImage,
+                    "receiverName": displayName,
+                  }),
                   child: Container(
                     decoration: BoxDecoration(
                       color: AppColors.cardColor,
@@ -94,20 +88,18 @@ class _MessageScreenState extends State<MessageScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                //=====================> Name <=======================
                                 CustomText(
-                                  text:  displayName,
+                                  text: displayName,
                                   fontSize: 16.sp,
                                   fontWeight: FontWeight.w700,
                                   bottom: 6.h,
                                   maxLine: 2,
                                   textAlign: TextAlign.start,
                                 ),
-                                //=====================> Last Message <=======================
                                 CustomText(
-                                  text: (conversation.lastMessage?.type == 'image')
+                                  text: (conversation.lastMessage.type == 'image')
                                       ? 'An image'
-                                      : (conversation.lastMessage?.text ?? 'No message available'),
+                                      : (conversation.lastMessage.text ?? 'No message available'),
                                   fontWeight: FontWeight.w500,
                                   maxLine: 2,
                                   textAlign: TextAlign.start,
@@ -128,4 +120,3 @@ class _MessageScreenState extends State<MessageScreen> {
     );
   }
 }
-
