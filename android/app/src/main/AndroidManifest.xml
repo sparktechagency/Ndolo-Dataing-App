@@ -24,7 +24,7 @@
 
     <application
         android:enableOnBackInvokedCallback="true"
-        android:label="ndolo_dating"
+        android:label="Ndolomeet"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 
