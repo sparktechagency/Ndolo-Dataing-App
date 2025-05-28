@@ -90,6 +90,7 @@ class AuthController extends GetxController {
       update();
     } else {
       ApiChecker.checkApi(response);
+      Fluttertoast.showToast(msg: response.statusText ?? "");
       signUpLoading(false);
       update();
     }
@@ -147,6 +148,7 @@ class AuthController extends GetxController {
         }
       } else {
         ApiChecker.checkApi(response);
+        Fluttertoast.showToast(msg: response.statusText ?? "");
       }
     } catch (e, s) {
       print("===> e : $e");
@@ -239,6 +241,7 @@ class AuthController extends GetxController {
       forgetEmailTextCtrl.clear();
     } else {
       ApiChecker.checkApi(response);
+      Fluttertoast.showToast(msg: response.statusText ?? "");
     }
     forgotLoading(false);
   }
@@ -308,6 +311,7 @@ class AuthController extends GetxController {
       Get.back();
     } else {
       ApiChecker.checkApi(response);
+      Fluttertoast.showToast(msg: response.statusText ?? "");
     }
     changePassLoading(false);
   }
@@ -361,6 +365,7 @@ class AuthController extends GetxController {
            update();
          } else {
            ApiChecker.checkApi(response);
+           Fluttertoast.showToast(msg: response.statusText ?? "");
            update();
          }
        }
