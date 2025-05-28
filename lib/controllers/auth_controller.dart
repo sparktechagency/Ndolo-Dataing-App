@@ -80,6 +80,7 @@ class AuthController extends GetxController {
       lastNameCTR.clear();
       emailCTR.clear();
       passCTR.clear();
+      confirmPassCTR.clear();
       birthDateCTRL.clear();
       addressCTRL.clear();
       countryCTRL.clear();
@@ -187,7 +188,7 @@ class AuthController extends GetxController {
     Map<String, dynamic> body = {
       'email': signInEmailCtrl.text.trim(),
       'password': signInPassCtrl.text.trim(),
-      "fcmToken": fcmToken.isNotEmpty?fcmToken:"test",
+      "fcmToken": fcmToken.isNotEmpty? fcmToken:"test",
       "loginType": 1
     };
     Response response = await ApiClient.postData(
@@ -312,31 +313,6 @@ class AuthController extends GetxController {
   }
 
   //======================> Google login Info <============================
-  /*handleGoogleSingIn(String email) async {
-    var fcmToken=await PrefsHelper.getString(AppConstants.fcmToken);
-
-    Map<String, dynamic> body =
-    {
-      "email": email,
-      "fcmToken": fcmToken ?? "",
-      "loginType": 2
-    };
-
-    var headers = {'Content-Type': 'application/json'};
-    Response response = await ApiClient.postData(ApiConstants.logInEndPoint, jsonEncode(body), headers: headers);
-    if (response.statusCode == 200) {
-      await PrefsHelper.setString(AppConstants.bearerToken, response.body['data']['attributes']['tokens']['access']['token']);
-      await PrefsHelper.setString(AppConstants.userId, response.body['data']['attributes']['user']['id']);
-      await PrefsHelper.setBool(AppConstants.isLogged, true);
-      Get.offAllNamed(AppRoutes.homeScreen);
-      await PrefsHelper.setBool(AppConstants.isLogged, true);
-      update();
-    } else {
-      ApiChecker.checkApi(response);
-      update();
-    }
-  }*/
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
    handleGoogleSignIn(BuildContext context) async {
@@ -359,7 +335,7 @@ class AuthController extends GetxController {
 
          Map<String, dynamic> body = {
            'email': '${user.email}',
-           "fcmToken": fcmToken ?? "",
+           "fcmToken": fcmToken.isNotEmpty? fcmToken:"test",
            "loginType": 2
          };
          var headers = {

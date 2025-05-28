@@ -189,15 +189,17 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                   Obx(()=> CustomButton(
                       loading: _authController.signUpLoading.value,
                         onTap: () {
-                          if (_formKey.currentState!.validate()) {
-                            if(_authController.selectedGender == null){
-                              Fluttertoast.showToast(msg: "Select Gender");
-                            }
-                            else if( _authController.bioCTRL.text.length <= 15   && _authController.bioCTRL.text.length >= 45){
-                              Fluttertoast.showToast(msg: "Bio must be between 15 and 45 characters.");
-                            }
-                            else{
-                              _authController.handleSignUp();
+                          if( _authController.bioCTRL.text.length < 15   ||  _authController.bioCTRL.text.length > 45){
+                            Fluttertoast.showToast(msg: "Bio must be between 15 and 45 characters.");
+                          }
+                          else {
+                            if (_formKey.currentState!.validate()) {
+                              if (_authController.selectedGender == null){
+                                Fluttertoast.showToast(msg: "Select Gender");
+                              }
+                              else{
+                                _authController.handleSignUp();
+                              }
                             }
                           }
                         },
