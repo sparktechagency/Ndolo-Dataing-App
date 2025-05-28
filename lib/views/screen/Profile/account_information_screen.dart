@@ -117,6 +117,8 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
           text: title,
           fontSize: 16.sp,
           fontWeight: FontWeight.bold,
+          maxLine: 15,
+          textAlign: TextAlign.start,
           bottom: 8.h,
         ),
         CustomListTile(title: value ?? "N/A"),

@@ -319,8 +319,8 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                     () => CustomButton(
                         loading: _profileController.updateProfileLoading.value,
                         onTap: () {
-                          if(_profileController.bioCTRL.text.length < 50){
-                            Fluttertoast.showToast(msg: "Bio should contain at least 50 characters");
+                          if(_profileController.bioCTRL.text.length < 15 || _profileController.bioCTRL.text.length > 45){
+                            Fluttertoast.showToast(msg: "Bio must be between 15 and 45 characters.");
                           }
                           else {
                             if (_formKey.currentState!.validate()) {
@@ -329,7 +329,6 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
                               print('No Selected ');
 
                             }
-
                           }
                         },
                         text: 'Update'.tr),

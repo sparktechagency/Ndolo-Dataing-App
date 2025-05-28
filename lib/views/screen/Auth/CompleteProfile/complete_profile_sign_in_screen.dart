@@ -19,11 +19,12 @@ class CompleteProfileSignInScreen extends StatefulWidget {
   const CompleteProfileSignInScreen({super.key});
 
   @override
-  State<CompleteProfileSignInScreen> createState() => _CompleteProfileScreenState();
+  State<CompleteProfileSignInScreen> createState() =>
+      _CompleteProfileScreenState();
 }
 
 class _CompleteProfileScreenState extends State<CompleteProfileSignInScreen> {
-  final ProfileController _profileController  = Get.put(ProfileController());
+  final ProfileController _profileController = Get.put(ProfileController());
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? selectedGender;
 
@@ -89,7 +90,6 @@ class _CompleteProfileScreenState extends State<CompleteProfileSignInScreen> {
                 _genderRadioButton(),
                 SizedBox(height: 16.h),
 
-
                 //==========================> First Name Text Field <======================
                 CustomText(
                   text: AppStrings.firstName.tr,
@@ -135,7 +135,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileSignInScreen> {
                   bottom: 8.h,
                 ),
                 CustomTextField(
-                  onTab: (){
+                  onTab: () {
                     _profileController.pickCountry(context);
                   },
                   readOnly: true,
@@ -181,12 +181,19 @@ class _CompleteProfileScreenState extends State<CompleteProfileSignInScreen> {
                 Wrap(
                   spacing: 8.w,
                   runSpacing: 4.h,
-                  children: _profileController.selectedInterests.map((interest) {
+                  children:
+                  _profileController.selectedInterests.map((selectedId) {
+                    final interest = _profileController.interestsModel.firstWhere(
+                          (element) => element.id == selectedId,
+                      orElse: () => InterestsModel(id: selectedId, name: 'Unknown'),
+                    );
+                      //_profileController.selectedInterests.map((interest) {
                     return Chip(
-                      label: Text(interest),
+                      label: Text(interest.name ?? ''),
                       backgroundColor: AppColors.primaryColor,
                       labelStyle: const TextStyle(color: Colors.white),
-                      deleteIcon: Icon(Icons.clear, size: 18.w, color: Colors.white),
+                      deleteIcon:
+                          Icon(Icons.clear, size: 18.w, color: Colors.white),
                       onDeleted: () {
                         setState(() {
                           _profileController.selectedInterests.remove(interest);
@@ -197,22 +204,24 @@ class _CompleteProfileScreenState extends State<CompleteProfileSignInScreen> {
                 ),
                 //=========================> Complete Profile Button <================
                 SizedBox(height: 24.h),
-                Obx(()=> CustomButton(
-                    loading: _profileController.updateProfileAfterGoogleSignInLoading.value,
-                    onTap: () {
-                      if (_formKey.currentState!.validate()) {
-                        if(_profileController.selectedGender.isEmpty){
-                          Fluttertoast.showToast(msg: "Select Gender");
+                Obx(
+                  () => CustomButton(
+                      loading: _profileController.updateProfileAfterGoogleSignInLoading.value,
+                      onTap: () {
+                        if (_profileController.bioCTRL.text.length < 15 || _profileController.bioCTRL.text.length > 45) {
+                          Fluttertoast.showToast(
+                              msg: "Bio must be between 15 and 45 characters.");
+                        } else {
+                          if (_formKey.currentState!.validate()) {
+                            if (_profileController.selectedGender.isEmpty) {
+                              Fluttertoast.showToast(msg: "Select Gender");
+                            } else {
+                              _profileController.updateProfileAfterGoogleSignIn();
+                            }
+                          }
                         }
-                        else if(_profileController.bioCTRL.text.length <= 15 && _profileController.bioCTRL.text.length >= 45  ){
-                          Fluttertoast.showToast(msg: "Bio must be between 15 and 45 characters.");
-                        }
-                        else{
-                          _profileController.updateProfileAfterGoogleSignIn();
-                        }
-                      }
-                    },
-                    text: AppStrings.completeProfile.tr),
+                      },
+                      text: AppStrings.completeProfile.tr),
                 ),
                 SizedBox(height: 24.h),
               ],
@@ -300,7 +309,8 @@ class _CompleteProfileScreenState extends State<CompleteProfileSignInScreen> {
         child: DropdownButton<String>(
           value: _profileController.selectedInterests.isEmpty
               ? null
-              : _profileController.selectedInterests.last, // Set value
+              : _profileController.selectedInterests.last,
+          // Set value
           dropdownColor: AppColors.fillColor,
           isExpanded: true,
           hint: CustomText(
@@ -312,7 +322,8 @@ class _CompleteProfileScreenState extends State<CompleteProfileSignInScreen> {
             AppIcons.downArrow,
             width: 24.w,
           ),
-          items: _profileController.interestsModel.map((InterestsModel interest) {
+          items:
+              _profileController.interestsModel.map((InterestsModel interest) {
             return DropdownMenuItem<String>(
               value: interest.id,
               child: StatefulBuilder(
@@ -323,20 +334,25 @@ class _CompleteProfileScreenState extends State<CompleteProfileSignInScreen> {
                         activeColor: AppColors.primaryColor,
                         checkColor: AppColors.whiteColor,
                         side: BorderSide(color: AppColors.primaryColor),
-                        value: _profileController.selectedInterests.contains(interest.name),
+                        value: _profileController.selectedInterests
+                            .contains(interest.id),
                         onChanged: (bool? isSelected) {
                           setState(() {
                             if (isSelected == true) {
-                              if (!_profileController.selectedInterests.contains(interest.name)) {
-                                _profileController.selectedInterests.add(interest.name!);
+                              if (!_profileController.selectedInterests
+                                  .contains(interest.id)) {
+                                _profileController.selectedInterests
+                                    .add(interest.id!);
                               }
                             } else {
-                              _profileController.selectedInterests.remove(interest.name!);
+                              _profileController.selectedInterests
+                                  .remove(interest.id!);
                             }
                           });
                         },
                       ),
-                      Text(interest.name!, style: const TextStyle(color: Colors.black)),
+                      Text(interest.name!,
+                          style: const TextStyle(color: Colors.black)),
                     ],
                   );
                 },
@@ -356,8 +372,6 @@ class _CompleteProfileScreenState extends State<CompleteProfileSignInScreen> {
       ),
     );
   }
-
-
 
   //==========================> Show Calender Function <=======================
   Future<void> _pickBirthDate(BuildContext context) async {
@@ -381,12 +395,12 @@ class _CompleteProfileScreenState extends State<CompleteProfileSignInScreen> {
     );
 
     if (pickedDate != null) {
-      if(isDateValid(pickedDate)){
+      if (isDateValid(pickedDate)) {
         setState(() {
-          _profileController.dateBirthCTRL.text = "${_getMonthName(pickedDate.month)} ${pickedDate.day}, ${pickedDate.year}";
+          _profileController.dateBirthCTRL.text =
+              "${_getMonthName(pickedDate.month)} ${pickedDate.day}, ${pickedDate.year}";
         });
-      }
-      else{
+      } else {
         Fluttertoast.showToast(msg: "The user is younger than 18 years.");
       }
     }
@@ -394,14 +408,27 @@ class _CompleteProfileScreenState extends State<CompleteProfileSignInScreen> {
 
   bool isDateValid(DateTime selectedDate) {
     DateTime today = DateTime.now();
-    DateTime eighteenYearsAgo = today.subtract(const Duration(days: 365 * 18)); // 18 years ago
+    DateTime eighteenYearsAgo =
+        today.subtract(const Duration(days: 365 * 18)); // 18 years ago
 
     return selectedDate.isBefore(eighteenYearsAgo);
   }
+
   // Helper function to convert month number to name
   String _getMonthName(int month) {
     const List<String> months = [
-      "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
     ];
     return months[month - 1];
   }

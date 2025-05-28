@@ -23,7 +23,8 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  LocalizationController localizationController = Get.find<LocalizationController>();
+  LocalizationController localizationController =
+      Get.find<LocalizationController>();
   final AuthController _authController = Get.put(AuthController());
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isChecked = false;
@@ -62,10 +63,11 @@ class _SignInScreenState extends State<SignInScreen> {
                     decoration: BoxDecoration(
                       color: AppColors.fillColor,
                       borderRadius: BorderRadius.circular(16.r),
-                      border: Border.all(color: AppColors.borderColor, width: 1),
+                      border:
+                          Border.all(color: AppColors.borderColor, width: 1),
                     ),
                     child: DropdownButtonHideUnderline(
-                      child:DropdownButton<String>(
+                      child: DropdownButton<String>(
                         focusColor: Colors.white,
                         value: selectedLanguage ?? language[0],
                         dropdownColor: AppColors.whiteColor,
@@ -99,8 +101,10 @@ class _SignInScreenState extends State<SignInScreen> {
                             int selectedIndex = language.indexOf(newValue);
                             if (selectedIndex != -1) {
                               Locale newLocale = Locale(
-                                AppConstants.languages[selectedIndex].languageCode,
-                                AppConstants.languages[selectedIndex].countryCode,
+                                AppConstants
+                                    .languages[selectedIndex].languageCode,
+                                AppConstants
+                                    .languages[selectedIndex].countryCode,
                               );
                               setState(() {
                                 localizationController.setLanguage(newLocale);
@@ -181,14 +185,19 @@ class _SignInScreenState extends State<SignInScreen> {
                 SizedBox(height: 16.h),
                 //=======================> Sign In Button <=====================
                 Obx(() => CustomButton(
-                  loading: _authController.signInLoading.value,
-                  onTap: () {
-                    if (_formKey.currentState!.validate()) {
-                        _authController.handleLogIn();
-                    }
-                  },
-                  text: AppStrings.signIn.tr,
-                )),
+                      loading: _authController.signInLoading.value,
+                      onTap: () {
+                        if (_formKey.currentState!.validate()) {
+                          if (isChecked) {
+                            _authController.handleLogIn();
+                          } else {
+                            Fluttertoast.showToast(
+                                msg: 'Please accept Remember Me'.tr);
+                          }
+                        }
+                      },
+                      text: AppStrings.signIn.tr,
+                    )),
                 SizedBox(height: 8.h),
                 //=======================> Or  <=====================
                 Center(
@@ -200,7 +209,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                 ),
                 //=======================> Google and Facebook Button <=====================
-               /* Center(
+                /* Center(
                   child: GestureDetector(
                     onTap: () {},
                     child: Container(
