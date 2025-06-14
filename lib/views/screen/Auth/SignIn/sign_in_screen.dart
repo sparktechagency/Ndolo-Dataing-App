@@ -209,16 +209,19 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                 ),
                 //=======================> Google and Facebook Button <=====================
-                /* Center(
+                 Center(
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      _authController.handleGoogleSignIn(context);
+                    },
                     child: Container(
+                      width: double.infinity,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8.r),
                             border: Border.all(
                                 width: 1.w, color: AppColors.primaryColor)),
                         child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+                          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -233,25 +236,26 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                         )),
                   ),
-                ),*/
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        _authController.handleGoogleSignIn(context);
-                      },
-                      child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16.r),
-                              border: Border.all(
-                                  width: 1.w, color: AppColors.primaryColor)),
-                          child: Padding(
-                            padding: EdgeInsets.all(8.w),
-                            child: Image.asset(AppImages.googleLogo,
-                                width: 32.w, height: 32.h),
-                          )),
-                    ),
+                ),
+
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     GestureDetector(
+                //       onTap: () {
+                //         _authController.handleGoogleSignIn(context);
+                //       },
+                //       child: Container(
+                //           decoration: BoxDecoration(
+                //               borderRadius: BorderRadius.circular(16.r),
+                //               border: Border.all(
+                //                   width: 1.w, color: AppColors.primaryColor)),
+                //           child: Padding(
+                //             padding: EdgeInsets.all(8.w),
+                //             child: Image.asset(AppImages.googleLogo,
+                //                 width: 32.w, height: 32.h),
+                //           )),
+                //     ),
                     // SizedBox(width: 12.w),
                     // GestureDetector(
                     //   onTap: () {},
@@ -267,10 +271,10 @@ class _SignInScreenState extends State<SignInScreen> {
                     //       )),
                     // ),
                     // Image.asset(AppImages.facebookLogo, width: 32.w, height: 32.h)
-                  ],
-                ),
+                 // ],
+              //  ),
 
-                SizedBox(height: 16.h),
+                SizedBox(height: 24.h),
                 //=======================> Don’t have an account <=====================
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

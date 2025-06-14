@@ -209,23 +209,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 //=======================> Google and Facebook Button <=====================
-                /*Center(
+                Center(
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      _authController.handleGoogleSignIn(context);
+                    },
                     child: Container(
+                        width: double.infinity,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8.r),
                             border: Border.all(
                                 width: 1.w, color: AppColors.primaryColor)),
                         child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal:  12.w, vertical: 4.h),
+                          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Image.asset(AppImages.googleLogo,
-                                  width: 32.w, height: 32.h),
-                              SizedBox( width: 12.w),
+                              Image.asset(AppImages.googleLogo, width: 32.w, height: 32.h),
+                              SizedBox(width: 12.w),
                               CustomText(
                                 text: 'Sign in With Google'.tr,
                                 fontSize: 18.sp,
@@ -234,31 +236,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         )),
                   ),
-                ),*/
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        if (isChecked && isCheckedYears) {
-                          _authController.handleGoogleSignIn(context);
-                        }
-                        else {
-                          Fluttertoast.showToast(
-                              msg: 'Please accept Terms & Conditions and 18 years old'.tr);
-                        }
-                      },
-                      child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16.r),
-                              border: Border.all(
-                                  width: 1.w, color: AppColors.primaryColor)),
-                          child: Padding(
-                            padding: EdgeInsets.all(8.w),
-                            child: Image.asset(AppImages.googleLogo,
-                                width: 32.w, height: 32.h),
-                          )),
-                    ),
+                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     GestureDetector(
+                //       onTap: () {
+                //         if (isChecked && isCheckedYears) {
+                //           _authController.handleGoogleSignIn(context);
+                //         }
+                //         else {
+                //           Fluttertoast.showToast(
+                //               msg: 'Please accept Terms & Conditions and 18 years old'.tr);
+                //         }
+                //       },
+                //       child: Container(
+                //           decoration: BoxDecoration(
+                //               borderRadius: BorderRadius.circular(16.r),
+                //               border: Border.all(
+                //                   width: 1.w, color: AppColors.primaryColor)),
+                //           child: Padding(
+                //             padding: EdgeInsets.all(8.w),
+                //             child: Image.asset(AppImages.googleLogo,
+                //                 width: 32.w, height: 32.h),
+                //           )),
+                //     ),
                     // SizedBox(width: 12.w),
                     // GestureDetector(
                     //   onTap: () {},
@@ -274,8 +276,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     //       )),
                     // ),
                     // Image.asset(AppImages.facebookLogo, width: 32.w, height: 32.h)
-                  ],
-                ),
+                 // ],
+               // ),
                 SizedBox(height: 16.h),
                 //=======================> Already have an account <=====================
                 Row(

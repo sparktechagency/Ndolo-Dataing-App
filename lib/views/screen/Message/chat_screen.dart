@@ -18,6 +18,8 @@ import '../../../helpers/time_formate.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_constants.dart';
 import '../../../utils/app_icons.dart';
+import '../../../utils/app_strings.dart';
+import '../../base/custom_button.dart';
 import '../../base/custom_network_image.dart';
 import '../../base/custom_text.dart';
 import '../../base/custom_text_field.dart';
@@ -140,6 +142,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 ));
               },
               child: SvgPicture.asset(AppIcons.video)),
+          SizedBox(width: 16.w),
+          _popupMenuButton(),
           SizedBox(width: 24.w),
         ],
       ),
@@ -357,6 +361,117 @@ class _ChatScreenState extends State<ChatScreen> {
       _controller.update();
     }
   }
+
+//================================> Popup Menu Button Method <=============================
+  PopupMenuButton<int> _popupMenuButton() {
+    return PopupMenuButton<int>(
+      padding: EdgeInsets.zero,
+      icon: SvgPicture.asset(AppIcons.dot, color: Colors.white),
+      onSelected: (int result) {
+        if (result == 0) {
+          print('Block User');
+        } else if (result == 1) {
+          print('Delete Chat ');
+        }
+      },
+      itemBuilder:
+          (BuildContext context) => <PopupMenuEntry<int>>[
+        PopupMenuItem<int>(
+          value: 0,
+          child: Text(
+            'Block User'.tr,
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+        PopupMenuItem<int>(
+          onTap: () {
+            _showCustomBottomSheet(context);
+          },
+          value: 1,
+          child: const Text(
+            'Delete Chat',
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+      ],
+      color: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+    );
+  }
+
+  //===============================> Delete conversation Bottom Sheet <===============================
+  _showCustomBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24.r),
+              topRight: Radius.circular(24.r),
+            ),
+            border: Border(
+              top: BorderSide(width: 2.w, color: AppColors.primaryColor),
+            ),
+            color: AppColors.cardColor,
+          ),
+          height: 265.h,
+          padding: EdgeInsets.symmetric(horizontal:  16.w, vertical: 8.h),
+          child: Column(
+            children: [
+              SizedBox(
+                width: 48.w,
+                child: Divider(color: AppColors.greyColor, thickness: 5.5,),
+              ),
+              SizedBox(height: 12.h),
+              CustomText(
+                text: AppStrings.deleteMessage.tr,
+                fontWeight: FontWeight.w600,
+                fontSize: 18.sp,
+              ),
+              SizedBox(
+                width: 190.w,
+                child: Divider(color: AppColors.primaryColor),
+              ),
+              SizedBox(height: 16.h),
+              CustomText(
+                text: 'Are you sure you want to delete this conversation?'.tr,
+                maxLine: 5,
+              ),
+              SizedBox(height: 48.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomButton(
+                    width: 124.w,
+                    height: 46.h,
+                    onTap: () {
+                      Get.back();
+                    },
+                    text: "No".tr,
+                    color: Colors.white,
+                    textColor: AppColors.primaryColor,
+                  ),
+                  SizedBox(width: 16.w),
+                  CustomButton(
+                    width: 124.w,
+                    height: 46.h,
+                    onTap: () {
+                      // Get.offAllNamed(AppRoutes.signInScreen);
+                    },
+                    text: "Yes".tr,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }
 
 
@@ -378,8 +493,7 @@ class CallMethod extends StatelessWidget {
   Widget build(BuildContext context) {
     return ZegoUIKitPrebuiltCall(
       appID: 1059598849,
-      appSign:
-          '6ea42a0e9c416a604335cf5d521cc0120cf4244d4dac79a6c0419eba10150a99',
+      appSign: '6ea42a0e9c416a604335cf5d521cc0120cf4244d4dac79a6c0419eba10150a99',
       userID: userID,
       userName: userName,
       callID: conversationID,

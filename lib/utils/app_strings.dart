@@ -10,6 +10,7 @@ class AppStrings {
   static String userEmail = 'User Email';
   static String email = 'Email';
   static String state = 'State';
+  static String ndolo = 'NDOLO';
   static String city = 'City';
   static String phoneNumber = 'Phone Number';
   static String userPassword = 'User Password';
@@ -123,4 +124,5 @@ class AppStrings {
   static String yesDelete = 'Yes, Delete';
   static String language = 'Language';
   static String chooseYourLanguage = 'Choose your language';
+  static String deleteMessage = 'Delete Message';
 }
