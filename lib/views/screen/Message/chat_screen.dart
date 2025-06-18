@@ -19,6 +19,7 @@ import '../../../utils/app_colors.dart';
 import '../../../utils/app_constants.dart';
 import '../../../utils/app_icons.dart';
 import '../../../utils/app_strings.dart';
+import '../../../utils/style.dart';
 import '../../base/custom_button.dart';
 import '../../base/custom_network_image.dart';
 import '../../base/custom_text.dart';
@@ -44,6 +45,7 @@ class _ChatScreenState extends State<ChatScreen> {
   var receiverImage = "";
   var receiverName = "";
   var receiverId = "";
+  String blockStatus="";
   File? selectedIMage;
 
   @override
@@ -61,6 +63,7 @@ class _ChatScreenState extends State<ChatScreen> {
       _controller.inboxFirstLoad(receiverId);
       _controller.listenMessage(receiverId);
       _controller.getMessage(receiverId);
+      blockStatus=Get.parameters['blockStatus']!;
     });
   }
 
@@ -185,7 +188,10 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ),
       ),
-      bottomSheet: Container(
+      //=============================> Write a message Section <===========================
+      bottomSheet: blockStatus == 'blocked'
+          ? Text('Conversation Blocked'.tr,style: AppStyles.h4(),)
+          : Container(
         color: Colors.white,
         height: MediaQuery.of(context).size.height * 0.1,
         width: MediaQuery.of(context).size.width,
@@ -275,7 +281,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       height: 140.h,
                       width: 155.w)
                       : Text(
-                    '${message.text}',
+                    message.text,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 16.sp,
@@ -288,7 +294,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     children: [
                       Flexible(
                         child: Text(
-                          '${TimeFormatHelper.timeAgo(message.createdAt!)}',
+                          '${TimeFormatHelper.timeAgo(message.createdAt)}',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 12.sp,
@@ -368,28 +374,17 @@ class _ChatScreenState extends State<ChatScreen> {
       padding: EdgeInsets.zero,
       icon: SvgPicture.asset(AppIcons.dot, color: Colors.white),
       onSelected: (int result) {
-        if (result == 0) {
           print('Block User');
-        } else if (result == 1) {
-          print('Delete Chat ');
-        }
       },
       itemBuilder:
           (BuildContext context) => <PopupMenuEntry<int>>[
         PopupMenuItem<int>(
+          onTap: (){
+            _controller.blockMessage(conversationId, blockStatus);
+          },
           value: 0,
           child: Text(
             'Block User'.tr,
-            style: TextStyle(color: Colors.black),
-          ),
-        ),
-        PopupMenuItem<int>(
-          onTap: () {
-            _showCustomBottomSheet(context);
-          },
-          value: 1,
-          child: const Text(
-            'Delete Chat',
             style: TextStyle(color: Colors.black),
           ),
         ),

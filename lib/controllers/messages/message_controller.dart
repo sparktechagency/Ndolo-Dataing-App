@@ -271,4 +271,38 @@ class MessageController extends GetxController {
     }
   }
 */
+
+
+  //===========================> Delete Conversation <=============================
+  deleteMessage(String conversationId)async{
+    Map<String, dynamic> body={
+      "conversationId":conversationId
+    };
+    var response=await ApiClient.deleteData(ApiConstants.deleteConversationEndPoint(conversationId), body: body);
+    if(response.statusCode==200){
+      conversationModel.removeWhere((element) => element.id == conversationId);
+      conversationModel.refresh();
+      Get.back();
+      update();
+    }
+  }
+
+//===========================> Block Conversation <=============================
+  blockMessage(String conversationId,String type) async{
+    sentMessageLoading(true);
+    Map<String, dynamic> body={
+      "conversationId":conversationId,
+      "type":type,
+    };
+    var response=await ApiClient.postData(ApiConstants.blockConversationEndPoint, body,);
+    if(response.statusCode==200 || response.statusCode==201){
+      print('Block>>>>>>>>>>>>');
+      Get.offAllNamed(AppRoutes.messageScreen);
+      update();
+    }
+    else{
+      update();
+    }
+  }
+
 }

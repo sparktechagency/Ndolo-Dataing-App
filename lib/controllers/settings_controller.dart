@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:ndolo_dating/helpers/route.dart';
 import '../helpers/prefs_helpers.dart';
+import '../service/api_checker.dart';
 import '../service/api_client.dart';
 import '../service/api_constants.dart';
 import '../utils/app_constants.dart';
@@ -64,19 +65,14 @@ class SettingController extends GetxController {
   final TextEditingController passwordCTRL = TextEditingController();
 
   Future<void> deleteAccount() async {
-    final password = passwordCTRL.text.trim();
-
-    if (password.isEmpty) {
-      Fluttertoast.showToast(msg: "Password cannot be empty");
-      return;
-    }
-
     deleteAccountLoading.value = true;
-
-    Map<String, String> headers = {'Content-Type': 'application/json'};
-    Map<String, dynamic> body = {
-      "password": password,
+    var headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${ApiClient.bearerToken}'
     };
+    var body = json.encode({
+      "password": passwordCTRL.text,
+    });
 
     final response = await ApiClient.deleteData(
       ApiConstants.deleteAccount,
@@ -84,40 +80,15 @@ class SettingController extends GetxController {
       headers: headers,
     );
 
-    print("Delete Account Response: ${response.body}");
-
-    String message = 'Failed to delete account';
-
     if (response.statusCode == 200) {
-      final responseBody = (response.body != null && response.body.isNotEmpty)
-          ? json.decode(response.body)
-          : null;
-
-      if (responseBody != null && responseBody['message'] != null) {
-        message = responseBody['message'].toString();
-      } else {
-        message = 'Account deleted successfully';
-      }
-
-      deleteAccountMessage.value = message;
+      print("Account deleted successfully: ${response.body}");
+      deleteAccountLoading.value = false;
+      Get.offAllNamed(AppRoutes.signInScreen);
     } else {
-      message = 'Failed to delete account';
-      final responseBody = (response.body != null && response.body.isNotEmpty)
-          ? json.decode(response.body)
-          : null;
-      if (responseBody != null && responseBody['message'] != null) {
-        message = responseBody['message'].toString();
-      }
-
-      deleteAccountMessage.value = message;
-      Fluttertoast.showToast(msg: message);
-
-      
+      print("Failed to delete account: ${response.statusText}");
     }
-
-
     deleteAccountLoading.value = false;
+    ApiChecker.checkApi(response);
     update();
   }
-
 }
