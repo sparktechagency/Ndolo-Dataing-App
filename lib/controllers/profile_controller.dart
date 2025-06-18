@@ -295,7 +295,7 @@ RxBool updateProfileImagesLoading = false.obs;
 
 
   //============================================> Block controller <====================================
-  RxBool blockLoading = false.obs;
+  /*RxBool blockLoading = false.obs;
   block({String? id}) async {
     blockLoading(true);
     var params =  {
@@ -313,7 +313,7 @@ RxBool updateProfileImagesLoading = false.obs;
       blockLoading(false);
     }
   }
-
+*/
   //======================================> Report <========================================
   RxBool reportLoading = false.obs;
   report({String? userID, String? title,String? description}) async {

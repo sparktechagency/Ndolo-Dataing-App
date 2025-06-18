@@ -18,6 +18,9 @@ import '../../../helpers/time_formate.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_constants.dart';
 import '../../../utils/app_icons.dart';
+import '../../../utils/app_strings.dart';
+import '../../../utils/style.dart';
+import '../../base/custom_button.dart';
 import '../../base/custom_network_image.dart';
 import '../../base/custom_text.dart';
 import '../../base/custom_text_field.dart';
@@ -42,6 +45,7 @@ class _ChatScreenState extends State<ChatScreen> {
   var receiverImage = "";
   var receiverName = "";
   var receiverId = "";
+  String blockStatus="";
   File? selectedIMage;
 
   @override
@@ -59,6 +63,7 @@ class _ChatScreenState extends State<ChatScreen> {
       _controller.inboxFirstLoad(receiverId);
       _controller.listenMessage(receiverId);
       _controller.getMessage(receiverId);
+      blockStatus=Get.parameters['blockStatus']!;
     });
   }
 
@@ -140,6 +145,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 ));
               },
               child: SvgPicture.asset(AppIcons.video)),
+          SizedBox(width: 16.w),
+          _popupMenuButton(),
           SizedBox(width: 24.w),
         ],
       ),
@@ -181,7 +188,10 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ),
       ),
-      bottomSheet: Container(
+      //=============================> Write a message Section <===========================
+      bottomSheet: blockStatus == 'blocked'
+          ? Text('Conversation Blocked'.tr,style: AppStyles.h4(),)
+          : Container(
         color: Colors.white,
         height: MediaQuery.of(context).size.height * 0.1,
         width: MediaQuery.of(context).size.width,
@@ -271,7 +281,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       height: 140.h,
                       width: 155.w)
                       : Text(
-                    '${message.text}',
+                    message.text,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 16.sp,
@@ -284,7 +294,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     children: [
                       Flexible(
                         child: Text(
-                          '${TimeFormatHelper.timeAgo(message.createdAt!)}',
+                          '${TimeFormatHelper.timeAgo(message.createdAt)}',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 12.sp,
@@ -357,6 +367,106 @@ class _ChatScreenState extends State<ChatScreen> {
       _controller.update();
     }
   }
+
+//================================> Popup Menu Button Method <=============================
+  PopupMenuButton<int> _popupMenuButton() {
+    return PopupMenuButton<int>(
+      padding: EdgeInsets.zero,
+      icon: SvgPicture.asset(AppIcons.dot, color: Colors.white),
+      onSelected: (int result) {
+          print('Block User');
+      },
+      itemBuilder:
+          (BuildContext context) => <PopupMenuEntry<int>>[
+        PopupMenuItem<int>(
+          onTap: (){
+            _controller.blockMessage(conversationId, blockStatus);
+          },
+          value: 0,
+          child: Text(
+            'Block User'.tr,
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+      ],
+      color: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+    );
+  }
+
+  //===============================> Delete conversation Bottom Sheet <===============================
+  _showCustomBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24.r),
+              topRight: Radius.circular(24.r),
+            ),
+            border: Border(
+              top: BorderSide(width: 2.w, color: AppColors.primaryColor),
+            ),
+            color: AppColors.cardColor,
+          ),
+          height: 265.h,
+          padding: EdgeInsets.symmetric(horizontal:  16.w, vertical: 8.h),
+          child: Column(
+            children: [
+              SizedBox(
+                width: 48.w,
+                child: Divider(color: AppColors.greyColor, thickness: 5.5,),
+              ),
+              SizedBox(height: 12.h),
+              CustomText(
+                text: AppStrings.deleteMessage.tr,
+                fontWeight: FontWeight.w600,
+                fontSize: 18.sp,
+              ),
+              SizedBox(
+                width: 190.w,
+                child: Divider(color: AppColors.primaryColor),
+              ),
+              SizedBox(height: 16.h),
+              CustomText(
+                text: 'Are you sure you want to delete this conversation?'.tr,
+                maxLine: 5,
+              ),
+              SizedBox(height: 48.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomButton(
+                    width: 124.w,
+                    height: 46.h,
+                    onTap: () {
+                      Get.back();
+                    },
+                    text: "No".tr,
+                    color: Colors.white,
+                    textColor: AppColors.primaryColor,
+                  ),
+                  SizedBox(width: 16.w),
+                  CustomButton(
+                    width: 124.w,
+                    height: 46.h,
+                    onTap: () {
+                      // Get.offAllNamed(AppRoutes.signInScreen);
+                    },
+                    text: "Yes".tr,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }
 
 
@@ -378,8 +488,7 @@ class CallMethod extends StatelessWidget {
   Widget build(BuildContext context) {
     return ZegoUIKitPrebuiltCall(
       appID: 1059598849,
-      appSign:
-          '6ea42a0e9c416a604335cf5d521cc0120cf4244d4dac79a6c0419eba10150a99',
+      appSign: '6ea42a0e9c416a604335cf5d521cc0120cf4244d4dac79a6c0419eba10150a99',
       userID: userID,
       userName: userName,
       callID: conversationID,

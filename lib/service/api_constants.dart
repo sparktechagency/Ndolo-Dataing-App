@@ -39,10 +39,11 @@ class ApiConstants {
   static  String sendMessageEndPoint(String conversationId) =>  "/conversation/send-message";
   static  String messageEndPoint =  "/message";
   static  String messageLocationEndPoint =  "/message/location";
-  static  String blockConversationEndPoint(String id) =>  "/conversation/block/$id";
+  static  String blockConversationEndPoint =  "/conversation/block";
   static  String getUserByIdEndPoint (String id) =>  "/users/$id";
   static  String deleteConversationEndPoint (String id) =>  "/conversation/$id";
   static  String reportEndPoint =  "/report";
   static  String notificationEndPoint =  "/info/notifications";
+  static  String deleteAccount =  "/auth/delete-me";
 
 }

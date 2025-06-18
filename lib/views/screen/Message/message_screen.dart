@@ -54,9 +54,9 @@ class _MessageScreenState extends State<MessageScreen> {
             itemBuilder: (context, index) {
               final conversation = controller.conversationModel[index];
               String conversationId = conversation.id;
-              String displayName = conversation.receiver.fullName;
-              String displayImage = conversation.receiver.profileImage;
-              String receiverId = conversation.receiver.id;
+              String displayName = '${conversation.receiver.fullName}';
+              String displayImage = '${conversation.receiver.profileImage}';
+              String receiverId = '${conversation.receiver.id}';
 
               return Padding(
                 padding: EdgeInsets.only(bottom: 16.h),
@@ -97,9 +97,9 @@ class _MessageScreenState extends State<MessageScreen> {
                                   textAlign: TextAlign.start,
                                 ),
                                 CustomText(
-                                  text: (conversation.lastMessage.type == 'image')
+                                  text: (conversation.lastMsg.type == 'image')
                                       ? 'An image'
-                                      : (conversation.lastMessage.text ?? 'No message available'),
+                                      : (conversation.lastMsg.text ?? 'No message available'),
                                   fontWeight: FontWeight.w500,
                                   maxLine: 2,
                                   textAlign: TextAlign.start,
