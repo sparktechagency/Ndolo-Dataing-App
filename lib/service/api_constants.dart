@@ -45,5 +45,4 @@ class ApiConstants {
   static  String reportEndPoint =  "/report";
   static  String notificationEndPoint =  "/info/notifications";
   static  String deleteAccount =  "/auth/delete-me";
-
 }
