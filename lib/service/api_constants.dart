@@ -44,5 +44,4 @@ class ApiConstants {
   static  String deleteConversationEndPoint (String id) =>  "/conversation/$id";
   static  String reportEndPoint =  "/report";
   static  String notificationEndPoint =  "/info/notifications";
-
 }
