@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:ndolo_dating/controllers/settings_controller.dart';
 import 'package:ndolo_dating/helpers/route.dart';
 import 'package:ndolo_dating/utils/app_strings.dart';
 import 'package:ndolo_dating/views/base/custom_alart.dart';
@@ -17,7 +18,8 @@ import '../../base/custom_text_field.dart';
 
 class SettingsScreen extends StatelessWidget {
   SettingsScreen({super.key});
-  final TextEditingController _passCTRL = TextEditingController();
+  //final TextEditingController _passCTRL = TextEditingController();
+  final SettingController _controller = Get.put(SettingController());
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +153,8 @@ class SettingsScreen extends StatelessWidget {
                 bottom: 14.h,
               ),
               CustomTextField(
-                controller: _passCTRL,
+                isPassword: true,
+                controller: _controller.passwordCTRL,
                 hintText: 'Enter your password',
                 prefixIcon: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -161,15 +164,18 @@ class SettingsScreen extends StatelessWidget {
               ),
               SizedBox(height: 24.h),
               //===============================> Delete Account Button <====================
-              CustomButton(
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return const CustomAlert();
-                      });
-                },
-                text: 'Delete Account'.tr,
+              Obx(()=> CustomButton(
+                loading: _controller.deleteAccountLoading.value,
+                  onTap: () {
+                   /* showDialog(
+                        context: context,
+                        builder: (context) {
+                          return const CustomAlert();
+                        });*/
+                    _controller.deleteAccount();
+                  },
+                  text: 'Delete Account'.tr,
+                ),
               ),
             ],
           ),

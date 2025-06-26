@@ -19,9 +19,14 @@ class OnboardingScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(height: 132.h),
-            //==================> Connect Image <=====================
-            Center(child: Image.asset(AppImages.onbording)),
-            SizedBox(height: 16.h),
+            CustomText(
+              text: AppStrings.ndolo.tr,
+              fontSize: 22.sp,
+              fontWeight: FontWeight.w700,
+              fontName: 'Gotham Rounded',
+              maxLine: 3,
+            ),
+            SizedBox(height: 12.h),
             //==================> Meet And Connect Text <=====================
             CustomText(
               text: AppStrings.meetAndConnect.tr,
@@ -30,6 +35,10 @@ class OnboardingScreen extends StatelessWidget {
               fontName: 'Gotham Rounded',
               maxLine: 3,
             ),
+            SizedBox(height: 88.h),
+            //==================> Connect Image <=====================
+            Center(child: Image.asset(AppImages.onbording)),
+            SizedBox(height: 16.h),
             //==================> Get Started Button <=====================
             const Spacer(),
             CustomButton(

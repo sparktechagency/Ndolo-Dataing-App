@@ -62,4 +62,5 @@ class AppIcons {
   static String friendsAdd = "$baseUrl/friendsAdd.svg";
   static String like = "$baseUrl/like.svg";
   static String sms = "$baseUrl/sms.svg";
+  static String dot = "$baseUrl/dot.svg";
 }

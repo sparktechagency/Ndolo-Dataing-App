@@ -145,5 +145,14 @@
   "About Us.": "À propos de nous.",
   "No users found": "Aucun utilisateur trouvé",
   "Notification is empty": "La notification est vide",
-  "Distance": "Distance"
+  "Distance": "Distance",
+  "NDOLO": "NDOLO",
+  "Yes": "Oui",
+  "No": "Non",
+  "Sign in With Google": "Connectez-vous avec Google",
+  "Delete Message": "Supprimer le message",
+  "Block User": "Bloquer l'utilisateur",
+  "Are you sure you want to delete this conversation?": "Êtes-vous sûr de vouloir supprimer cette conversation?",
+  "I confirm that I am 18 years old or older.": "Je confirme avoir 18 ans ou plus.",
+  "Conversation Blocked": "Conversation bloquée"
 }
