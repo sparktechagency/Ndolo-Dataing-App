@@ -54,16 +54,20 @@ class _ChatScreenState extends State<ChatScreen> {
     _socket.init();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getUserId();
-      conversationId = Get.parameters['conversationId']!;
-      currentUserId = params['currentUserId'] ?? "";
-      receiverImage = params['receiverImage'] ?? "";
-      receiverName = params['receiverName'] ?? "";
-      receiverId = params['receiverId'] ?? "";
-      _socket.emitMessagePage(receiverId);
-      _controller.inboxFirstLoad(receiverId);
-      _controller.listenMessage(receiverId);
-      _controller.getMessage(receiverId);
-      blockStatus=Get.parameters['blockStatus']!;
+      conversationId = Get.parameters['conversationId'] ?? "";
+      currentUserId = Get.parameters['currentUserId'] ?? "";
+      receiverImage = Get.parameters['receiverImage'] ?? "";
+      receiverName = Get.parameters['receiverName'] ?? "";
+      receiverId = Get.parameters['receiverId'] ?? "";
+      blockStatus = Get.parameters['blockStatus'] ?? "";
+
+      // Emit socket events and load messages only if receiverId is available
+      if (receiverId.isNotEmpty) {
+        _socket.emitMessagePage(receiverId);
+        _controller.inboxFirstLoad(receiverId);
+        _controller.listenMessage(receiverId);
+        _controller.getMessage(receiverId);
+      }
     });
   }
 
@@ -167,16 +171,25 @@ class _ChatScreenState extends State<ChatScreen> {
                     children: [
                       RefreshIndicator(
                         onRefresh: _refreshMessages,
-                        child: ListView.builder(
-                          itemCount: controller.messageModel.length,
-                          controller: _controller.scrollController,
-                          reverse: true,
-                          itemBuilder: (context, index) {
-                            final message = controller.messageModel[index];
-                            return message.msgByUserId == currentUserId
-                                ? senderBubble(context, message)
-                                : receiverBubble(context, message);
+                        child: NotificationListener<ScrollNotification>(
+                          onNotification: (scrollNotification) {
+                            if (scrollNotification is ScrollUpdateNotification &&
+                                scrollNotification.metrics.pixels == 0) {
+                              _controller.loadOlderMessages(conversationId);
+                              return true;
+                            }
+                            return false;
                           },
+                          child: ListView.builder(
+                            controller: _controller.scrollController,
+                            itemCount: controller.messageModel.length,
+                            itemBuilder: (context, index) {
+                              final message = controller.messageModel[index];
+                              return message.msgByUserId == currentUserId
+                                  ? senderBubble(context, message)
+                                  : receiverBubble(context, message);
+                            },
+                          ),
                         ),
                       ),
                     ],
@@ -205,16 +218,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 child: CustomTextField(
                   controller: _controller.sentMsgCtrl,
                   hintText: "Type something…",
-             /*     suffixIcons: Padding(
-                    padding:
-                    EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
-                    child: GestureDetector(
-                        onTap: () {
-                          openGallery();
-                        },
-                        child: SvgPicture.asset(AppIcons.attach,
-                            color: AppColors.greyColor)),
-                  ),*/
                 ),
               ),
               GestureDetector(

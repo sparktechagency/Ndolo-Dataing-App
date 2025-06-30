@@ -63,6 +63,8 @@ class MessageController extends GetxController {
       }
     });
   }
+
+
   Future<void> getConversation() async {
     print(PrefsHelper.userId);
     print(AppConstants.bearerToken);
@@ -94,6 +96,21 @@ class MessageController extends GetxController {
       },
     );
   }
+
+  Future<void> loadOlderMessages(String conversationId) async {
+    print('Loading older messages for conversation: $conversationId');
+    _socket.socket!.emit('load-older-messages', {"conversationId": conversationId});
+
+    _socket.socket!.on('older-messages', (data) {
+      if (data != null && data.isNotEmpty) {
+        final List<MessageModel> olderMessages = List<MessageModel>.from(data.map((x) => MessageModel.fromJson(x)));
+        messageModel.addAll(olderMessages);  // Add the older messages to the top of the list
+        messageModel.refresh();
+        update();
+      }
+    });
+  }
+
 
   //===================================> CREATE A NEW CONVERSATION <===================================
   createConversation(String receiverId, {bool isAddFriend = false}) async {
@@ -185,7 +202,6 @@ class MessageController extends GetxController {
   //===================================> SEND A TEXT MESSAGE <===================================
   void sentMessage(String receiverId, String senderId, String text, String msgById) async {
     if (text.isEmpty || sentMessageLoading.value) return;
-    if (sentMessageLoading.value) return;
     sentMessageLoading(true);
     try {
       if (_socket.socket != null) {
@@ -195,6 +211,7 @@ class MessageController extends GetxController {
           "text": text,
           "msgByUserId": msgById
         });
+
         final newMessage = MessageModel(
           text: text,
           msgByUserId: senderId,
@@ -202,9 +219,11 @@ class MessageController extends GetxController {
           type: 'text',
           id: UniqueKey().toString(),
         );
+
         messageModel.insert(0, newMessage);
         messageModel.refresh();
-        update();
+
+        // Scroll to the latest message.
         Future.delayed(const Duration(milliseconds: 100), () {
           if (scrollController.hasClients) {
             scrollController.animateTo(
@@ -220,9 +239,10 @@ class MessageController extends GetxController {
     } catch (e) {
       Fluttertoast.showToast(msg: "Socket Error: ${e.toString()}");
     } finally {
-      sentMessageLoading(false);
+      sentMessageLoading(false); // Reset loading flag after sending.
     }
   }
+
 
   //===================================> SEND AN IMAGE MESSAGE <===================================
 /*
