@@ -229,7 +229,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               Image.asset(AppImages.googleLogo, width: 32.w, height: 32.h),
                               SizedBox(width: 12.w),
                               CustomText(
-                                text: 'Sign in With Google'.tr,
+                                text: 'Sign In With Google'.tr,
                                 fontSize: 18.sp,
                               ),
                             ],

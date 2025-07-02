@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyC9x5wIDRb6UHHLc4p4OWlkovnUDN7D1ZQ',
-    appId: '1:1089481655001:android:7ee5cda6a430578a3d74c8',
-    messagingSenderId: '1089481655001',
-    projectId: 'ndolo-dating-app',
-    storageBucket: 'ndolo-dating-app.firebasestorage.app',
+    apiKey: 'AIzaSyAM7avnMdLiY8T-NJX8oVeIaUak54JME9g',
+    appId: '1:645947543073:android:69e02f9e7d505f35421d60',
+    messagingSenderId: '645947543073',
+    projectId: 'ndolo-d21ee',
+    storageBucket: 'ndolo-d21ee.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBjOImQR7CW3uk33IDMPi96d07d_Fyg-w4',
-    appId: '1:1089481655001:ios:f069d6ead12c5ffb3d74c8',
-    messagingSenderId: '1089481655001',
-    projectId: 'ndolo-dating-app',
-    storageBucket: 'ndolo-dating-app.firebasestorage.app',
+    apiKey: 'AIzaSyCXqQbp6qg0s01E3A71nz-M8r3zwZ2zwxw',
+    appId: '1:645947543073:ios:a9b480757d3f677d421d60',
+    messagingSenderId: '645947543073',
+    projectId: 'ndolo-d21ee',
+    storageBucket: 'ndolo-d21ee.firebasestorage.app',
     iosBundleId: 'com.ndolo.ndoloDating',
   );
 

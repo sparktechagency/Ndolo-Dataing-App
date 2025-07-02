@@ -319,7 +319,60 @@ class AuthController extends GetxController {
   //======================> Google login Info <============================
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
-   handleGoogleSignIn(BuildContext context) async {
+  handleGoogleSignIn(BuildContext context) async {
+    await _auth.signOut();
+    await googleSignIn.signOut();
+
+    final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+    if (googleSignInAccount != null) {
+      final GoogleSignInAuthentication googleSignInAuthentication =
+      await googleSignInAccount.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(accessToken: googleSignInAuthentication.accessToken, idToken: googleSignInAuthentication.idToken);
+
+      // Firebase Authentication
+      final UserCredential authResult = await _auth.signInWithCredential(credential);
+      final User? user = authResult.user;
+
+      if (user != null) {
+        var fcmToken = await PrefsHelper.getString(AppConstants.fcmToken);
+        var bearerToken = await PrefsHelper.getString(AppConstants.bearerToken);
+
+        Map<String, dynamic> body = {
+          'email': '${user.email}',
+          "fcmToken": fcmToken ?? "",
+          "loginType": 'google'
+        };
+        var headers = {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $bearerToken',
+        };
+        Response response = await ApiClient.postData(ApiConstants.logInEndPoint, jsonEncode(body), headers: headers);
+        print("response on google login :${response.body}");
+
+        if (response.statusCode == 200) {
+          await PrefsHelper.setString(AppConstants.bearerToken, response.body['data']['attributes']['tokens']['access']['token']);
+          await PrefsHelper.setString(AppConstants.userId, response.body['data']['attributes']['user']['id']);
+          await PrefsHelper.setString(AppConstants.userName, response.body['data']['attributes']['user']['fullName']);
+          bool condition = response.body['data']['attributes']['user']['isProfileCompleted'];
+
+          if(!condition){
+            Get.offAllNamed(AppRoutes.completeProfileSignInScreen);
+          } else {
+            await PrefsHelper.setBool(AppConstants.isLogged, true);
+            Get.offAllNamed(AppRoutes.homeScreen);
+          }
+          // Get.offAllNamed(AppRoutes.uploadPhotosScreen);
+          update();
+        } else {
+          ApiChecker.checkApi(response);
+          update();
+        }
+      }
+    } else {
+      print("Sign in with Google canceled by user.");
+    }
+  }
+  /* handleGoogleSignIn(BuildContext context) async {
      await _auth.signOut();
      await googleSignIn.signOut();
 
@@ -373,7 +426,7 @@ class AuthController extends GetxController {
        print("Sign in with Google canceled by user.");
      }
    }
-
+*/
   //======================> Facebook login Info <============================
   handleFacebookSignIn(String email) async {
     var fcmToken = await PrefsHelper.getString(AppConstants.fcmToken);

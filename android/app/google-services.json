@@ -1,26 +1,43 @@
 {
   "project_info": {
-    "project_number": "1089481655001",
-    "project_id": "ndolo-dating-app",
-    "storage_bucket": "ndolo-dating-app.firebasestorage.app"
+    "project_number": "645947543073",
+    "project_id": "ndolo-d21ee",
+    "storage_bucket": "ndolo-d21ee.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1089481655001:android:7ee5cda6a430578a3d74c8",
+        "mobilesdk_app_id": "1:645947543073:android:69e02f9e7d505f35421d60",
         "android_client_info": {
           "package_name": "com.ndolo.ndolo_dating"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "645947543073-q7eebrvp9uojl6bgjn9fgloc48tvdulq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyC9x5wIDRb6UHHLc4p4OWlkovnUDN7D1ZQ"
+          "current_key": "AIzaSyAM7avnMdLiY8T-NJX8oVeIaUak54JME9g"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "645947543073-q7eebrvp9uojl6bgjn9fgloc48tvdulq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "645947543073-rpkplm6r0pkie8k7j365j0vb4kqt4nj8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ndolo.ndoloDating"
+              }
+            }
+          ]
         }
       }
     }
