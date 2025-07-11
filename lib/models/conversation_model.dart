@@ -20,12 +20,12 @@ class ConversationModel {
   factory ConversationModel.fromJson(Map<String, dynamic> json) {
     return ConversationModel(
       id: json['_id'],
-      sender: json['sender'] ?? '',
-      receiver: json['receiver'] ?? '',
+      sender: Sender.fromJson(json['sender'] ?? {}),
+      receiver: Receiver.fromJson(json['receiver'] ?? {}),
       unseenMsg: json['unseenMsg'] ?? 0,
       blockStatus: json['blockStatus'] ?? '',
       blockedBy: json['blockedBy'] ?? '',
-      lastMsg: json['lastMsg'] ?? '',
+      lastMsg: LastMsg.fromJson(json['lastMsg'] ?? {}),
     );
   }
 
@@ -101,7 +101,7 @@ class Sender {
       email: json['email'] ?? '',
       profileImage: json['profileImage'] ?? '',
       coverImage: json['coverImage'] ?? '',
-      gallery: json['gallery'] ?? '',
+      gallery: List<String>.from(json['gallery'] ?? []), // Ensuring it's a List<String>
       role: json['role'] ?? '',
       phoneNumber: json['phoneNumber'] ?? '',
       country: json['country'] ?? '',
@@ -117,7 +117,7 @@ class Sender {
       isProfileCompleted: json['isProfileCompleted'] ?? false,
       isBlocked: json['isBlocked'] ?? false,
       isDeleted: json['isDeleted'] ?? false,
-      createdAt: json['createdAt'] ?? '',
+      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : DateTime.now(),
     );
   }
 
@@ -167,7 +167,7 @@ class Receiver {
   final String fcmToken;
   final String id;
   final String gender;
-  final String dateOfBirth;
+  final String dateOfBirth; // This should be a String or DateTime, not int
   final String bio;
   final int credits;
   final bool isProfileCompleted;
@@ -209,8 +209,8 @@ class Receiver {
       email: json['email'] ?? '',
       profileImage: json['profileImage'] ?? '',
       coverImage: json['coverImage'] ?? '',
-      gallery: json['gallery'] ?? '',
-      role: json['role'],
+      gallery: List<String>.from(json['gallery'] ?? []), // Ensure it's a List<String>
+      role: json['role'] ?? '',
       phoneNumber: json['phoneNumber'] ?? '',
       country: json['country'] ?? '',
       state: json['state'] ?? '',
@@ -219,13 +219,13 @@ class Receiver {
       fcmToken: json['fcmToken'] ?? '',
       id: json['id'] ?? '',
       gender: json['gender'] ?? '',
-      dateOfBirth: json['dateOfBirth'] ?? '',
+      dateOfBirth: _convertDateOfBirth(json['dateOfBirth']),
       bio: json['bio'] ?? '',
       credits: json['credits'] ?? 0,
       isProfileCompleted: json['isProfileCompleted'] ?? false,
       isBlocked: json['isBlocked'] ?? false,
       isDeleted: json['isDeleted'] ?? false,
-      createdAt: json['createdAt'] ?? '',
+      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : DateTime.now(),
     );
   }
 
@@ -255,6 +255,20 @@ class Receiver {
       'isDeleted': isDeleted,
       'createdAt': createdAt.toIso8601String(),
     };
+  }
+
+  // Handle the type conversion for dateOfBirth
+  static String _convertDateOfBirth(dynamic dateOfBirth) {
+    if (dateOfBirth == null) return ''; // Return empty string if null
+    if (dateOfBirth is int) {
+      // If it's an integer (timestamp), convert it to a DateTime string
+      return DateTime.fromMillisecondsSinceEpoch(dateOfBirth).toIso8601String();
+    }
+    if (dateOfBirth is String) {
+      // If it's already a string, return as is
+      return dateOfBirth;
+    }
+    return ''; // Default fallback
   }
 }
 
