@@ -319,6 +319,7 @@ class AuthController extends GetxController {
   //======================> Google login Info <============================
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
+/*
   handleGoogleSignIn(BuildContext context) async {
     await _auth.signOut();
     await googleSignIn.signOut();
@@ -372,7 +373,8 @@ class AuthController extends GetxController {
       print("Sign in with Google canceled by user.");
     }
   }
-  /* handleGoogleSignIn(BuildContext context) async {
+*/
+   handleGoogleSignIn(BuildContext context) async {
      await _auth.signOut();
      await googleSignIn.signOut();
 
@@ -426,7 +428,6 @@ class AuthController extends GetxController {
        print("Sign in with Google canceled by user.");
      }
    }
-*/
   //======================> Facebook login Info <============================
   handleFacebookSignIn(String email) async {
     var fcmToken = await PrefsHelper.getString(AppConstants.fcmToken);
