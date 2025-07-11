@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "486658480135",
+    "project_id": "ndolomeet-70f27",
+    "storage_bucket": "ndolomeet-70f27.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:486658480135:android:ee250092e4440ff1af72a2",
+        "android_client_info": {
+          "package_name": "com.ndolo.ndolo_dating"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6hYz6z1B3sFUlhRK8hVlIvgKjfNifBm4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
