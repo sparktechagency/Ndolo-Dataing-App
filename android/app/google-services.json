@@ -12,7 +12,20 @@
           "package_name": "com.ndolo.ndolo_dating"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "486658480135-8km0jpcf84b35tj79933jai7lnijmh2c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ndolo.ndolo_dating",
+            "certificate_hash": "3776e98aa8233ff5cd03b69a6b80b137f5e322f2"
+          }
+        },
+        {
+          "client_id": "486658480135-hh3feqs2b6f06ssogkie9rporjqroko1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyC6hYz6z1B3sFUlhRK8hVlIvgKjfNifBm4"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "486658480135-a229ld46m30kcgpo7d2u50d7c591lgd1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "486658480135-gb0mjjfis16dd15jk3f8i1n17ocbo0me.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ndolo.ndoloDating"
+              }
+            }
+          ]
         }
       }
     }
