@@ -1,45 +1,45 @@
 {
   "project_info": {
-    "project_number": "486658480135",
-    "project_id": "ndolomeet-70f27",
-    "storage_bucket": "ndolomeet-70f27.firebasestorage.app"
+    "project_number": "730579018123",
+    "project_id": "ndolo-c51c0",
+    "storage_bucket": "ndolo-c51c0.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:486658480135:android:ee250092e4440ff1af72a2",
+        "mobilesdk_app_id": "1:730579018123:android:34125bed02bc424d598f8e",
         "android_client_info": {
           "package_name": "com.ndolo.ndolo_dating"
         }
       },
       "oauth_client": [
         {
-          "client_id": "486658480135-8km0jpcf84b35tj79933jai7lnijmh2c.apps.googleusercontent.com",
+          "client_id": "730579018123-4jlaik6h2q6cbhc8tpvr23v4ocjsqa4q.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.ndolo.ndolo_dating",
-            "certificate_hash": "3776e98aa8233ff5cd03b69a6b80b137f5e322f2"
+            "certificate_hash": "001b5796abc758ab7359fc17b95167cd9cda22bc"
           }
         },
         {
-          "client_id": "486658480135-hh3feqs2b6f06ssogkie9rporjqroko1.apps.googleusercontent.com",
+          "client_id": "730579018123-31ps9e76isik1lrsrchtdk1doitv8ua4.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC6hYz6z1B3sFUlhRK8hVlIvgKjfNifBm4"
+          "current_key": "AIzaSyBmk1r1LlQLyZ7kPleav5cT2AAKXfjPSx8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "486658480135-a229ld46m30kcgpo7d2u50d7c591lgd1.apps.googleusercontent.com",
+              "client_id": "730579018123-31ps9e76isik1lrsrchtdk1doitv8ua4.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "486658480135-gb0mjjfis16dd15jk3f8i1n17ocbo0me.apps.googleusercontent.com",
+              "client_id": "730579018123-8hsc68e3atjmd3v4skobkf83f381dqme.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.ndolo.ndoloDating"
