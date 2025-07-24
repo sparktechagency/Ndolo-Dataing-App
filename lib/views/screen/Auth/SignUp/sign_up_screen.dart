@@ -12,6 +12,7 @@ import '../../../../utils/app_icons.dart';
 import '../../../../utils/app_strings.dart';
 import '../../../base/custom_app_bar.dart';
 import '../../../base/custom_button.dart';
+import '../../../base/custom_page_loading.dart';
 import '../../../base/custom_text.dart';
 import '../../../base/custom_text_field.dart';
 
@@ -209,7 +210,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 //=======================> Google and Facebook Button <=====================
-                Center(
+                _authController.googleLoginLoading.value
+                    ? const CustomPageLoading()
+                    : Center(
                   child: GestureDetector(
                     onTap: () {
                       _authController.handleGoogleSignIn(context);

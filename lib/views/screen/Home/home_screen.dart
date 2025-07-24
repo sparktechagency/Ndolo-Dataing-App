@@ -200,6 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ],
                                     ),
                                     SizedBox(height: 6.h),
+                                    //========================> Location Row <=======================
                                     Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
@@ -227,10 +228,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ],
                                     ),
                                     SizedBox(height: 6.h),
+                                    //========================> Friend Love Info Button Row <=======================
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
+                                        //========================> Add Friend Button  <=======================
                                         Flexible(
                                           child: GestureDetector(
                                             onTap: () {
@@ -248,6 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                         ),
                                         SizedBox(width: 8.w),
+                                        //========================> Love Button <=======================
                                         Flexible(
                                           child: GestureDetector(
                                             onTap: () {
@@ -261,7 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 const Color(0xffFF9D33)),
                                           ),
                                         ),
-                                        SizedBox(width: 8.w),
+                                        /*SizedBox(width: 8.w),
                                         Flexible(
                                           child: GestureDetector(
                                             onTap: () {
@@ -276,8 +280,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 SvgPicture.asset(AppIcons.sms),
                                                 Colors.red),
                                           ),
-                                        ),
+                                        ),*/
                                         SizedBox(width: 8.w),
+                                        //========================>  Info Button <=======================
                                         Flexible(
                                           child: GestureDetector(
                                             onTap: () {
