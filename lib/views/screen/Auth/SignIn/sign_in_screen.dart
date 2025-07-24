@@ -9,6 +9,7 @@ import 'package:ndolo_dating/utils/app_colors.dart';
 import 'package:ndolo_dating/utils/app_icons.dart';
 import 'package:ndolo_dating/utils/app_strings.dart';
 import 'package:ndolo_dating/views/base/custom_button.dart';
+import 'package:ndolo_dating/views/base/custom_page_loading.dart';
 import 'package:ndolo_dating/views/base/custom_text.dart';
 import 'package:ndolo_dating/views/base/custom_text_field.dart';
 import '../../../../helpers/route.dart';
@@ -209,7 +210,9 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                 ),
                 //=======================> Google and Facebook Button <=====================
-                 Center(
+                _authController.googleLoginLoading.value
+                    ? const CustomPageLoading()
+                    : Center(
                   child: GestureDetector(
                     onTap: () {
                       _authController.handleGoogleSignIn(context);

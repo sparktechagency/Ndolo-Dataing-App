@@ -39,192 +39,209 @@ class _CompleteProfileScreenState extends State<CompleteProfileSignInScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: ''),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: CustomText(
-                    text: AppStrings.completeProfile.tr,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18.sp,
+      body: Obx(()=>SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: CustomText(
+                      text: AppStrings.completeProfile.tr,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 18.sp,
+                      bottom: 8.h,
+                    ),
+                  ),
+                  //==========================> Date OF Birth Date Text Field <======================
+                  CustomText(
+                    text: AppStrings.dateOfBirth.tr,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.sp,
                     bottom: 8.h,
                   ),
-                ),
-                //==========================> Date OF Birth Date Text Field <======================
-                CustomText(
-                  text: AppStrings.dateOfBirth.tr,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.sp,
-                  bottom: 8.h,
-                ),
-                CustomTextField(
-                  onTab: () {
-                    _pickBirthDate(context);
-                  },
-                  readOnly: true,
-                  controller: _profileController.dateBirthCTRL,
-                  hintText: 'DD-MM-YYYY',
-                  suffixIcons: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w),
-                      child: SvgPicture.asset(AppIcons.calenderIcon)),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please select a date";
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16.h),
-                //=============================> Gender Selection <==============================
-                CustomText(
-                  text: AppStrings.gender.tr,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.sp,
-                  bottom: 8.h,
-                ),
-                _genderRadioButton(),
-                SizedBox(height: 16.h),
+                  CustomTextField(
+                    onTab: () {
+                      _pickBirthDate(context);
+                    },
+                    readOnly: true,
+                    controller: _profileController.dateBirthCTRL,
+                    hintText: 'DD-MM-YYYY',
+                    suffixIcons: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        child: SvgPicture.asset(AppIcons.calenderIcon)),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please select a date";
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16.h),
+                  //=============================> Gender Selection <==============================
+                  CustomText(
+                    text: AppStrings.gender.tr,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.sp,
+                    bottom: 8.h,
+                  ),
+                  _genderRadioButton(),
+                  SizedBox(height: 16.h),
 
-                //==========================> First Name Text Field <======================
-                CustomText(
-                  text: AppStrings.firstName.tr,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.sp,
-                  bottom: 8.h,
-                ),
-                CustomTextField(
-                  controller: _profileController.firstNameCTRL,
-                  hintText: AppStrings.firstName.tr,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter your first name";
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16.h),
+                  //==========================> First Name Text Field <======================
+                  CustomText(
+                    text: AppStrings.firstName.tr,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.sp,
+                    bottom: 8.h,
+                  ),
+                  CustomTextField(
+                    controller: _profileController.firstNameCTRL,
+                    hintText: AppStrings.firstName.tr,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter your first name";
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16.h),
 
-                //==========================> Last Name Text Field <======================
-                CustomText(
-                  text: AppStrings.lastName.tr,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.sp,
-                  bottom: 8.h,
-                ),
-                CustomTextField(
-                  controller: _profileController.lastNameCTRL,
-                  hintText: AppStrings.firstName.tr,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter your last name";
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16.h),
-                //==========================> Country Text Field <======================
-                CustomText(
-                  text: AppStrings.country.tr,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.sp,
-                  bottom: 8.h,
-                ),
-                CustomTextField(
-                  onTab: () {
-                    _profileController.pickCountry(context);
-                  },
-                  readOnly: true,
-                  controller: _profileController.countryCTRL,
-                  hintText: AppStrings.country.tr,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter your country";
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16.h),
-                //==========================> Bio Text Field <======================
-                CustomText(
-                  text: AppStrings.bio.tr,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.sp,
-                  bottom: 8.h,
-                ),
-                CustomTextField(
-                  controller: _profileController.bioCTRL,
-                  hintText: AppStrings.writeShortBio.tr,
-                  maxLines: 5,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter your bio";
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16.h),
-                //==========================> Interest Dropdown <====================
-                CustomText(
-                  text: AppStrings.interest.tr,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.sp,
-                  bottom: 8.h,
-                ),
-                _interestDropDown(),
-                SizedBox(height: 16.h),
-                //==========================> Show Interest Options Select After Dropdown <======================
-                Wrap(
-                  spacing: 8.w,
-                  runSpacing: 4.h,
-                  children:
-                  _profileController.selectedInterests.map((selectedId) {
-                    final interest = _profileController.interestsModel.firstWhere(
-                          (element) => element.id == selectedId,
-                      orElse: () => InterestsModel(id: selectedId, name: 'Unknown'),
-                    );
-                      //_profileController.selectedInterests.map((interest) {
-                    return Chip(
-                      label: Text(interest.name ?? ''),
-                      backgroundColor: AppColors.primaryColor,
-                      labelStyle: const TextStyle(color: Colors.white),
-                      deleteIcon:
-                          Icon(Icons.clear, size: 18.w, color: Colors.white),
-                      onDeleted: () {
-                        setState(() {
-                          _profileController.selectedInterests.remove(interest);
-                        });
-                      },
-                    );
-                  }).toList(),
-                ),
-                //=========================> Complete Profile Button <================
-                SizedBox(height: 24.h),
-                Obx(
-                  () => CustomButton(
-                      loading: _profileController.updateProfileAfterGoogleSignInLoading.value,
-                      onTap: () {
-                        if (_profileController.bioCTRL.text.length < 15 || _profileController.bioCTRL.text.length > 45) {
-                          Fluttertoast.showToast(
-                              msg: "Bio must be between 15 and 45 characters.");
-                        } else {
-                          if (_formKey.currentState!.validate()) {
-                            if (_profileController.selectedGender.isEmpty) {
-                              Fluttertoast.showToast(msg: "Select Gender");
-                            } else {
-                              _profileController.updateProfileAfterGoogleSignIn();
+                  //==========================> Last Name Text Field <======================
+                  CustomText(
+                    text: AppStrings.lastName.tr,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.sp,
+                    bottom: 8.h,
+                  ),
+                  CustomTextField(
+                    controller: _profileController.lastNameCTRL,
+                    hintText: AppStrings.firstName.tr,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter your last name";
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16.h),
+                  //==========================> Country Text Field <======================
+                  CustomText(
+                    text: AppStrings.country.tr,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.sp,
+                    bottom: 8.h,
+                  ),
+                  CustomTextField(
+                    onTab: () {
+                      _profileController.pickCountry(context);
+                    },
+                    readOnly: true,
+                    controller: _profileController.countryCTRL,
+                    hintText: AppStrings.country.tr,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter your country";
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16.h),
+                  //==========================> Bio Text Field <======================
+                  CustomText(
+                    text: AppStrings.bio.tr,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.sp,
+                    bottom: 8.h,
+                  ),
+                  CustomTextField(
+                    controller: _profileController.bioCTRL,
+                    hintText: AppStrings.writeShortBio.tr,
+                    maxLines: 5,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter your bio";
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16.h),
+                  //==========================> Interest Dropdown <====================
+                  CustomText(
+                    text: AppStrings.interest.tr,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.sp,
+                    bottom: 8.h,
+                  ),
+                  _interestDropDown(),
+                  SizedBox(height: 16.h),
+                  //==========================> Show Interest Options Select After Dropdown <======================
+                  /*Wrap(
+                    spacing: 8.w,
+                    runSpacing: 4.h,
+                    children: _profileController.selectedInterests.map((selectedId) {
+                     final interest = _profileController.interestsModel.firstWhere(
+                            (element) => element.id == selectedId,
+                        orElse: () => InterestsModel(id: selectedId, name: 'Unknown'),
+                      );
+                        //_profileController.selectedInterests.map((interest) {
+                      return Chip(
+                        label: Text(interest.name ?? ''),
+                        backgroundColor: AppColors.primaryColor,
+                        labelStyle: const TextStyle(color: Colors.white),
+                        deleteIcon:
+                            Icon(Icons.clear, size: 18.w, color: Colors.white),
+                        onDeleted: () {
+                          setState(() {
+                            _profileController.selectedInterests.remove(interest);
+                          });
+                        },
+                      );
+                    }).toList(),
+                  ),*/
+                  Wrap(
+                    spacing: 8.w,
+                    runSpacing: 4.h,
+                    children: _profileController.interestsModel.where((interest) => _profileController.selectedInterests.contains(interest.id)).map((interest) {
+                      return Chip(
+                        label: Text(interest.name ?? ''),
+                        backgroundColor: AppColors.primaryColor,
+                        labelStyle: const TextStyle(color: Colors.white),
+                        deleteIcon: Icon(Icons.clear, size: 18.w, color: Colors.white),
+                        onDeleted: () {
+                          setState(() {
+                            _profileController.selectedInterests.remove(interest.id);
+                          });
+                        },
+                      );
+                    }).toList(),
+                  ),
+                  //=========================> Complete Profile Button <================
+                  SizedBox(height: 24.h),
+                  Obx(
+                    () => CustomButton(
+                        loading: _profileController.updateProfileAfterGoogleSignInLoading.value,
+                        onTap: () {
+                          if (_profileController.bioCTRL.text.length < 15 || _profileController.bioCTRL.text.length > 45) {
+                            Fluttertoast.showToast(
+                                msg: "Bio must be between 15 and 45 characters.");
+                          } else {
+                            if (_formKey.currentState!.validate()) {
+                              if (_profileController.selectedGender.isEmpty) {
+                                Fluttertoast.showToast(msg: "Select Gender");
+                              } else {
+                                _profileController.updateProfileAfterGoogleSignIn();
+                              }
                             }
                           }
-                        }
-                      },
-                      text: AppStrings.completeProfile.tr),
-                ),
-                SizedBox(height: 24.h),
-              ],
+                        },
+                        text: AppStrings.completeProfile.tr),
+                  ),
+                  SizedBox(height: 24.h),
+                ],
+              ),
             ),
           ),
         ),

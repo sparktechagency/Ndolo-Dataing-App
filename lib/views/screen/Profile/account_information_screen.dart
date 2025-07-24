@@ -91,7 +91,7 @@ class _AccountInformationScreenState extends State<AccountInformationScreen> {
                     'firstName': data.firstName ?? '',
                     'lastName': data.lastName ?? '',
                     'dateOfBirth': '${data.dateOfBirth}' ?? '',
-                    'phoneNumber': '${data.phoneNumber}' ?? '',
+                    'phoneNumber': '${data.phoneNumber}' ?? 'N/A',
                     'country': data.country ?? '',
                     'state': data.state ?? '',
                     'city': data.city ?? '',

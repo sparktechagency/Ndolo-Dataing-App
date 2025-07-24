@@ -34,7 +34,7 @@ class _EditAccountInformationState extends State<EditAccountInformation> {
     super.initState();
     _profileController.firstNameCTRL.text = Get.parameters['firstName'] ?? '';
     _profileController.lastNameCTRL.text = Get.parameters['lastName'] ?? '';
-    _profileController.phoneNumberCTRL.text = Get.parameters['phoneNumber'] ?? '';
+    _profileController.phoneNumberCTRL.text = Get.parameters['phoneNumber'] ?? 'N/A';
     _profileController.countryCTRL.text = Get.parameters['country'] ?? '';
     _profileController.stateCTRL.text = Get.parameters['state'] ?? '';
     _profileController.cityCTRL.text = Get.parameters['city'] ?? '';
