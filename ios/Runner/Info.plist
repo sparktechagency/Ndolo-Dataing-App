@@ -72,6 +72,13 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+    <true/>
+    <key>GoogleSignIn</key>
+    <dict>
+        <key>ClientID</key>
+        <string>730579018123-8hsc68e3atjmd3v4skobkf83f381dqme.apps.googleusercontent.com</string>
+    </dict>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
